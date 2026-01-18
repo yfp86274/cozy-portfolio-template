@@ -1,0 +1,56 @@
+{
+  "name": "手作人網站模板 - 開發環境",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "json.schemaDownload.enable": true,
+        "editor.quickSuggestions": {
+          "strings": true
+        },
+        "editor.colorDecorators": true,
+        "files.associations": {
+          "site.config.json": "jsonc"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "workbench.colorTheme": "Default Light Modern",
+        "editor.fontSize": 14,
+        "editor.tabSize": 2,
+        "editor.wordWrap": "on"
+      },
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "redhat.vscode-json",
+        "Vue.volar",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "naumovs.color-highlight",
+        "aaron-bond.better-comments",
+        "usernamehw.errorlens"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install && echo '✅ 環境準備好了！請編輯 site.config.json 開始設定您的網站。'",
+  "postStartCommand": "echo '👋 歡迎！輸入 npm run dev 開始預覽您的網站'",
+  "forwardPorts": [
+    5173
+  ],
+  "portsAttributes": {
+    "5173": {
+      "label": "網站預覽",
+      "onAutoForward": "openBrowserOnce"
+    }
+  },
+  "remoteUser": "node"
+}

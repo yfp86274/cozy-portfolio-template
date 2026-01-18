@@ -1,5 +1,6 @@
 # GitHub Pages 自動部署工作流
 # 當 push 到 main 分支時自動觸發部署
+# 專為手作人設計，提供友善的中文錯誤訊息
 
 name: Deploy to GitHub Pages
 
@@ -38,8 +39,65 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      # 獨立的配置驗證步驟，確保錯誤訊息清楚顯示
+      - name: 🔍 驗證網站設定
+        id: validate
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "  🔍 正在檢查您的 site.config.json 設定檔..."
+          echo "═══════════════════════════════════════════════════════════"
+          echo ""
+          
+          # 執行驗證腳本
+          npm run validate
+          
+          # 檢查是否生成了錯誤報告
+          if [ -f "CONFIG_ERRORS.md" ]; then
+            echo ""
+            echo "═══════════════════════════════════════════════════════════"
+            echo "  ⚠️  發現設定問題，以下是詳細說明："
+            echo "═══════════════════════════════════════════════════════════"
+            echo ""
+            cat CONFIG_ERRORS.md
+            echo ""
+            echo "═══════════════════════════════════════════════════════════"
+            echo "  💡 請修正上述問題後重新提交"
+            echo "═══════════════════════════════════════════════════════════"
+          else
+            echo ""
+            echo "✅ 設定檔檢查通過！"
+          fi
+
+      - name: 🏗️ 建置網站
         run: npm run build
+        env:
+          # 確保建置時也能看到完整的錯誤訊息
+          NODE_ENV: production
+
+      # 如果建置失敗，顯示友善的錯誤訊息
+      - name: 📋 建置失敗時顯示說明
+        if: failure()
+        run: |
+          echo ""
+          echo "═══════════════════════════════════════════════════════════"
+          echo "  ❌ 網站建置失敗"
+          echo "═══════════════════════════════════════════════════════════"
+          echo ""
+          echo "  可能的原因："
+          echo "  1. site.config.json 設定檔有錯誤"
+          echo "  2. 圖片檔案路徑不正確"
+          echo "  3. 程式碼有語法錯誤"
+          echo ""
+          echo "  建議的處理方式："
+          echo "  1. 檢查上方的錯誤訊息"
+          echo "  2. 在本機執行 'npm run validate' 檢查設定"
+          echo "  3. 在本機執行 'npm run dev' 預覽網站"
+          echo ""
+          echo "  需要幫助嗎？"
+          echo "  - 查看專案中的 CONFIG_GUIDE.md"
+          echo "  - 到 GitHub Issues 發問"
+          echo ""
+          echo "═══════════════════════════════════════════════════════════"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -57,6 +115,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: 🚀 部署到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: 🎉 部署成功
+        run: |
+          echo ""
+          echo "═══════════════════════════════════════════════════════════"
+          echo "  🎉 恭喜！您的網站已成功上線！"
+          echo "═══════════════════════════════════════════════════════════"
+          echo ""
+          echo "  您的網站網址："
+          echo "  ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "  提醒：首次部署可能需要幾分鐘才能看到網站"
+          echo ""
+          echo "═══════════════════════════════════════════════════════════"

@@ -1,27 +1,24 @@
 #!/usr/bin/env node
 
 /**
- * 🔍 Configuration Validator
+ * 🔍 網站配置驗證器
  *
- * This script runs before `vite build` to catch common JSON errors
- * and provide friendly, actionable error messages for non-technical users.
+ * 這個腳本會在建置網站前檢查您的 site.config.json 設定檔，
+ * 並用親切的方式告訴您哪裡需要修正。
  *
- * It validates site.config.json and helps users fix common mistakes like:
- * - Extra commas
- * - Missing quotes
- * - Missing required fields
+ * 專為不熟悉程式碼的手作人設計 ❤️
  */
 
 import fs from 'fs'
 import path from 'path'
 import {fileURLToPath} from 'url'
 
-// Get directory name in ES modules
+// 取得專案根目錄
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '..')
 
-// ANSI color codes for terminal output
+// 終端機顏色設定
 const colors = {
     reset: '\x1b[0m',
     bright: '\x1b[1m',
@@ -30,17 +27,25 @@ const colors = {
     yellow: '\x1b[33m',
     blue: '\x1b[34m',
     cyan: '\x1b[36m',
+    magenta: '\x1b[35m',
+}
+
+// 收集所有錯誤和警告，用於生成報告
+const collectedIssues = {
+    errors: [],
+    warnings: [],
+    suggestions: [],
 }
 
 /**
- * Print a styled message to console
+ * 列印訊息到終端機
  */
 function print(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`)
 }
 
 /**
- * Print a styled header
+ * 列印分隔線標題
  */
 function printHeader(message) {
     console.log('')
@@ -51,174 +56,314 @@ function printHeader(message) {
 }
 
 /**
- * Print a success message
+ * 列印成功訊息
  */
 function printSuccess(message) {
     print(`✅ ${message}`, 'green')
 }
 
 /**
- * Print a warning message
+ * 列印警告訊息
  */
 function printWarning(message) {
-    print(`⚠️  ${message}`, 'yellow')
+    print(`💡 ${message}`, 'yellow')
 }
 
 /**
- * Print an error message with friendly guidance
+ * 列印友善的錯誤訊息
+ * @param {string} emoji - 表情符號
+ * @param {string} title - 標題
+ * @param {string} where - 錯誤位置
+ * @param {string} why - 為什麼錯
+ * @param {string} howToFix - 怎麼修正
+ * @param {string} example - 範例（可選）
  */
-function printError(title, details, suggestion) {
+function printFriendlyError(emoji, title, where, why, howToFix, example = null) {
     console.log('')
     print('╭' + '─'.repeat(58) + '╮', 'red')
-    print(`│  ❌ ${title.padEnd(53)}│`, 'red')
+    print(`│  ${emoji} ${title.padEnd(52)}│`, 'red')
     print('├' + '─'.repeat(58) + '┤', 'red')
 
-    // Split details into lines if too long
-    const detailLines = details.match(/.{1,54}/g) || [details]
-    detailLines.forEach(line => {
-        print(`│  ${line.padEnd(56)}│`, 'yellow')
-    })
-
-    print('├' + '─'.repeat(58) + '┤', 'red')
-    print('│  💡 How to fix:'.padEnd(60) + '│', 'cyan')
-
-    const suggestionLines = suggestion.match(/.{1,54}/g) || [suggestion]
-    suggestionLines.forEach(line => {
+    // 錯誤位置
+    print('│  📍 位置：'.padEnd(60) + '│', 'yellow')
+    wrapText(where, 54).forEach((line) => {
         print(`│     ${line.padEnd(53)}│`, 'reset')
     })
 
+    // 為什麼錯
+    print('│                                                          │', 'reset')
+    print('│  ❓ 原因：'.padEnd(60) + '│', 'yellow')
+    wrapText(why, 54).forEach((line) => {
+        print(`│     ${line.padEnd(53)}│`, 'reset')
+    })
+
+    // 怎麼修正
+    print('│                                                          │', 'reset')
+    print('│  🔧 解決方法：'.padEnd(60) + '│', 'cyan')
+    wrapText(howToFix, 54).forEach((line) => {
+        print(`│     ${line.padEnd(53)}│`, 'reset')
+    })
+
+    // 範例（如果有的話）
+    if (example) {
+        print('│                                                          │', 'reset')
+        print('│  📝 範例：'.padEnd(60) + '│', 'green')
+        wrapText(example, 54).forEach((line) => {
+            print(`│     ${line.padEnd(53)}│`, 'green')
+        })
+    }
+
     print('╰' + '─'.repeat(58) + '╯', 'red')
     console.log('')
+
+    // 收集錯誤
+    collectedIssues.errors.push({
+        emoji,
+        title,
+        where,
+        why,
+        howToFix,
+        example,
+    })
 }
 
 /**
- * Try to identify the specific JSON syntax error
+ * 將長文字換行
+ */
+function wrapText(text, maxWidth) {
+    const words = text.split(' ')
+    const lines = []
+    let currentLine = ''
+
+    words.forEach((word) => {
+        if ((currentLine + ' ' + word).trim().length <= maxWidth) {
+            currentLine = (currentLine + ' ' + word).trim()
+        } else {
+            if (currentLine) lines.push(currentLine)
+            currentLine = word
+        }
+    })
+    if (currentLine) lines.push(currentLine)
+
+    return lines.length > 0 ? lines : ['']
+}
+
+/**
+ * 診斷 JSON 語法錯誤
  */
 function diagnoseJsonError(content, error) {
     const errorMessage = error.message
 
-    // Extract position from error message if available
+    // 從錯誤訊息中提取位置
     const positionMatch = errorMessage.match(/position\s*(\d+)/i)
     const lineMatch = errorMessage.match(/line\s*(\d+)/i)
-    const columnMatch = errorMessage.match(/column\s*(\d+)/i)
 
     let position = positionMatch ? parseInt(positionMatch[1]) : null
     let line = lineMatch ? parseInt(lineMatch[1]) : null
 
-    // If we have a position, calculate line number
+    // 如果有位置，計算行號
     if (position !== null && line === null) {
         const beforeError = content.substring(0, position)
         line = (beforeError.match(/\n/g) || []).length + 1
     }
 
-    // Get context around the error
-    let contextStart = Math.max(0, (position || 0) - 30)
-    let contextEnd = Math.min(content.length, (position || 0) + 30)
+    // 取得錯誤前後的內容
+    let contextStart = Math.max(0, (position || 0) - 40)
+    let contextEnd = Math.min(content.length, (position || 0) + 40)
     let context = content.substring(contextStart, contextEnd)
 
-    // Common error patterns and friendly messages
+    // 常見錯誤模式及友善訊息
     const patterns = [
         {
-            regex: /,\s*[}\]]/,
-            title: 'Extra Comma Found! 🔴',
-            detail: 'There\'s a comma before a closing bracket } or ]',
-            suggestion: 'Remove the extra comma. In JSON, the last item in a list or object should NOT have a comma after it.',
-            test: () => content.match(/,\s*[}\]]/g)
+            test: () => content.match(/,\s*[}\]]/g),
+            emoji: '🔴',
+            title: '哎呀，有一個多餘的逗號！',
+            where: `大約在第 ${line || '?'} 行附近`,
+            why: '在 JSON 裡面，最後一個項目後面不能有逗號。就像列清單時，最後一項不用加「、」一樣。',
+            howToFix: '請找到 } 或 ] 前面的逗號，把它刪掉就好了。',
+            example: '正確：{ "name": "小美" }\n錯誤：{ "name": "小美", }',
         },
         {
-            regex: /[}\]]\s*[{\[]/,
-            title: 'Missing Comma Between Items',
-            detail: 'Two items are next to each other without a comma',
-            suggestion: 'Add a comma between the items. Every item except the last needs a comma after it.',
-            test: () => content.match(/[}\]]\s*[{\[]/g) && !content.match(/[}\]]\s*,\s*[{\[]/g)
+            test: () => content.includes("'"),
+            emoji: '📝',
+            title: '引號用錯了喔！',
+            where: `檔案中使用了單引號 '`,
+            why: 'JSON 只認得雙引號 "，不認得單引號 \'。這是 JSON 的規定。',
+            howToFix: '請把所有的單引號 \' 換成雙引號 "',
+            example: '正確："name": "小美"\n錯誤：\'name\': \'小美\'',
         },
         {
-            regex: /:\s*[,}\]]/,
-            title: 'Missing Value',
-            detail: 'A property has a colon but no value after it',
-            suggestion: 'Add a value after the colon. For text use "quotes", for numbers just type the number.',
-            test: () => content.match(/:\s*[,}\]]/g)
+            test: () => content.match(/:\s*[,}\]]/g),
+            emoji: '❓',
+            title: '這裡好像少了一個值！',
+            where: `大約在第 ${line || '?'} 行，某個冒號後面沒有值`,
+            why: '每個設定項目的冒號後面都要有值，不能空著。',
+            howToFix: '請在冒號後面填上適當的值。文字要用雙引號包起來，數字直接寫。',
+            example: '正確："name": "小美"\n錯誤："name": ',
         },
         {
-            regex: /[^"]\s*:/,
-            title: 'Property Name Without Quotes',
-            detail: 'Property names in JSON must be wrapped in double quotes',
-            suggestion: 'Wrap the property name in double quotes: "propertyName": value',
             test: () => {
-                // Check for unquoted keys (simplified check)
-                const unquotedKey = content.match(/[{,]\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g)
-                return unquotedKey && !unquotedKey[0].includes('"')
-            }
+                // 檢查是否缺少逗號
+                const lines = content.split('\n')
+                for (let i = 0; i < lines.length - 1; i++) {
+                    const currentLine = lines[i].trim()
+                    const nextLine = lines[i + 1].trim()
+                    if (
+                        currentLine.endsWith('"') &&
+                        !currentLine.endsWith('",') &&
+                        !currentLine.endsWith('":') &&
+                        nextLine.startsWith('"')
+                    ) {
+                        return true
+                    }
+                }
+                return false
+            },
+            emoji: '➕',
+            title: '這裡好像少了一個逗號！',
+            where: `大約在第 ${line || '?'} 行附近`,
+            why: 'JSON 裡面，每個項目之間要用逗號隔開（最後一個除外）。',
+            howToFix: '請在兩個項目之間加上逗號。',
+            example: '正確："name": "小美",\n       "role": "手作人"',
         },
         {
-            regex: /'/,
-            title: 'Single Quotes Used',
-            detail: 'JSON requires double quotes ("), not single quotes (\')',
-            suggestion: 'Replace all single quotes with double quotes.',
-            test: () => content.includes("'")
+            test: () => {
+                const openBraces = (content.match(/{/g) || []).length
+                const closeBraces = (content.match(/}/g) || []).length
+                return openBraces !== closeBraces
+            },
+            emoji: '🔲',
+            title: '括號好像沒有配對！',
+            where: `整個檔案`,
+            why: '每個 { 都要有對應的 }，就像每個開始都要有結束。',
+            howToFix: '請檢查所有的大括號 { } 是否都有配對。可能是少了一個，或多了一個。',
+            example: '正確：{ "profile": { "name": "小美" } }',
         },
     ]
 
-    // Check each pattern
+    // 檢查每個模式
     for (const pattern of patterns) {
         if (pattern.test && pattern.test()) {
-            return {
-                title: pattern.title,
-                detail: pattern.detail + (line ? ` (around line ${line})` : ''),
-                suggestion: pattern.suggestion
-            }
+            return pattern
         }
     }
 
-    // Generic error if no specific pattern matched
+    // 通用錯誤
     return {
-        title: 'JSON Syntax Error',
-        detail: `${errorMessage}${line ? ` (line ${line})` : ''}`,
-        suggestion: 'Check for missing quotes, extra commas, or mismatched brackets. You can use jsonlint.com to find the exact error.'
+        emoji: '🤔',
+        title: 'JSON 格式有點問題',
+        where: line ? `大約在第 ${line} 行` : '不確定確切位置',
+        why: errorMessage,
+        howToFix:
+            '建議您可以：\n1. 使用 https://jsonlint.com 這個網站來檢查\n2. 把 site.config.json 的內容貼上去，它會告訴您哪裡有問題',
+        example: null,
     }
 }
 
 /**
- * Validate the structure of the config object
+ * 驗證設定結構
  */
 function validateConfigStructure(config) {
     const warnings = []
     const errors = []
 
-    // Required top-level fields
-    const requiredFields = ['profile', 'theme']
-    for (const field of requiredFields) {
+    // 必填的頂層欄位
+    const requiredSections = {
+        profile: '個人資料',
+        theme: '外觀主題',
+    }
+
+    for (const [field, label] of Object.entries(requiredSections)) {
         if (!config[field]) {
-            errors.push(`Missing required section: "${field}"`)
+            errors.push({
+                emoji: '📋',
+                title: `缺少「${label}」區塊`,
+                where: `site.config.json 最外層`,
+                why: `網站需要「${field}」這個區塊才能正常運作。`,
+                howToFix: `請在設定檔中加入 "${field}": { ... } 區塊`,
+            })
         }
     }
 
-    // Check profile fields
+    // 檢查個人資料
     if (config.profile) {
         if (!config.profile.name || config.profile.name.trim() === '') {
-            warnings.push('Your name is empty in profile.name - visitors won\'t know who you are!')
+            warnings.push({
+                field: 'profile.name',
+                message: '您的名字還是空的喔！訪客會想知道這是誰的網站。',
+                suggestion: '請填入您的名字或品牌名稱',
+            })
         }
-        if (!config.profile.role || config.profile.role.trim() === '') {
-            warnings.push('Your role/profession is empty in profile.role')
-        }
-    }
 
-    // Check theme fields
-    if (config.theme) {
-        const colorFields = ['primaryColor', 'backgroundColor', 'textColor']
-        for (const field of colorFields) {
-            const value = config.theme[field]
-            if (value && !isValidColor(value)) {
-                warnings.push(`theme.${field} might not be a valid color: "${value}". Colors should be hex codes like "#8B4513"`)
+        if (!config.profile.email || !isValidEmail(config.profile.email)) {
+            warnings.push({
+                field: 'profile.email',
+                message: 'Email 格式好像不太對',
+                suggestion: '請確認 Email 格式正確，例如：hello@example.com',
+            })
+        }
+
+        // 檢查社群連結格式
+        if (config.profile.social) {
+            const socialPlatforms = ['instagram', 'pinterest', 'etsy', 'youtube', 'tiktok']
+            for (const platform of socialPlatforms) {
+                const url = config.profile.social[platform]
+                if (url && url.trim() !== '' && !isValidUrl(url)) {
+                    warnings.push({
+                        field: `profile.social.${platform}`,
+                        message: `${platform} 的網址格式好像不太對`,
+                        suggestion: '網址應該要以 https:// 開頭，例如：https://instagram.com/yourname',
+                    })
+                }
             }
         }
     }
 
-    // Check UI preset
+    // 檢查主題顏色
+    if (config.theme) {
+        const colorFields = {
+            primaryColor: '主要顏色',
+            backgroundColor: '背景顏色',
+            textColor: '文字顏色',
+        }
+
+        for (const [field, label] of Object.entries(colorFields)) {
+            const value = config.theme[field]
+            if (value && !isValidHexColor(value)) {
+                warnings.push({
+                    field: `theme.${field}`,
+                    message: `「${label}」的色碼格式好像不太對：${value}`,
+                    suggestion: '色碼格式應該是 # 加上 6 個字元，例如：#8B4513（咖啡色）',
+                })
+            }
+        }
+
+        // 檢查字體名稱是否有空格但沒引號（常見錯誤）
+        if (config.theme.fontFamily && config.theme.fontFamily.includes(' ')) {
+            // 這其實是 OK 的，JSON 字串本來就會保留空格
+        }
+    }
+
+    // 檢查 UI 預設
     if (config.ui && config.ui.themePreset) {
-        const validPresets = ['default', 'minimal', 'soft', 'bold', 'craft', 'chef', 'artist', 'therapist']
+        const validPresets = ['default', 'minimal', 'soft', 'bold']
         if (!validPresets.includes(config.ui.themePreset.toLowerCase())) {
-            warnings.push(`Unknown theme preset: "${config.ui.themePreset}". Valid options: ${validPresets.join(', ')}`)
+            warnings.push({
+                field: 'ui.themePreset',
+                message: `「${config.ui.themePreset}」不是有效的風格選項`,
+                suggestion: `有效的選項有：${validPresets.join('、')}`,
+            })
+        }
+    }
+
+    // 檢查 SEO
+    if (config.seo) {
+        if (config.seo.siteDescription && config.seo.siteDescription.length > 160) {
+            warnings.push({
+                field: 'seo.siteDescription',
+                message: `網站描述有點太長了（${config.seo.siteDescription.length} 字元）`,
+                suggestion: '建議控制在 160 字元以內，Google 才能完整顯示',
+            })
         }
     }
 
@@ -226,31 +371,128 @@ function validateConfigStructure(config) {
 }
 
 /**
- * Simple color validation
+ * 驗證 Email 格式
  */
-function isValidColor(color) {
-    if (!color || typeof color !== 'string') return false
-    // Hex color
-    if (/^#[0-9A-Fa-f]{3,8}$/.test(color)) return true
-    // rgb/rgba
-    if (/^rgba?\s*\(/.test(color)) return true
-    // Named colors (simplified check)
-    if (/^[a-zA-Z]+$/.test(color)) return true
-    return false
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
 /**
- * Get default config for recovery
+ * 驗證網址格式
+ */
+function isValidUrl(url) {
+    try {
+        new URL(url)
+        return true
+    } catch {
+    return false
+    }
+}
+
+/**
+ * 驗證 Hex 色碼
+ */
+function isValidHexColor(color) {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color)
+}
+
+/**
+ * 生成錯誤報告 Markdown 文件
+ */
+function generateErrorReport() {
+    if (collectedIssues.errors.length === 0 && collectedIssues.warnings.length === 0) {
+        // 沒有錯誤，刪除舊的報告檔案（如果存在）
+        const reportPath = path.join(projectRoot, 'CONFIG_ERRORS.md')
+        if (fs.existsSync(reportPath)) {
+            fs.unlinkSync(reportPath)
+        }
+        return
+    }
+
+    let report = `# 🔍 設定檔檢查報告
+
+> 這份報告是自動產生的，幫助您修正 \`site.config.json\` 中的問題。
+> 修正完成後，這個檔案會自動消失。
+
+---
+
+`
+
+    // 錯誤區塊
+    if (collectedIssues.errors.length > 0) {
+        report += `## ❌ 需要修正的錯誤
+
+以下問題會影響網站正常運作，請優先處理：
+
+`
+        collectedIssues.errors.forEach((err, index) => {
+            report += `### ${index + 1}. ${err.emoji} ${err.title}
+
+| 項目 | 說明 |
+|------|------|
+| 📍 位置 | ${err.where} |
+| ❓ 原因 | ${err.why} |
+| 🔧 解決方法 | ${err.howToFix} |
+`
+            if (err.example) {
+                report += `
+**範例：**
+\`\`\`
+${err.example}
+\`\`\`
+`
+            }
+            report += '\n---\n\n'
+        })
+    }
+
+    // 警告區塊
+    if (collectedIssues.warnings.length > 0) {
+        report += `## 💡 建議改善的地方
+
+這些不是錯誤，但改善後網站會更好：
+
+| 欄位 | 說明 | 建議 |
+|------|------|------|
+`
+        collectedIssues.warnings.forEach((warn) => {
+            report += `| \`${warn.field}\` | ${warn.message} | ${warn.suggestion} |\n`
+        })
+    }
+
+    report += `
+---
+
+## 🆘 需要幫助嗎？
+
+如果您不確定怎麼修正，可以：
+
+1. **使用 JSON 檢查工具**：把 \`site.config.json\` 的內容貼到 [jsonlint.com](https://jsonlint.com)
+2. **參考設定指南**：查看專案中的 \`CONFIG_GUIDE.md\`
+3. **回報問題**：到 GitHub Issues 詢問
+
+記得修正後重新執行 \`npm run validate\` 來確認問題已解決！
+`
+
+    // 寫入報告檔案
+    const reportPath = path.join(projectRoot, 'CONFIG_ERRORS.md')
+    fs.writeFileSync(reportPath, report, 'utf-8')
+    print('\n📄 已生成錯誤報告：CONFIG_ERRORS.md', 'cyan')
+    print('   打開這個檔案可以看到更詳細的修正說明', 'cyan')
+}
+
+/**
+ * 取得預設設定
  */
 function getDefaultConfig() {
     return {
         profile: {
-            name: 'Your Name',
-            role: 'Your Profession',
+            name: '您的名字',
+            role: '您的專長',
             email: 'hello@example.com',
-            bio: 'Tell your story here...',
+            bio: '在這裡介紹您自己...',
             avatar: '/images/avatar.jpg',
-            social: {}
+            social: {},
         },
         theme: {
             primaryColor: '#6B4423',
@@ -258,136 +500,156 @@ function getDefaultConfig() {
             backgroundColor: '#FFFBF5',
             textColor: '#2D2D2D',
             mutedColor: '#6B6B6B',
-            fontFamily: 'Inter',
-            headingFont: 'Inter'
+            fontFamily: 'Noto Sans TC',
+            headingFont: 'Noto Serif TC',
         },
         ui: {
             themePreset: 'default',
             heroStyle: 'split',
             showFooter: true,
-            showSocialLinks: true
+            showSocialLinks: true,
         },
         content: {
-            heroTitle: 'Welcome',
-            heroSubtitle: 'This is my portfolio',
-            heroButtonText: 'View Work',
-            worksTitle: 'My Work',
-            otherWorksTitle: 'More Work'
+            heroTitle: '歡迎光臨',
+            heroSubtitle: '這是我的作品集',
+            heroButtonText: '瀏覽作品',
+            worksTitle: '我的作品',
+            otherWorksTitle: '更多作品',
         },
         seo: {
-            siteTitle: 'My Portfolio',
-            siteDescription: 'A portfolio website'
-        }
+            siteTitle: '我的作品集',
+            siteDescription: '一個展示作品的網站',
+        },
     }
 }
 
 /**
- * Main validation function
+ * 主程式
  */
 async function main() {
-    printHeader('🔍 Validating your site configuration...')
+    printHeader('🔍 正在檢查您的網站設定...')
 
     const configPath = path.join(projectRoot, 'site.config.json')
 
-    // Check if config file exists
+    // 檢查設定檔是否存在
     if (!fs.existsSync(configPath)) {
-        printError(
-            'Config File Not Found!',
-            'Could not find site.config.json in your project',
-            'Create a site.config.json file in your project root. You can copy the example from the template.'
+        printFriendlyError(
+            '📁',
+            '找不到設定檔！',
+            '專案根目錄',
+            '網站需要 site.config.json 這個檔案來知道要顯示什麼內容。',
+            '別擔心！我現在就幫您建立一個預設的設定檔。',
+            null
         )
 
-        // Create a default config
-        print('\n📝 Creating a default config file for you...', 'cyan')
+        print('\n📝 正在建立預設設定檔...', 'cyan')
         try {
-            fs.writeFileSync(configPath, JSON.stringify(getDefaultConfig(), null, 2))
-            printSuccess('Created site.config.json with default values!')
-            printWarning('Please edit site.config.json to add your information.')
+            fs.writeFileSync(configPath, JSON.stringify(getDefaultConfig(), null, 2), 'utf-8')
+            printSuccess('已建立 site.config.json！')
+            print('\n👉 下一步：請打開 site.config.json，填入您的資料', 'yellow')
         } catch (e) {
-            print('Could not create default config: ' + e.message, 'red')
+            print('無法建立設定檔：' + e.message, 'red')
+            generateErrorReport()
             process.exit(1)
         }
     }
 
-    // Read the config file
+    // 讀取設定檔
     let content
     try {
         content = fs.readFileSync(configPath, 'utf-8')
     } catch (error) {
-        printError(
-            'Could Not Read Config File',
+        printFriendlyError(
+            '📖',
+            '無法讀取設定檔',
+            'site.config.json',
             error.message,
-            'Make sure the file exists and you have permission to read it.'
+            '請確認檔案存在且沒有被其他程式鎖定。'
         )
+        generateErrorReport()
         process.exit(1)
     }
 
-    // Check for BOM or weird characters
-    if (content.charCodeAt(0) === 0xFEFF) {
-        content = content.slice(1) // Remove BOM
-        printWarning('Removed BOM character from config file')
+    // 移除 BOM 字元
+    if (content.charCodeAt(0) === 0xfeff) {
+        content = content.slice(1)
+        printWarning('已移除檔案開頭的特殊字元（BOM）')
     }
 
-    // Try to parse JSON
+    // 嘗試解析 JSON
     let config
     try {
         config = JSON.parse(content)
-        printSuccess('JSON syntax is valid!')
+        printSuccess('JSON 格式正確！')
     } catch (error) {
         const diagnosis = diagnoseJsonError(content, error)
-        printError(diagnosis.title, diagnosis.detail, diagnosis.suggestion)
+        printFriendlyError(
+            diagnosis.emoji,
+            diagnosis.title,
+            diagnosis.where,
+            diagnosis.why,
+            diagnosis.howToFix,
+            diagnosis.example
+        )
 
-        // Try to use default config to continue build
-        print('\n🔄 Attempting to continue with default configuration...', 'yellow')
+        // 嘗試使用預設設定繼續
+        print('\n🔄 將使用預設設定繼續建置...', 'yellow')
         config = getDefaultConfig()
-        printWarning('Build will continue with default settings. Please fix your config file!')
+        printWarning('請記得修正設定檔中的問題！')
     }
 
-    // Validate structure
+    // 驗證結構
     const {warnings, errors} = validateConfigStructure(config)
 
-    // Print warnings
+    // 收集警告
+    collectedIssues.warnings = warnings
+
+    // 顯示結構錯誤
+    errors.forEach((err) => {
+        printFriendlyError(err.emoji, err.title, err.where, err.why, err.howToFix)
+    })
+
+    // 顯示警告
     if (warnings.length > 0) {
         console.log('')
-        print('⚠️  Some suggestions to improve your config:', 'yellow')
-        warnings.forEach(warning => {
-            print(`   • ${warning}`, 'yellow')
-        })
-    }
-
-    // Print errors (but don't fail - we want to be forgiving)
-    if (errors.length > 0) {
+        print('💡 一些小建議可以讓您的網站更完美：', 'yellow')
         console.log('')
-        print('❗ Some issues were found:', 'red')
-        errors.forEach(err => {
-            print(`   • ${err}`, 'red')
+        warnings.forEach((warn) => {
+            print(`   📍 ${warn.field}`, 'cyan')
+            print(`      ${warn.message}`, 'yellow')
+            print(`      👉 ${warn.suggestion}`, 'reset')
+            console.log('')
         })
-        printWarning('The site will still build, but some features may not work correctly.')
     }
 
-    // Final status
+    // 生成報告
+    generateErrorReport()
+
+    // 最終狀態
     console.log('')
     print('─'.repeat(60), 'cyan')
 
-    if (errors.length === 0 && warnings.length === 0) {
-        print('🎉 Perfect! Your configuration looks great!', 'green')
-    } else if (errors.length === 0) {
-        print('👍 Config is valid! Consider the suggestions above.', 'green')
+    if (collectedIssues.errors.length === 0 && warnings.length === 0) {
+        print('🎉 太棒了！您的設定檔完全沒問題！', 'green')
+        print('   網站已經準備好可以上線了！', 'green')
+    } else if (collectedIssues.errors.length === 0) {
+        print('👍 設定檔基本上沒問題，可以正常運作', 'green')
+        print('   但上面的建議如果能改善會更好喔！', 'yellow')
     } else {
-        print('⚠️  Build will continue, but please fix the issues above.', 'yellow')
+        print('⚠️  有一些問題需要處理', 'yellow')
+        print('   請打開 CONFIG_ERRORS.md 查看詳細說明', 'yellow')
     }
 
     print('─'.repeat(60), 'cyan')
     console.log('')
 
-    // Always exit with success to not block the build
-    // (We want to be forgiving for non-technical users)
+    // 總是以成功退出，不阻擋建置
+    // （對不熟悉技術的用戶更友善）
     process.exit(0)
 }
 
-// Run the validator
-main().catch(error => {
-    print(`Unexpected error: ${error.message}`, 'red')
-    // Exit with success anyway to not block the build
+// 執行主程式
+main().catch((error) => {
+    print(`發生意外錯誤：${error.message}`, 'red')
     process.exit(0)
 })

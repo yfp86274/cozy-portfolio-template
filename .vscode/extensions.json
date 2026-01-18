@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "redhat.vscode-json",
+    "Vue.volar",
+    "bradlc.vscode-tailwindcss",
+    "naumovs.color-highlight",
+    "formulahendry.auto-rename-tag",
+    "aaron-bond.better-comments",
+    "usernamehw.errorlens",
+    "meganrogge.template-string-converter",
+    "christian-kohler.path-intellisense"
+  ],
+  "unwantedRecommendations": []
+}

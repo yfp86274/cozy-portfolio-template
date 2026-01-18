@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.com/site.config.schema.json",
-  "title": "Site Configuration",
-  "description": "Configuration schema for the portfolio website template",
+  "title": "網站配置",
+  "description": "手作人作品集網站的配置檔案。請依照提示填寫您的個人資訊和網站設定。",
   "type": "object",
   "required": [
     "profile",
@@ -14,11 +14,12 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "description": "JSON Schema reference for IDE support"
+      "description": "📌 這是讓編輯器能幫您檢查設定的魔法連結，請不要修改這行"
     },
     "profile": {
       "type": "object",
-      "description": "Your personal information",
+      "title": "👤 個人資料",
+      "description": "這裡填寫您的基本資訊，訪客會在網站上看到這些內容",
       "required": [
         "name",
         "role",
@@ -27,65 +28,130 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Your name (appears in header/footer)",
-          "minLength": 1
+          "title": "您的名字",
+          "description": "📝 填寫您希望在網站上顯示的名字，例如：「小美手作」或「Emma Woolcraft」",
+          "minLength": 1,
+          "examples": [
+            "小美手作",
+            "Emma Woolcraft",
+            "張大廚"
+          ]
         },
         "role": {
           "type": "string",
-          "description": "Your profession or title"
+          "title": "您的職業/專長",
+          "description": "📝 您是做什麼的？例如：「編織藝術家」、「私廚料理人」、「手工皂創作者」",
+          "examples": [
+            "編織藝術家",
+            "私廚料理人",
+            "手工皂創作者",
+            "插畫家"
+          ]
         },
         "email": {
           "type": "string",
           "format": "email",
-          "description": "Your contact email address"
+          "title": "聯絡信箱",
+          "description": "📧 客戶可以透過這個信箱聯繫您（格式：xxx@xxx.com）",
+          "examples": [
+            "hello@example.com"
+          ]
         },
         "bio": {
           "type": "string",
-          "description": "A short biography or tagline"
+          "title": "自我介紹",
+          "description": "📝 用一兩句話介紹自己，讓訪客認識您。例如：「用雙手編織溫暖，每一針都是對生活的熱愛」",
+          "examples": [
+            "用雙手編織溫暖，每一針都是對生活的熱愛",
+            "從產地到餐桌，用心烹調每一道料理"
+          ]
         },
         "avatar": {
           "type": "string",
-          "description": "Path to your avatar image (place in public/images/)"
+          "title": "大頭照路徑",
+          "description": "🖼️ 您的照片檔案路徑。請將照片放在 public/images/ 資料夾，然後填寫 /images/您的檔名.jpg",
+          "default": "/images/avatar.jpg",
+          "examples": [
+            "/images/avatar.jpg",
+            "/images/profile.png"
+          ]
         },
         "social": {
           "type": "object",
-          "description": "Social media profile links",
+          "title": "社群媒體連結",
+          "description": "🔗 填寫您的社群帳號網址，不用的平台留空白即可",
           "properties": {
             "instagram": {
               "type": "string",
-              "description": "Instagram profile URL"
+              "title": "Instagram",
+              "description": "📷 您的 Instagram 個人頁面網址，例如：https://instagram.com/yourname",
+              "examples": [
+                "https://instagram.com/yourname"
+              ]
             },
             "pinterest": {
               "type": "string",
-              "description": "Pinterest profile URL"
+              "title": "Pinterest",
+              "description": "📌 您的 Pinterest 個人頁面網址",
+              "examples": [
+                "https://pinterest.com/yourname"
+              ]
             },
             "etsy": {
               "type": "string",
-              "description": "Etsy shop URL"
+              "title": "Etsy 商店",
+              "description": "🛒 您的 Etsy 商店網址，例如：https://yourshop.etsy.com",
+              "examples": [
+                "https://yourshop.etsy.com"
+              ]
             },
             "twitter": {
               "type": "string",
-              "description": "Twitter/X profile URL"
+              "title": "Twitter / X",
+              "description": "🐦 您的 Twitter 個人頁面網址",
+              "examples": [
+                "https://twitter.com/yourname"
+              ]
             },
             "linkedin": {
               "type": "string",
-              "description": "LinkedIn profile URL"
+              "title": "LinkedIn",
+              "description": "💼 您的 LinkedIn 個人頁面網址",
+              "examples": [
+                "https://linkedin.com/in/yourname"
+              ]
             },
             "youtube": {
               "type": "string",
-              "description": "YouTube channel URL"
+              "title": "YouTube",
+              "description": "🎬 您的 YouTube 頻道網址",
+              "examples": [
+                "https://youtube.com/@yourname"
+              ]
             },
             "tiktok": {
               "type": "string",
-              "description": "TikTok profile URL"
+              "title": "TikTok",
+              "description": "🎵 您的 TikTok 個人頁面網址",
+              "examples": [
+                "https://tiktok.com/@yourname"
+              ]
             },
             "behance": {
               "type": "string",
-              "description": "Behance portfolio URL"
+              "title": "Behance",
+              "description": "🎨 您的 Behance 作品集網址（適合設計師）",
+              "examples": [
+                "https://behance.net/yourname"
+              ]
             },
             "dribbble": {
               "type": "string",
-              "description": "Dribbble profile URL"
+              "title": "Dribbble",
+              "description": "🏀 您的 Dribbble 作品集網址（適合設計師）",
+              "examples": [
+                "https://dribbble.com/yourname"
+              ]
             }
           },
           "additionalProperties": false
@@ -94,7 +160,8 @@
     },
     "theme": {
       "type": "object",
-      "description": "Colors and typography settings",
+      "title": "🎨 外觀主題",
+      "description": "設定網站的顏色和字體。顏色使用色碼格式（#開頭的6位數字/字母）",
       "required": [
         "primaryColor",
         "secondaryColor",
@@ -105,183 +172,356 @@
       "properties": {
         "primaryColor": {
           "type": "string",
+          "format": "color",
+          "title": "主要顏色",
+          "description": "🎨 網站的主色調，用於按鈕、連結等重要元素。使用色碼格式，例如：#8B4513（咖啡色）、#2E8B57（森林綠）、#CD5C5C（印地安紅）",
           "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-          "description": "Main brand color (hex format, e.g., #8B4513)"
+          "default": "#8B4513",
+          "examples": [
+            "#8B4513",
+            "#2E8B57",
+            "#CD5C5C",
+            "#4169E1"
+          ]
         },
         "secondaryColor": {
           "type": "string",
+          "format": "color",
+          "title": "次要顏色",
+          "description": "🎨 輔助色，用於裝飾和強調。建議選擇與主色調搭配的顏色",
           "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-          "description": "Secondary/accent color (hex format)"
+          "default": "#A0522D",
+          "examples": [
+            "#A0522D",
+            "#3CB371",
+            "#F08080"
+          ]
         },
         "backgroundColor": {
           "type": "string",
+          "format": "color",
+          "title": "背景顏色",
+          "description": "🎨 網站背景色。建議使用淺色讓文字容易閱讀，例如：#FDF5E6（米白）、#F5F5F5（淺灰）、#FFFAFA（雪白）",
           "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-          "description": "Page background color (hex format)"
+          "default": "#FDF5E6",
+          "examples": [
+            "#FDF5E6",
+            "#F5F5F5",
+            "#FFFAFA",
+            "#FFF8DC"
+          ]
         },
         "textColor": {
           "type": "string",
+          "format": "color",
+          "title": "文字顏色",
+          "description": "🎨 主要文字的顏色。建議使用深色確保可讀性，例如：#333333（深灰）、#2D2D2D（近黑）",
           "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-          "description": "Main text color (hex format)"
+          "default": "#3D2914",
+          "examples": [
+            "#3D2914",
+            "#333333",
+            "#2D2D2D"
+          ]
         },
         "mutedColor": {
           "type": "string",
+          "format": "color",
+          "title": "淡化文字顏色",
+          "description": "🎨 較不重要文字的顏色（如日期、說明文字）。建議比主文字顏色淺一些",
           "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-          "description": "Muted/secondary text color (hex format)"
+          "default": "#8B7355",
+          "examples": [
+            "#8B7355",
+            "#666666",
+            "#888888"
+          ]
         },
         "fontFamily": {
           "type": "string",
-          "description": "Main body font from Google Fonts"
+          "title": "主要字體",
+          "description": "✍️ 網站內文使用的字體（來自 Google Fonts）。推薦：Lora（優雅）、Inter（現代）、Noto Sans TC（中文友善）",
+          "default": "Lora",
+          "examples": [
+            "Lora",
+            "Inter",
+            "Noto Sans TC",
+            "Playfair Display",
+            "Source Sans Pro"
+          ]
         },
         "headingFont": {
           "type": "string",
-          "description": "Optional heading font from Google Fonts"
+          "title": "標題字體",
+          "description": "✍️ 標題專用字體。可以與主要字體不同，增加層次感。留空則使用主要字體",
+          "examples": [
+            "Playfair Display",
+            "Cormorant Garamond",
+            "Noto Serif TC"
+          ]
         }
       }
     },
     "ui": {
       "type": "object",
-      "description": "Layout and display options",
+      "title": "🖥️ 介面設定",
+      "description": "調整網站的版面配置和顯示選項",
       "properties": {
         "themePreset": {
           "type": "string",
+          "title": "風格預設",
+          "description": "🎭 選擇最適合您風格的預設主題：\n\n• minimal - 極簡風格，適合廚師、建築師、攝影師，乾淨俐落\n• default - 溫暖自然，適合編織、手作、烘焙，溫馨舒適\n• soft - 柔和夢幻，適合花藝、甜點、嬰兒用品，粉嫩柔美\n• bold - 大膽強烈，適合藝術家、設計師、音樂人，個性鮮明",
           "enum": [
             "default",
             "minimal",
             "soft",
             "bold"
           ],
-          "description": "Visual style preset that changes the overall look and feel",
-          "default": "default"
+          "default": "default",
+          "enumDescriptions": [
+            "default - 溫暖自然風格，適合編織、手作、烘焙創作者",
+            "minimal - 極簡專業風格，適合廚師、建築師、攝影師",
+            "soft - 柔和夢幻風格，適合花藝師、甜點師、嬰兒用品",
+            "bold - 大膽強烈風格，適合藝術家、設計師、音樂人"
+          ]
         },
         "heroStyle": {
           "type": "string",
+          "title": "首頁版型",
+          "description": "🏠 首頁主視覺的排版方式：\n• split - 左右分割（照片在一邊，文字在另一邊）\n• centered - 置中排列（適合沒有照片時使用）\n• minimal - 極簡風格（只有文字）",
           "enum": [
             "split",
             "centered",
             "minimal"
           ],
-          "description": "Hero section layout style",
-          "default": "split"
+          "default": "split",
+          "enumDescriptions": [
+            "split - 左右分割版面，照片與文字並排",
+            "centered - 內容置中，適合純文字展示",
+            "minimal - 極簡風格，最少的視覺元素"
+          ]
         },
         "showFooter": {
           "type": "boolean",
-          "description": "Show or hide the footer section",
+          "title": "顯示頁尾",
+          "description": "👟 是否顯示網站底部的頁尾區塊",
           "default": true
         },
         "showSocialLinks": {
           "type": "boolean",
-          "description": "Show or hide social media links",
+          "title": "顯示社群連結",
+          "description": "🔗 是否在網站上顯示您的社群媒體連結圖示",
           "default": true
         },
         "showOtherWorks": {
           "type": "boolean",
-          "description": "Show or hide the 'Other Works' section",
+          "title": "顯示其他作品區",
+          "description": "📁 是否顯示「其他作品」區塊（在主要作品之下）",
           "default": true
         },
         "navStyle": {
           "type": "string",
+          "title": "導覽列樣式",
+          "description": "🧭 網站頂部導覽列的樣式",
           "enum": [
             "default",
             "minimal"
           ],
-          "description": "Navigation bar style",
-          "default": "default"
+          "default": "default",
+          "enumDescriptions": [
+            "default - 標準導覽列",
+            "minimal - 精簡導覽列"
+          ]
         },
         "gridColumns": {
           "type": "integer",
+          "title": "作品欄位數",
+          "description": "📊 作品展示區每排顯示幾個作品（電腦版）。手機上會自動調整",
           "enum": [
             2,
             3,
             4
           ],
-          "description": "Number of columns in the work grid (desktop)",
-          "default": 3
+          "default": 3,
+          "enumDescriptions": [
+            "2 欄 - 作品圖較大",
+            "3 欄 - 平衡的顯示方式（推薦）",
+            "4 欄 - 一次顯示更多作品"
+          ]
         },
         "thumbnailRatio": {
           "type": "string",
+          "title": "作品縮圖比例",
+          "description": "📐 作品縮圖的長寬比例：\n• 4/3 - 傳統相片比例\n• 3/2 - 單眼相機比例\n• 16/9 - 寬螢幕比例\n• 1/1 - 正方形（適合 Instagram 風格）",
           "enum": [
             "4/3",
             "3/2",
             "16/9",
             "1/1"
           ],
-          "description": "Aspect ratio for work thumbnails",
-          "default": "4/3"
+          "default": "4/3",
+          "enumDescriptions": [
+            "4/3 - 傳統相片比例",
+            "3/2 - 單眼相機常用比例",
+            "16/9 - 寬螢幕電影比例",
+            "1/1 - 正方形，類似 Instagram"
+          ]
         },
         "smoothScroll": {
           "type": "boolean",
-          "description": "Enable smooth scroll behavior",
+          "title": "平滑捲動",
+          "description": "🎢 開啟後，頁面捲動會有平滑的動畫效果",
           "default": true
         },
         "showBackToTop": {
           "type": "boolean",
-          "description": "Show 'back to top' button on mobile",
+          "title": "顯示回頂部按鈕",
+          "description": "⬆️ 在手機版顯示「回到頂部」的快捷按鈕",
           "default": true
         }
       }
     },
     "content": {
       "type": "object",
-      "description": "Text content for various sections",
+      "title": "📝 文案內容",
+      "description": "自訂網站各區塊顯示的文字",
       "properties": {
         "heroTitle": {
           "type": "string",
-          "description": "Main heading in the hero section"
+          "title": "首頁大標題",
+          "description": "🏠 首頁最顯眼的大標題，用來吸引訪客。例如：「手作的溫度」、「用心料理每一道」",
+          "examples": [
+            "手作的溫度",
+            "用心料理每一道",
+            "Handcrafted with Love"
+          ]
         },
         "heroSubtitle": {
           "type": "string",
-          "description": "Subtitle in the hero section"
+          "title": "首頁副標題",
+          "description": "🏠 大標題下方的說明文字，簡短介紹您的特色",
+          "examples": [
+            "為您的生活增添溫暖與美好",
+            "從產地到餐桌的美味旅程"
+          ]
         },
         "heroButtonText": {
           "type": "string",
-          "description": "Text for the hero call-to-action button"
+          "title": "首頁按鈕文字",
+          "description": "🔘 首頁主要按鈕的文字，引導訪客瀏覽作品",
+          "default": "瀏覽作品",
+          "examples": [
+            "瀏覽作品",
+            "View My Work",
+            "探索更多"
+          ]
         },
         "worksTitle": {
           "type": "string",
-          "description": "Title for the main works/portfolio section"
+          "title": "作品區標題",
+          "description": "📁 作品展示區的標題",
+          "default": "作品集",
+          "examples": [
+            "作品集",
+            "Portfolio",
+            "我的創作"
+          ]
         },
         "otherWorksTitle": {
           "type": "string",
-          "description": "Title for the secondary works section"
+          "title": "其他作品區標題",
+          "description": "📁 其他作品區塊的標題",
+          "default": "更多作品",
+          "examples": [
+            "更多作品",
+            "More Creations",
+            "其他創作"
+          ]
         },
         "footerText": {
           "type": "string",
-          "description": "Custom text displayed in the footer"
+          "title": "頁尾文字",
+          "description": "👟 顯示在網站最底部的文字，可以放版權聲明或小語錄",
+          "examples": [
+            "用雙手創造美好",
+            "Made with ❤️",
+            "© 2024 我的品牌"
+          ]
         },
         "notFoundTitle": {
           "type": "string",
-          "description": "Title for the 404 error page"
+          "title": "404頁面標題",
+          "description": "🔍 當訪客進入不存在的頁面時顯示的標題",
+          "default": "找不到頁面",
+          "examples": [
+            "找不到頁面",
+            "Page Not Found",
+            "迷路了嗎？"
+          ]
         },
         "notFoundMessage": {
           "type": "string",
-          "description": "Message displayed on the 404 error page"
+          "title": "404頁面訊息",
+          "description": "🔍 404頁面的說明文字",
+          "default": "您要找的頁面不存在",
+          "examples": [
+            "您要找的頁面不存在",
+            "這個頁面可能已經移除或搬家了"
+          ]
         },
         "notFoundButtonText": {
           "type": "string",
-          "description": "Button text on the 404 error page"
+          "title": "404頁面按鈕",
+          "description": "🔍 404頁面返回首頁的按鈕文字",
+          "default": "回首頁",
+          "examples": [
+            "回首頁",
+            "Go Home",
+            "返回首頁"
+          ]
         }
       }
     },
     "seo": {
       "type": "object",
-      "description": "Search engine optimization settings",
+      "title": "🔍 搜尋引擎優化",
+      "description": "這些設定會影響您的網站在 Google 搜尋結果中的顯示方式",
       "properties": {
         "siteTitle": {
           "type": "string",
-          "description": "Browser tab title and search engine title"
+          "title": "網站標題",
+          "description": "🏷️ 顯示在瀏覽器分頁和 Google 搜尋結果的標題。建議格式：「名字 | 專長」",
+          "examples": [
+            "小美手作 | 編織藝術家",
+            "Emma Woolcraft | Fiber Artist"
+          ]
         },
         "siteDescription": {
           "type": "string",
-          "description": "Meta description for search engines",
-          "maxLength": 160
+          "title": "網站描述",
+          "description": "📄 Google 搜尋結果中顯示的網站簡介（建議 50-160 字元）",
+          "maxLength": 160,
+          "examples": [
+            "手工編織藝術家，專注於永續時尚與溫暖的生活美學。"
+          ]
         },
         "keywords": {
           "type": "string",
-          "description": "Comma-separated keywords for SEO"
+          "title": "關鍵字",
+          "description": "🔑 幫助搜尋引擎理解您網站的關鍵字，用逗號分隔",
+          "examples": [
+            "編織, 手作, 毛線, 永續時尚, 手工藝"
+          ]
         },
         "ogImage": {
           "type": "string",
-          "description": "Social media preview image path (1200x630px recommended)"
+          "title": "社群分享預覽圖",
+          "description": "🖼️ 在社群媒體分享時顯示的預覽圖片。建議尺寸：1200x630 像素。檔案放在 public/images/ 資料夾",
+          "default": "/images/og-image.jpg",
+          "examples": [
+            "/images/og-image.jpg",
+            "/images/share-preview.png"
+          ]
         }
       }
     }
