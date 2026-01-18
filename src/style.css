@@ -1,0 +1,556 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS VARIABLES - These are set dynamically from site.config.js
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+    /* Default fallback colors (will be overridden by theme.js) */
+    --color-primary: 139 69 19;
+    --color-secondary: 160 82 45;
+    --color-background: 253 245 230;
+    --color-text: 61 41 20;
+    --color-muted: 139 115 85;
+
+    /* Generated shades */
+    --color-primary-light: 168 98 48;
+    --color-primary-dark: 111 55 15;
+    --color-secondary-light: 189 111 74;
+    --color-background-alt: 245 237 222;
+
+    /* Fonts (fallbacks) */
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-heading: 'Inter', system-ui, sans-serif;
+
+    /* Animation timing */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer base {
+    html {
+        @apply scroll-smooth;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        font-family: var(--font-body);
+        @apply text-text bg-background antialiased;
+        letter-spacing: 0.01em;
+        /* Prevent horizontal scroll on mobile */
+        overflow-x: hidden;
+    }
+
+    * {
+        @apply m-0 p-0 box-border;
+    }
+
+    /* Selection color using theme primary */
+    ::selection {
+        @apply bg-primary text-background;
+    }
+
+    /* Focus visible for accessibility */
+    :focus-visible {
+        @apply outline-2 outline-primary outline-offset-2;
+    }
+
+    /* Remove tap highlight on mobile */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Headings use heading font */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
+        @apply font-normal;
+    }
+
+    /* Responsive typography using clamp() - prevents awkward breaks on small screens */
+    h1 {
+        font-size: clamp(1.75rem, 4vw + 0.5rem, 3.5rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+    }
+
+    h2 {
+        font-size: clamp(1.25rem, 2.5vw + 0.5rem, 2rem);
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+    }
+
+    h3 {
+        font-size: clamp(1rem, 1.5vw + 0.5rem, 1.5rem);
+        line-height: 1.35;
+    }
+
+    p {
+        font-size: clamp(0.9375rem, 0.5vw + 0.875rem, 1.125rem);
+        line-height: 1.7;
+    }
+
+    /* Ensure minimum touch target sizes on mobile (44x44px per WCAG) */
+    @media (pointer: coarse) {
+        a, button, [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
+    }
+
+    /* Smooth scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-background;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-primary/20 rounded-full;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-primary/40;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer components {
+    /* Navigation link style */
+    .nav-link {
+        @apply relative text-xs tracking-[0.15em] uppercase text-muted
+        hover:text-primary transition-colors duration-300
+        min-h-[44px] flex items-center px-1;
+    }
+
+    .nav-link::after {
+        content: '';
+        @apply absolute -bottom-1 left-0 w-0 h-[1px] bg-primary
+        transition-all duration-300;
+        transition-timing-function: var(--ease-out-expo);
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        @apply w-full;
+    }
+
+    .nav-link.active {
+        @apply text-primary;
+    }
+
+    /* Primary button style - uses theme colors */
+    .btn-primary {
+        @apply inline-flex items-center justify-center
+        px-6 py-3 md:px-8 md:py-4
+        text-xs tracking-[0.2em] uppercase font-medium
+        bg-primary text-background border-2 border-primary
+        hover:bg-transparent hover:text-primary
+        active:scale-[0.98]
+        transition-all duration-300
+        min-h-[48px] min-w-[120px]
+        rounded-sm;
+        transition-timing-function: var(--ease-out-expo);
+    }
+
+    /* Secondary button style */
+    .btn-secondary {
+        @apply inline-flex items-center justify-center
+        px-6 py-3 md:px-8 md:py-4
+        text-xs tracking-[0.2em] uppercase font-medium
+        bg-transparent text-primary border-2 border-primary
+        hover:bg-primary hover:text-background
+        active:scale-[0.98]
+        transition-all duration-300
+        min-h-[48px] min-w-[120px]
+        rounded-sm;
+        transition-timing-function: var(--ease-out-expo);
+    }
+
+    /* Work card hover effect */
+    .work-card {
+        @apply overflow-hidden cursor-pointer block;
+    }
+
+    .work-card img {
+        @apply w-full h-full object-cover
+        transition-all duration-700;
+        transition-timing-function: var(--ease-out-expo);
+    }
+
+    .work-card:hover img {
+        @apply scale-[1.03];
+    }
+
+    /* Touch feedback for mobile */
+    @media (hover: none) {
+        .work-card:active img {
+            @apply scale-[0.98] opacity-90;
+        }
+    }
+
+    /* Glassmorphism effect for mobile menu - enhanced */
+    .glass {
+        background: rgb(var(--color-background) / 0.85);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+    }
+
+    .glass-strong {
+        background: rgb(var(--color-background) / 0.95);
+        backdrop-filter: blur(32px) saturate(200%);
+        -webkit-backdrop-filter: blur(32px) saturate(200%);
+    }
+
+    .glass-dark {
+        background: rgb(var(--color-text) / 0.75);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+    }
+
+    /* Placeholder for missing images */
+    .placeholder-image {
+        @apply bg-background-alt flex items-center justify-center;
+    }
+
+    .placeholder-image::after {
+        content: '📷';
+        @apply text-4xl opacity-30;
+    }
+
+    /* Touch-friendly link */
+    .touch-link {
+        @apply relative min-h-[44px] min-w-[44px] flex items-center justify-center;
+    }
+
+    /* Card with subtle shadow */
+    .card-elevated {
+        box-shadow: 0 1px 3px rgb(var(--color-text) / 0.05),
+        0 10px 40px rgb(var(--color-text) / 0.05);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer utilities {
+    /* Main content container */
+    .content-container {
+        @apply max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20;
+    }
+
+    /* Narrow content container for text */
+    .content-narrow {
+        @apply max-w-[800px] mx-auto px-4 sm:px-6;
+    }
+
+    /* Text utilities */
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .text-pretty {
+        text-wrap: pretty;
+    }
+
+    /* Hero text overlay gradient for readability - enhanced for mobile */
+    .hero-overlay {
+        background: linear-gradient(
+                to top,
+                rgb(var(--color-background) / 0.95) 0%,
+                rgb(var(--color-background) / 0.7) 30%,
+                rgb(var(--color-background) / 0.3) 60%,
+                transparent 100%
+        );
+    }
+
+    /* Alternative overlay - from left for split layouts */
+    .hero-overlay-left {
+        background: linear-gradient(
+                to right,
+                rgb(var(--color-background) / 0.9) 0%,
+                rgb(var(--color-background) / 0.5) 50%,
+                transparent 100%
+        );
+    }
+
+    /* Safe area for mobile notches (iPhone etc.) */
+    .safe-area-inset {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .safe-area-top {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    /* Hide scrollbar but keep functionality */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Prevent text selection on UI elements */
+    .no-select {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    /* GPU acceleration for smooth animations */
+    .gpu {
+        transform: translateZ(0);
+        will-change: transform;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS - Mobile-first, Performance-optimized
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Staggered menu item animation - refined timing */
+@keyframes menuItemSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-item-stagger {
+    animation: menuItemSlideUp 0.5s var(--ease-out-expo) forwards;
+    opacity: 0;
+}
+
+.menu-item-stagger:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.menu-item-stagger:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.menu-item-stagger:nth-child(3) {
+    animation-delay: 0.11s;
+}
+
+.menu-item-stagger:nth-child(4) {
+    animation-delay: 0.14s;
+}
+
+.menu-item-stagger:nth-child(5) {
+    animation-delay: 0.17s;
+}
+
+.menu-item-stagger:nth-child(6) {
+    animation-delay: 0.20s;
+}
+
+.menu-item-stagger:nth-child(7) {
+    animation-delay: 0.23s;
+}
+
+.menu-item-stagger:nth-child(8) {
+    animation-delay: 0.26s;
+}
+
+/* Hamburger to X animation - smoother transitions */
+.hamburger-line {
+    @apply block h-[2px] w-6 bg-current transition-all duration-300;
+    transition-timing-function: var(--ease-out-expo);
+    transform-origin: center;
+}
+
+.hamburger-active .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hamburger-active .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Smooth page transitions */
+.page-enter-active,
+.page-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.page-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
+}
+
+/* View Transitions API support (Chrome 111+) */
+@supports (view-transition-name: none) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.25s;
+        animation-timing-function: var(--ease-out-expo);
+    }
+}
+
+/* Fade transition for images */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s var(--ease-out-expo);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* List stagger animation for TransitionGroup */
+.list-enter-active {
+    transition: all 0.5s var(--ease-out-expo);
+}
+
+.list-leave-active {
+    transition: all 0.3s ease-out;
+}
+
+.list-enter-from {
+    opacity: 0;
+    transform: translateY(24px);
+}
+
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(-24px);
+}
+
+.list-move {
+    transition: transform 0.5s var(--ease-out-expo);
+}
+
+/* Subtle scale animation for cards on load */
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.card-appear {
+    animation: cardAppear 0.6s var(--ease-out-expo) forwards;
+    opacity: 0;
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse-soft {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Slide up animation for hero content */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUpFade 0.8s var(--ease-out-expo) forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+.animate-slide-up-delay-1 {
+    animation: slideUpFade 0.8s var(--ease-out-expo) forwards;
+    animation-delay: 0.35s;
+    opacity: 0;
+}
+
+.animate-slide-up-delay-2 {
+    animation: slideUpFade 0.8s var(--ease-out-expo) forwards;
+    animation-delay: 0.5s;
+    opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REDUCED MOTION - Respect user preferences
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .menu-item-stagger,
+    .card-appear,
+    .animate-slide-up,
+    .animate-slide-up-delay-1,
+    .animate-slide-up-delay-2 {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE-SPECIFIC ENHANCEMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+    /* Slightly larger base font on mobile for readability */
+    html {
+        font-size: 15px;
+    }
+
+    /* Ensure buttons have adequate padding on mobile */
+    .btn-primary,
+    .btn-secondary {
+        @apply px-5 py-3.5;
+    }
+
+    /* Better spacing for mobile cards */
+    .work-card {
+        @apply mb-2;
+    }
+}
