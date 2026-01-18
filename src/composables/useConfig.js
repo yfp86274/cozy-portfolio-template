@@ -13,11 +13,23 @@
  * - 如果沒有設定 profession，系統會正常運作
  * - 如果沒有設定 layout，會使用預設佈局 ['Hero', 'Works', 'OtherWorks']
  * - 所有舊版 config 都能正常運作
+ *
+ * 新增功能：
+ * - uiConfig: 深層 UI 配置（圖片比例、圓角、動畫速度）
+ * - copywriting: 情感化文案（404 頁面、載入中文字）
  */
 
 import {computed, reactive, readonly} from 'vue'
 import siteConfig from '@/../site.config.json'
-import {getProfessionConfig, mergeWithProfessionDefaults,} from '@/utils/professionMap'
+import {
+  DEFAULT_COPYWRITING,
+  DEFAULT_UI_CONFIG,
+  getAnimationDuration,
+  getBorderRadiusValue,
+  getProfessionConfig,
+  getThumbnailAspectRatio,
+  mergeWithProfessionDefaults,
+} from '@/utils/professionMap'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 常量定義
@@ -105,6 +117,14 @@ function applyDefaults(userConfig) {
       layout: DEFAULT_LAYOUT,
       ...userConfig.ui,
     },
+    uiConfig: {
+      ...DEFAULT_UI_CONFIG,
+      ...userConfig.uiConfig,
+    },
+    copywriting: {
+      ...DEFAULT_COPYWRITING,
+      ...userConfig.copywriting,
+    },
     content: {
       heroTitle: '',
       heroSubtitle: '',
@@ -156,6 +176,16 @@ export function useConfig() {
    * 取得 UI 設定
    */
   const ui = readonly(config.ui)
+
+  /**
+   * 取得深層 UI 配置（圖片比例、圓角、動畫速度）
+   */
+  const uiConfig = readonly(config.uiConfig || DEFAULT_UI_CONFIG)
+
+  /**
+   * 取得情感化文案
+   */
+  const copywriting = readonly(config.copywriting || DEFAULT_COPYWRITING)
 
   /**
    * 取得內容文案
@@ -310,6 +340,8 @@ export function useConfig() {
       colors: professionConfig.colors,
       heroStyle: professionConfig.heroStyle,
       layout: professionConfig.layout,
+      uiConfig: professionConfig.uiConfig,
+      copywriting: professionConfig.copywriting,
     }
   }
 
@@ -329,12 +361,72 @@ export function useConfig() {
     return config.ui.navStyle || 'default'
   }
 
+  /**
+   * 取得深層 UI 配置的縮圖比例（CSS 格式）
+   * @returns {string} 如 '4/3', '16/9', '1/1'
+   */
+  const getUiThumbnailRatio = () => {
+    const ratio = config.uiConfig?.thumbnailRatio || DEFAULT_UI_CONFIG.thumbnailRatio
+    return getThumbnailAspectRatio(ratio)
+  }
+
+  /**
+   * 取得圓角 CSS 值
+   * @returns {string} 如 '8px', '16px', '0px'
+   */
+  const getBorderRadius = () => {
+    const borderRadius = config.uiConfig?.borderRadius || DEFAULT_UI_CONFIG.borderRadius
+    return getBorderRadiusValue(borderRadius)
+  }
+
+  /**
+   * 取得動畫速度係數
+   * @returns {number}
+   */
+  const getAnimationSpeed = () => {
+    return config.uiConfig?.animationSpeed || DEFAULT_UI_CONFIG.animationSpeed
+  }
+
+  /**
+   * 計算調整後的動畫持續時間
+   * @param {number} baseDuration - 基礎持續時間（毫秒）
+   * @returns {number} 調整後的持續時間
+   */
+  const calcAnimationDuration = (baseDuration = 300) => {
+    const speed = getAnimationSpeed()
+    return getAnimationDuration(speed, baseDuration)
+  }
+
+  /**
+   * 取得 404 頁面配置
+   * @returns {object} { title, message, emoji, buttonText }
+   */
+  const getNotFoundConfig = () => {
+    const cw = config.copywriting || DEFAULT_COPYWRITING
+    return {
+      title: cw.notFoundTitle || DEFAULT_COPYWRITING.notFoundTitle,
+      message: cw.notFoundMessage || DEFAULT_COPYWRITING.notFoundMessage,
+      emoji: cw.notFoundEmoji || professionConfig?.emoji || DEFAULT_COPYWRITING.notFoundEmoji,
+      buttonText: config.content?.notFoundButtonText || '回首頁',
+    }
+  }
+
+  /**
+   * 取得載入中文字
+   * @returns {string}
+   */
+  const getLoadingText = () => {
+    return config.copywriting?.loadingText || DEFAULT_COPYWRITING.loadingText
+  }
+
   return {
     // 完整配置區塊（唯讀）
     config: readonly(config),
     profile,
     theme,
     ui,
+    uiConfig,
+    copywriting,
     content,
     seo,
 
@@ -352,6 +444,16 @@ export function useConfig() {
     getHeroStyle,
     getThemePreset,
     getNavStyle,
+
+    // 深層 UI 配置方法
+    getUiThumbnailRatio,
+    getBorderRadius,
+    getAnimationSpeed,
+    calcAnimationDuration,
+
+    // 情感化文案方法
+    getNotFoundConfig,
+    getLoadingText,
 
     // 佈局相關
     getLayout,

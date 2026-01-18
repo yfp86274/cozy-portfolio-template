@@ -11,11 +11,16 @@
  *   - 推薦的字體組合
  *   - 預設的配色方案
  *   - 建議的版面配置
+ *   - 情感化的 UI 設定和文案
  *
  * 優先級（高到低）：
  * 1. 用戶在 config 中明確設定的值
  * 2. 職業預設值
  * 3. 系統預設值
+ *
+ * 新增功能：
+ * - uiConfig: 控制深層 UI 行為（圖片比例、圓角、動畫速度）
+ * - copywriting: 情感化文案（404 頁面、載入中文字）
  */
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -40,6 +45,32 @@ const DEFAULT_COLORS = {
 /** 預設佈局 */
 const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
 
+/** 預設 UI 配置 */
+export const DEFAULT_UI_CONFIG = {
+    thumbnailRatio: '4:3',      // 預設縮圖比例
+    borderRadius: 'medium',     // 'none' | 'small' | 'medium' | 'large' | 'pill'
+    animationSpeed: 1,          // 動畫速度係數 (0.5 = 慢, 1 = 正常, 1.5 = 快)
+}
+
+/** 預設情感化文案 */
+export const DEFAULT_COPYWRITING = {
+    notFoundTitle: '找不到頁面',
+    notFoundMessage: '您要找的頁面似乎不存在',
+    notFoundEmoji: '🔍',
+    loadingText: '載入中...',
+    errorTitle: '出了點問題',
+    errorMessage: '請稍後再試',
+}
+
+/** 圓角映射 - 將語意化名稱轉換為 CSS 值 */
+export const BORDER_RADIUS_MAP = {
+    none: '0px',
+    small: '4px',
+    medium: '8px',
+    large: '16px',
+    pill: '9999px',
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // 職業定義
 // ═══════════════════════════════════════════════════════════════════════════
@@ -57,6 +88,8 @@ const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
  * - gridColumns: 推薦的作品欄位數
  * - thumbnailRatio: 推薦的縮圖比例
  * - navStyle: 推薦的導覽列樣式
+ * - uiConfig: 深層 UI 配置 { thumbnailRatio, borderRadius, animationSpeed }
+ * - copywriting: 情感化文案 { notFoundTitle, notFoundMessage, notFoundEmoji, loadingText }
  */
 export const professionMap = {
     // ═══════════════════════════════════════════════════════════════════════════
@@ -83,6 +116,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '3/2',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // 像盤子一樣的圓形比例
+            borderRadius: 'large',      // 大圓角，溫潤如瓷器
+            animationSpeed: 0.8,        // 稍慢，優雅從容
+        },
+        copywriting: {
+            notFoundTitle: '這道菜還沒準備好',
+            notFoundMessage: '哎呀，這個頁面還在備料中，請回到首頁看看我們的拿手好菜！',
+            notFoundEmoji: '🍽️',
+            loadingText: '精心烹調中...',
+        },
     },
 
     baker: {
@@ -106,6 +150,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '1/1',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // Instagram 風格，展示甜點
+            borderRadius: 'large',      // 柔軟圓潤，像麵團
+            animationSpeed: 0.9,        // 溫柔緩慢
+        },
+        copywriting: {
+            notFoundTitle: '蛋糕還在烤箱裡',
+            notFoundMessage: '這個頁面還沒出爐呢！先去看看其他甜蜜的作品吧～',
+            notFoundEmoji: '🎂',
+            loadingText: '烘焙中，香味四溢...',
+        },
     },
 
     barista: {
@@ -129,6 +184,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '4/3',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '4:3',      // 經典比例，展示拉花
+            borderRadius: 'medium',     // 中等圓角，如咖啡杯
+            animationSpeed: 0.85,       // 從容不迫
+        },
+        copywriting: {
+            notFoundTitle: '這杯咖啡賣完了',
+            notFoundMessage: '抱歉，這個頁面像今日特調一樣已經完售。來首頁點杯別的吧！',
+            notFoundEmoji: '☕',
+            loadingText: '萃取中，請稍候...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -155,6 +221,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '4/3',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '4:5',      // 垂直比例，展示穿搭
+            borderRadius: 'medium',     // 柔和圓角，如毛線球
+            animationSpeed: 0.75,       // 慢慢來，像織毛衣
+        },
+        copywriting: {
+            notFoundTitle: '線頭斷了',
+            notFoundMessage: '糟糕，這個頁面的線頭找不到了！回首頁重新開始編織吧～',
+            notFoundEmoji: '🧶',
+            loadingText: '一針一線編織中...',
+        },
     },
 
     potter: {
@@ -178,6 +255,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '1/1',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // 正方形，展示器皿
+            borderRadius: 'large',      // 大圓角，如陶器曲線
+            animationSpeed: 0.7,        // 緩慢，如轆轤轉動
+        },
+        copywriting: {
+            notFoundTitle: '這件作品還在窯裡',
+            notFoundMessage: '這個頁面還在等待燒製，請回到首頁欣賞已完成的作品！',
+            notFoundEmoji: '🏺',
+            loadingText: '塑形中，泥土正在成形...',
+        },
     },
 
     jeweler: {
@@ -201,6 +289,17 @@ export const professionMap = {
         gridColumns: 4,
         thumbnailRatio: '1/1',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // 正方形，珠寶特寫
+            borderRadius: 'small',      // 小圓角，精緻感
+            animationSpeed: 1.1,        // 略快，閃爍效果
+        },
+        copywriting: {
+            notFoundTitle: '這顆寶石遺失了',
+            notFoundMessage: '這個頁面像顆珍貴的寶石一樣不見了，回首頁探索其他璀璨作品吧！',
+            notFoundEmoji: '💎',
+            loadingText: '拋光中，即將閃耀...',
+        },
     },
 
     leatherworker: {
@@ -224,6 +323,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '4/3',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '4:3',      // 經典比例，展示皮件細節
+            borderRadius: 'small',      // 小圓角，俐落如切割
+            animationSpeed: 0.9,        // 沉穩
+        },
+        copywriting: {
+            notFoundTitle: '這塊皮革還在裁切',
+            notFoundMessage: '這個頁面的皮革還沒準備好，回首頁看看已完成的精品吧！',
+            notFoundEmoji: '🧵',
+            loadingText: '手工縫製中...',
+        },
     },
 
     woodworker: {
@@ -247,6 +357,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '16/9',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '16:9',     // 寬螢幕比例，展示家具
+            borderRadius: 'small',      // 小圓角，木工精準
+            animationSpeed: 0.8,        // 穩重
+        },
+        copywriting: {
+            notFoundTitle: '這塊木頭還在雕刻',
+            notFoundMessage: '這個頁面的木料還在工作台上，回首頁欣賞完成的作品吧！',
+            notFoundEmoji: '🪚',
+            loadingText: '打磨中，木屑紛飛...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -273,6 +394,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '4/3',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '4:3',      // 經典畫框比例
+            borderRadius: 'none',       // 無圓角，畫框感
+            animationSpeed: 1.2,        // 快速，充滿活力
+        },
+        copywriting: {
+            notFoundTitle: '這幅畫還在創作中',
+            notFoundMessage: '藝術需要時間醞釀，這個頁面尚未完成。回首頁探索已展出的作品！',
+            notFoundEmoji: '🖼️',
+            loadingText: '靈感湧現中...',
+        },
     },
 
     illustrator: {
@@ -296,6 +428,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '1/1',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // 正方形，社群友善
+            borderRadius: 'medium',     // 中等圓角，親切感
+            animationSpeed: 1.1,        // 活潑
+        },
+        copywriting: {
+            notFoundTitle: '這張圖還在繪製',
+            notFoundMessage: '鉛筆還在紙上跳舞，這個頁面尚未完成。先去看看其他插畫吧！',
+            notFoundEmoji: '✏️',
+            loadingText: '描繪中，線條成形...',
+        },
     },
 
     photographer: {
@@ -319,6 +462,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '3/2',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '3:2',      // 經典攝影比例
+            borderRadius: 'none',       // 無圓角，專業感
+            animationSpeed: 1,          // 標準速度
+        },
+        copywriting: {
+            notFoundTitle: '這張照片曝光不足',
+            notFoundMessage: '快門還沒按下，這個頁面尚未捕捉到。回首頁瀏覽其他攝影作品！',
+            notFoundEmoji: '📸',
+            loadingText: '對焦中，準備捕捉...',
+        },
     },
 
     designer: {
@@ -342,6 +496,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '16/9',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '16:9',     // 螢幕比例，展示 UI
+            borderRadius: 'medium',     // 現代圓角
+            animationSpeed: 1.15,       // 俐落快速
+        },
+        copywriting: {
+            notFoundTitle: '設計稿遺失了',
+            notFoundMessage: '這個頁面的設計稿不小心被刪掉了！回首頁看看其他設計作品吧～',
+            notFoundEmoji: '🎨',
+            loadingText: '渲染中，像素排列...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -368,6 +533,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '4/3',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '4:5',      // 垂直比例，展示花束
+            borderRadius: 'large',      // 大圓角，柔美花瓣
+            animationSpeed: 0.7,        // 優雅緩慢
+        },
+        copywriting: {
+            notFoundTitle: '這束花還在含苞',
+            notFoundMessage: '這個頁面的花朵還沒綻放，回首頁欣賞盛開的花藝作品吧！',
+            notFoundEmoji: '🌷',
+            loadingText: '花朵綻放中...',
+        },
     },
 
     gardener: {
@@ -391,6 +567,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '4/3',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '4:3',      // 經典比例，展示庭園
+            borderRadius: 'medium',     // 中等圓角，自然感
+            animationSpeed: 0.75,       // 緩慢生長
+        },
+        copywriting: {
+            notFoundTitle: '這片園地還在播種',
+            notFoundMessage: '種子還在土裡等待發芽，回首頁看看已經茂盛的花園吧！',
+            notFoundEmoji: '🌱',
+            loadingText: '澆水施肥中，靜待成長...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -417,6 +604,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '16/9',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '16:9',     // 寬廣舒適
+            borderRadius: 'pill',       // 藥丸形狀，溫柔親和
+            animationSpeed: 0.6,        // 非常緩慢，平靜
+        },
+        copywriting: {
+            notFoundTitle: '這裡是個安全的空間',
+            notFoundMessage: '雖然這個頁面不存在，但沒關係，讓我們回到首頁，繼續這段旅程。',
+            notFoundEmoji: '🌿',
+            loadingText: '深呼吸，放鬆...',
+        },
     },
 
     yoga: {
@@ -440,6 +638,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '3/2',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '3:2',      // 平衡比例
+            borderRadius: 'large',      // 大圓角，流動感
+            animationSpeed: 0.5,        // 極慢，冥想般
+        },
+        copywriting: {
+            notFoundTitle: '呼吸，然後放下',
+            notFoundMessage: '這個頁面已經隨風而去，讓我們回到當下，從首頁重新開始。',
+            notFoundEmoji: '🕊️',
+            loadingText: '吸氣...吐氣...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -466,6 +675,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '16/9',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '16:9',     // 寬螢幕，展示建築全景
+            borderRadius: 'none',       // 無圓角，直線美學
+            animationSpeed: 1.2,        // 俐落精準
+        },
+        copywriting: {
+            notFoundTitle: '這裡的藍圖遺失了',
+            notFoundMessage: '這個空間的設計圖還在繪製中，回首頁探索已完工的建築作品！',
+            notFoundEmoji: '📐',
+            loadingText: '結構計算中...',
+        },
     },
 
     interior: {
@@ -489,6 +709,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '4/3',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '4:3',      // 經典空間比例
+            borderRadius: 'small',      // 小圓角，現代感
+            animationSpeed: 1,          // 標準速度
+        },
+        copywriting: {
+            notFoundTitle: '這個空間還在規劃',
+            notFoundMessage: '這個頁面的家具還沒擺好，回首頁看看已經佈置好的空間吧！',
+            notFoundEmoji: '🏠',
+            loadingText: '空間規劃中...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -515,6 +746,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '1/1',
         navStyle: 'minimal',
+        uiConfig: {
+            thumbnailRatio: '1:1',      // 專輯封面比例
+            borderRadius: 'small',      // 小圓角，唱片感
+            animationSpeed: 1.3,        // 快速，節奏感
+        },
+        copywriting: {
+            notFoundTitle: '這首歌還在錄製',
+            notFoundMessage: '這個頁面的旋律還沒完成，回首頁聆聽其他已發行的作品！',
+            notFoundEmoji: '🎸',
+            loadingText: '調音中，準備演出...',
+        },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -541,6 +783,17 @@ export const professionMap = {
         gridColumns: 2,
         thumbnailRatio: '3/2',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '3:2',      // 書本比例
+            borderRadius: 'small',      // 小圓角，書頁感
+            animationSpeed: 0.8,        // 沉穩
+        },
+        copywriting: {
+            notFoundTitle: '這一頁還是空白',
+            notFoundMessage: '故事還在醞釀，這個頁面的文字尚未落筆。回首頁閱讀已發表的作品！',
+            notFoundEmoji: '📖',
+            loadingText: '文字編織中...',
+        },
     },
 
     teacher: {
@@ -564,6 +817,17 @@ export const professionMap = {
         gridColumns: 3,
         thumbnailRatio: '16/9',
         navStyle: 'default',
+        uiConfig: {
+            thumbnailRatio: '16:9',     // 投影片比例
+            borderRadius: 'medium',     // 中等圓角，友善
+            animationSpeed: 1,          // 標準速度
+        },
+        copywriting: {
+            notFoundTitle: '這堂課還沒開始',
+            notFoundMessage: '教室裡還沒有內容，回首頁看看其他精彩的課程吧！',
+            notFoundEmoji: '🎓',
+            loadingText: '備課中，知識整理...',
+        },
     },
 }
 
@@ -617,6 +881,93 @@ export function getProfessionsByCategory() {
     })
 
     return categories
+}
+
+/**
+ * 取得職業的 UI 配置
+ * 優先級：用戶設定 > 職業預設 > 系統預設
+ *
+ * @param {string} profession - 職業代碼
+ * @param {object} userUiConfig - 用戶自訂的 UI 配置
+ * @returns {object} 合併後的 UI 配置
+ */
+export function getUiConfig(profession, userUiConfig = {}) {
+    const professionConfig = getProfessionConfig(profession)
+
+    // 系統預設
+    const defaults = {...DEFAULT_UI_CONFIG}
+
+    // 職業預設
+    const professionDefaults = professionConfig?.uiConfig || {}
+
+    // 合併（用戶設定優先）
+    return {
+        ...defaults,
+        ...professionDefaults,
+        ...filterEmptyValues(userUiConfig),
+    }
+}
+
+/**
+ * 取得職業的情感化文案
+ * 優先級：用戶設定 > 職業預設 > 系統預設
+ *
+ * @param {string} profession - 職業代碼
+ * @param {object} userCopywriting - 用戶自訂的文案
+ * @returns {object} 合併後的文案配置
+ */
+export function getCopywriting(profession, userCopywriting = {}) {
+    const professionConfig = getProfessionConfig(profession)
+
+    // 系統預設
+    const defaults = {...DEFAULT_COPYWRITING}
+
+    // 職業預設
+    const professionDefaults = professionConfig?.copywriting || {}
+
+    // 如果職業有設定 emoji，也用於 notFoundEmoji
+    if (professionConfig?.emoji && !professionDefaults.notFoundEmoji) {
+        professionDefaults.notFoundEmoji = professionConfig.emoji
+    }
+
+    // 合併（用戶設定優先）
+    return {
+        ...defaults,
+        ...professionDefaults,
+        ...filterEmptyValues(userCopywriting),
+    }
+}
+
+/**
+ * 取得圓角的 CSS 值
+ * @param {string} borderRadius - 圓角名稱（'none' | 'small' | 'medium' | 'large' | 'pill'）
+ * @returns {string} CSS 值
+ */
+export function getBorderRadiusValue(borderRadius) {
+    return BORDER_RADIUS_MAP[borderRadius] || BORDER_RADIUS_MAP.medium
+}
+
+/**
+ * 取得動畫持續時間
+ * 基於動畫速度係數計算
+ *
+ * @param {number} animationSpeed - 動畫速度係數
+ * @param {number} baseDuration - 基礎持續時間（毫秒）
+ * @returns {number} 調整後的持續時間（毫秒）
+ */
+export function getAnimationDuration(animationSpeed = 1, baseDuration = 300) {
+    // 速度係數越高，持續時間越短
+    return Math.round(baseDuration / animationSpeed)
+}
+
+/**
+ * 將縮圖比例轉換為 CSS aspect-ratio 值
+ * @param {string} ratio - 比例字串（如 '4:3', '16:9', '1:1'）
+ * @returns {string} CSS aspect-ratio 值（如 '4/3'）
+ */
+export function getThumbnailAspectRatio(ratio) {
+    if (!ratio) return '4/3'
+    return ratio.replace(':', '/')
 }
 
 /**
@@ -689,6 +1040,20 @@ export function mergeWithProfessionDefaults(profession, userConfig) {
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
+    // 合併 uiConfig（深層 UI 配置）
+    // ═══════════════════════════════════════════════════════════════════════════
+    const userUiConfig = userConfig.uiConfig || {}
+
+    merged.uiConfig = getUiConfig(profession, userUiConfig)
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 合併 copywriting（情感化文案）
+    // ═══════════════════════════════════════════════════════════════════════════
+    const userCopywriting = userConfig.copywriting || {}
+
+    merged.copywriting = getCopywriting(profession, userCopywriting)
+
+    // ═══════════════════════════════════════════════════════════════════════════
     // 保留其他區塊（profile, content, seo）
     // ═══════════════════════════════════════════════════════════════════════════
     merged.profile = userConfig.profile || {}
@@ -754,6 +1119,8 @@ export function getProfessionPreview(profession) {
         backgroundColor: config.colors.backgroundColor,
         fontFamily: config.fonts.body,
         heroStyle: config.heroStyle,
+        uiConfig: config.uiConfig,
+        copywriting: config.copywriting,
     }
 }
 
@@ -762,7 +1129,15 @@ export default {
     getProfessionConfig,
     getProfessionList,
     getProfessionsByCategory,
+    getUiConfig,
+    getCopywriting,
+    getBorderRadiusValue,
+    getAnimationDuration,
+    getThumbnailAspectRatio,
     mergeWithProfessionDefaults,
     hasUserOverride,
     getProfessionPreview,
+    DEFAULT_UI_CONFIG,
+    DEFAULT_COPYWRITING,
+    BORDER_RADIUS_MAP,
 }
