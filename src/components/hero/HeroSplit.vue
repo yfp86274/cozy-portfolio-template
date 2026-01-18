@@ -9,6 +9,7 @@
 import {computed} from 'vue'
 import {useConfig} from '@/composables/useConfig'
 import {getPlaceholderImage} from '@/utils/theme'
+import SmartImage from '@/components/ui/SmartImage.vue'
 
 const {content, profile, theme} = useConfig()
 
@@ -75,16 +76,19 @@ const scrollToWorks = () => {
           </div>
         </div>
 
-        <!-- Hero Image -->
+        <!-- Hero Image (使用 SmartImage 組件) -->
         <div class="order-1 lg:order-2">
           <div
-              class="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-square bg-background-alt overflow-hidden rounded-theme"
+              class="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-square overflow-hidden rounded-theme"
               :class="{ 'card-appear': isLoaded }"
           >
-            <img
+            <SmartImage
                 :src="heroImage"
                 alt="Portfolio Hero"
                 class="w-full h-full object-cover"
+                :lazy="false"
+                :fade-in-duration="600"
+                :placeholder-icon-size="64"
                 @error="handleImageError"
             />
           </div>

@@ -4,40 +4,25 @@
  *
  * 以格線方式展示主要作品集
  * 支援自訂欄位數和縮圖比例
+ * 使用 SmartImage 組件實現職業感知佔位圖和漸進式載入
  */
 
-import {computed} from 'vue'
 import {RouterLink} from 'vue-router'
 import {usePortfolio} from '@/composables/usePortfolio'
 import {useConfig} from '@/composables/useConfig'
-import {getPlaceholderImage} from '@/utils/theme'
+import SmartImage from '@/components/ui/SmartImage.vue'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Composables & Config
 // ═══════════════════════════════════════════════════════════════════════════
 const {worksWithCovers} = usePortfolio()
-const {content, theme, getGridClass, getAspectClass} = useConfig()
+const {content, getGridClass, getAspectClass} = useConfig()
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Computed
 // ═══════════════════════════════════════════════════════════════════════════
 const gridClass = getGridClass()
 const aspectClass = getAspectClass()
-
-// 預設佔位圖
-const placeholderBg = computed(() =>
-    getPlaceholderImage(theme.backgroundColor, 400, 300)
-)
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Event Handlers
-// ═══════════════════════════════════════════════════════════════════════════
-
-// 圖片載入錯誤處理
-const handleImageError = (event) => {
-  event.target.src = placeholderBg.value
-  event.target.classList.add('placeholder-image')
-}
 </script>
 
 <template>
@@ -69,19 +54,20 @@ const handleImageError = (event) => {
             transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
           }"
         >
-          <!-- Cover Image Container -->
+          <!-- Cover Image Container (使用 SmartImage 組件) -->
           <div
               :class="[
-              'relative bg-background-alt overflow-hidden mb-3 md:mb-4 rounded-theme card-shadow',
+              'relative overflow-hidden mb-3 md:mb-4 rounded-theme card-shadow',
               aspectClass,
             ]"
           >
-            <img
+            <SmartImage
                 :src="work.coverBg ? work.coverBg : work.cover"
                 :alt="work.name"
-                class="w-full h-full object-cover"
-                loading="lazy"
-                @error="handleImageError"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                :lazy="true"
+                :fade-in-duration="400"
+                :placeholder-icon-size="40"
             />
           </div>
 
