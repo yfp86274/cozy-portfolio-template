@@ -1,26 +1,13 @@
 /**
- * Profession Map - 職業風格映射系統
+ * Profession Map - 職業風格映射系統 v2.0
  *
  * 🪄 魔法功能：讓用戶只需填寫職業，就能自動套用最適合的視覺風格。
- * 這是為了讓不懂設計的手作人也能有專業的網站外觀。
  *
- * 使用方式：
- * 用戶在 site.config.json 中設定 profile.profession: "chef"
- * 系統會自動套用：
- *   - 適合的 themePreset (minimal)
- *   - 推薦的字體組合
- *   - 預設的配色方案
- *   - 建議的版面配置
- *   - 情感化的 UI 設定和文案
- *
- * 優先級（高到低）：
- * 1. 用戶在 config 中明確設定的值
- * 2. 職業預設值
- * 3. 系統預設值
- *
- * 新增功能：
- * - uiConfig: 控制深層 UI 行為（圖片比例、圓角、動畫速度）
- * - copywriting: 情感化文案（404 頁面、載入中文字）
+ * v2.0 更新：大幅增強各職業間的視覺區別度
+ * - 色彩方案：每個類別使用完全不同的色調
+ * - 字體組合：更極端的搭配差異
+ * - UI 配置：圓角從銳利到圓潤、動畫從沉穩到活潑
+ * - 佈局：不同的格線、比例、Hero 樣式
  */
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -47,9 +34,11 @@ const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
 
 /** 預設 UI 配置 */
 export const DEFAULT_UI_CONFIG = {
-    thumbnailRatio: '4:3',      // 預設縮圖比例
-    borderRadius: 'medium',     // 'none' | 'small' | 'medium' | 'large' | 'pill'
-    animationSpeed: 1,          // 動畫速度係數 (0.5 = 慢, 1 = 正常, 1.5 = 快)
+    thumbnailRatio: '4:3',
+    borderRadius: 'medium',
+    animationSpeed: 1,
+    cardStyle: 'default',       // 'default' | 'minimal' | 'bordered' | 'elevated'
+    hoverEffect: 'lift',        // 'lift' | 'glow' | 'scale' | 'none'
 }
 
 /** 預設情感化文案 */
@@ -62,38 +51,23 @@ export const DEFAULT_COPYWRITING = {
     errorMessage: '請稍後再試',
 }
 
-/** 圓角映射 - 將語意化名稱轉換為 CSS 值 */
+/** 圓角映射 */
 export const BORDER_RADIUS_MAP = {
     none: '0px',
     small: '4px',
     medium: '8px',
     large: '16px',
+    xl: '24px',
     pill: '9999px',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 職業定義
+// 職業定義 - 大幅增強區別度版本
 // ═══════════════════════════════════════════════════════════════════════════
 
-/**
- * 職業定義
- * 每個職業包含：
- * - label: 顯示名稱（中文）
- * - emoji: 圖示
- * - preset: 對應的視覺風格預設
- * - fonts: 推薦字體 { body, heading }
- * - colors: 預設配色方案
- * - heroStyle: 推薦的首頁版型
- * - layout: 推薦的頁面區塊順序
- * - gridColumns: 推薦的作品欄位數
- * - thumbnailRatio: 推薦的縮圖比例
- * - navStyle: 推薦的導覽列樣式
- * - uiConfig: 深層 UI 配置 { thumbnailRatio, borderRadius, animationSpeed }
- * - copywriting: 情感化文案 { notFoundTitle, notFoundMessage, notFoundEmoji, loadingText }
- */
 export const professionMap = {
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🍳 餐飲類 - 乾淨俐落、專業感
+    // 🍳 餐飲類 - 米其林風格：極簡、留白、高對比
     // ═══════════════════════════════════════════════════════════════════════════
     chef: {
         label: '廚師 / 料理人',
@@ -102,28 +76,30 @@ export const professionMap = {
         preset: 'minimal',
         fonts: {
             body: 'Inter',
-            heading: 'Cormorant Garamond',
+            heading: 'Cormorant Garamond',  // 優雅襯線體
         },
         colors: {
-            primaryColor: '#1a1a1a',
-            secondaryColor: '#8b7355',
-            backgroundColor: '#fafafa',
-            textColor: '#1a1a1a',
-            mutedColor: '#6b6b6b',
+            primaryColor: '#0a0a0a',         // 純黑
+            secondaryColor: '#c9a87c',       // 香檳金
+            backgroundColor: '#fafafa',      // 幾乎純白
+            textColor: '#0a0a0a',
+            mutedColor: '#757575',
         },
         heroStyle: 'minimal',
         layout: ['Hero', 'Works', 'OtherWorks'],
-        gridColumns: 2,
+        gridColumns: 2,                      // 大圖展示
         thumbnailRatio: '3/2',
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '1:1',      // 像盤子一樣的圓形比例
-            borderRadius: 'large',      // 大圓角，溫潤如瓷器
-            animationSpeed: 0.8,        // 稍慢，優雅從容
+            thumbnailRatio: '1:1',
+            borderRadius: 'none',            // 銳利邊角，專業感
+            animationSpeed: 0.7,             // 緩慢優雅
+            cardStyle: 'minimal',
+            hoverEffect: 'none',
         },
         copywriting: {
             notFoundTitle: '這道菜還沒準備好',
-            notFoundMessage: '哎呀，這個頁面還在備料中，請回到首頁看看我們的拿手好菜！',
+            notFoundMessage: '請回到首頁，探索我們的拿手好菜。',
             notFoundEmoji: '🍽️',
             loadingText: '精心烹調中...',
         },
@@ -135,15 +111,15 @@ export const professionMap = {
         category: 'food',
         preset: 'soft',
         fonts: {
-            body: 'Quicksand',
-            heading: 'Playfair Display',
+            body: 'Quicksand',               // 圓潤可愛
+            heading: 'Playfair Display',     // 優雅對比
         },
         colors: {
-            primaryColor: '#c9a87c',
-            secondaryColor: '#e8d5c4',
-            backgroundColor: '#fffbf7',
-            textColor: '#5d4e42',
-            mutedColor: '#9c8b7e',
+            primaryColor: '#d4a373',         // 焦糖色
+            secondaryColor: '#faedcd',       // 奶油黃
+            backgroundColor: '#fefae0',      // 溫暖米白
+            textColor: '#6c584c',            // 巧克力棕
+            mutedColor: '#a98467',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -151,9 +127,11 @@ export const professionMap = {
         thumbnailRatio: '1/1',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '1:1',      // Instagram 風格，展示甜點
-            borderRadius: 'large',      // 柔軟圓潤，像麵團
-            animationSpeed: 0.9,        // 溫柔緩慢
+            thumbnailRatio: '1:1',
+            borderRadius: 'xl',              // 超大圓角，像馬卡龍
+            animationSpeed: 0.8,
+            cardStyle: 'elevated',
+            hoverEffect: 'lift',
         },
         copywriting: {
             notFoundTitle: '蛋糕還在烤箱裡',
@@ -169,15 +147,15 @@ export const professionMap = {
         category: 'food',
         preset: 'minimal',
         fonts: {
-            body: 'Source Sans Pro',
-            heading: 'Libre Baskerville',
+            body: 'IBM Plex Sans',           // 現代工業感
+            heading: 'Libre Baskerville',    // 經典襯線
         },
         colors: {
-            primaryColor: '#3d2914',
-            secondaryColor: '#6f4e37',
-            backgroundColor: '#f9f6f2',
-            textColor: '#2d2d2d',
-            mutedColor: '#7a7a7a',
+            primaryColor: '#2c1810',         // 深咖啡
+            secondaryColor: '#8b5a2b',       // 拿鐵棕
+            backgroundColor: '#f5f1eb',      // 咖啡奶泡色
+            textColor: '#2c1810',
+            mutedColor: '#6b5344',
         },
         heroStyle: 'minimal',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -185,20 +163,22 @@ export const professionMap = {
         thumbnailRatio: '4/3',
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '4:3',      // 經典比例，展示拉花
-            borderRadius: 'medium',     // 中等圓角，如咖啡杯
-            animationSpeed: 0.85,       // 從容不迫
+            thumbnailRatio: '4:3',
+            borderRadius: 'small',
+            animationSpeed: 0.85,
+            cardStyle: 'minimal',
+            hoverEffect: 'scale',
         },
         copywriting: {
             notFoundTitle: '這杯咖啡賣完了',
-            notFoundMessage: '抱歉，這個頁面像今日特調一樣已經完售。來首頁點杯別的吧！',
+            notFoundMessage: '來首頁點杯別的吧！',
             notFoundEmoji: '☕',
-            loadingText: '萃取中，請稍候...',
+            loadingText: '萃取中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🧶 手作類 - 溫暖、有機感
+    // 🧶 手作類 - 溫暖有機：大地色系、手感質地
     // ═══════════════════════════════════════════════════════════════════════════
     knitter: {
         label: '編織創作者',
@@ -206,29 +186,31 @@ export const professionMap = {
         category: 'craft',
         preset: 'default',
         fonts: {
-            body: 'Lora',
-            heading: 'Playfair Display',
+            body: 'Lora',                    // 溫暖襯線
+            heading: 'Amatic SC',            // 手寫風格！
         },
         colors: {
-            primaryColor: '#8B4513',
-            secondaryColor: '#A0522D',
-            backgroundColor: '#FDF5E6',
-            textColor: '#3D2914',
-            mutedColor: '#8B7355',
+            primaryColor: '#a0785a',         // 駝色
+            secondaryColor: '#d4b896',       // 亞麻色
+            backgroundColor: '#fdf6ec',      // 羊毛白
+            textColor: '#5c4033',            // 深棕
+            mutedColor: '#8b7355',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 3,
-        thumbnailRatio: '4/3',
+        thumbnailRatio: '4/5',               // 垂直比例
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '4:5',      // 垂直比例，展示穿搭
-            borderRadius: 'medium',     // 柔和圓角，如毛線球
-            animationSpeed: 0.75,       // 慢慢來，像織毛衣
+            thumbnailRatio: '4:5',
+            borderRadius: 'large',
+            animationSpeed: 0.6,             // 很慢，像織毛衣
+            cardStyle: 'default',
+            hoverEffect: 'lift',
         },
         copywriting: {
             notFoundTitle: '線頭斷了',
-            notFoundMessage: '糟糕，這個頁面的線頭找不到了！回首頁重新開始編織吧～',
+            notFoundMessage: '回首頁重新開始編織吧～',
             notFoundEmoji: '🧶',
             loadingText: '一針一線編織中...',
         },
@@ -241,30 +223,32 @@ export const professionMap = {
         preset: 'default',
         fonts: {
             body: 'Nunito',
-            heading: 'Cormorant Garamond',
+            heading: 'EB Garamond',          // 古典優雅
         },
         colors: {
-            primaryColor: '#8d6e63',
-            secondaryColor: '#a1887f',
-            backgroundColor: '#f5f0eb',
-            textColor: '#4e342e',
+            primaryColor: '#8d6e63',         // 陶土色
+            secondaryColor: '#bcaaa4',       // 釉色
+            backgroundColor: '#efebe9',      // 生坯白
+            textColor: '#4e342e',            // 窯燒棕
             mutedColor: '#8d6e63',
         },
-        heroStyle: 'split',
+        heroStyle: 'centered',               // 置中展示
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 3,
         thumbnailRatio: '1/1',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '1:1',      // 正方形，展示器皿
-            borderRadius: 'large',      // 大圓角，如陶器曲線
-            animationSpeed: 0.7,        // 緩慢，如轆轤轉動
+            thumbnailRatio: '1:1',
+            borderRadius: 'pill',            // 圓潤如陶器
+            animationSpeed: 0.5,             // 極慢，如轆轤
+            cardStyle: 'default',
+            hoverEffect: 'glow',
         },
         copywriting: {
             notFoundTitle: '這件作品還在窯裡',
-            notFoundMessage: '這個頁面還在等待燒製，請回到首頁欣賞已完成的作品！',
+            notFoundMessage: '請回到首頁欣賞已完成的作品！',
             notFoundEmoji: '🏺',
-            loadingText: '塑形中，泥土正在成形...',
+            loadingText: '塑形中...',
         },
     },
 
@@ -274,31 +258,33 @@ export const professionMap = {
         category: 'craft',
         preset: 'soft',
         fonts: {
-            body: 'Raleway',
-            heading: 'Cinzel',
+            body: 'Raleway',                 // 纖細優雅
+            heading: 'Cinzel',               // 羅馬碑文風
         },
         colors: {
-            primaryColor: '#b8860b',
-            secondaryColor: '#d4af37',
-            backgroundColor: '#fefefe',
-            textColor: '#2c2c2c',
-            mutedColor: '#888888',
+            primaryColor: '#1a1a2e',         // 深夜藍
+            secondaryColor: '#c9b037',       // 純金色
+            backgroundColor: '#fafafa',      // 絲絨白
+            textColor: '#1a1a2e',
+            mutedColor: '#6c6c6c',
         },
         heroStyle: 'centered',
         layout: ['Hero', 'Works', 'OtherWorks'],
-        gridColumns: 4,
+        gridColumns: 4,                      // 小圖密集展示
         thumbnailRatio: '1/1',
-        navStyle: 'default',
+        navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '1:1',      // 正方形，珠寶特寫
-            borderRadius: 'small',      // 小圓角，精緻感
-            animationSpeed: 1.1,        // 略快，閃爍效果
+            thumbnailRatio: '1:1',
+            borderRadius: 'none',            // 銳利如切割
+            animationSpeed: 1.2,             // 快速閃爍
+            cardStyle: 'bordered',
+            hoverEffect: 'glow',             // 發光效果
         },
         copywriting: {
             notFoundTitle: '這顆寶石遺失了',
-            notFoundMessage: '這個頁面像顆珍貴的寶石一樣不見了，回首頁探索其他璀璨作品吧！',
+            notFoundMessage: '回首頁探索其他璀璨作品。',
             notFoundEmoji: '💎',
-            loadingText: '拋光中，即將閃耀...',
+            loadingText: '拋光中...',
         },
     },
 
@@ -308,15 +294,15 @@ export const professionMap = {
         category: 'craft',
         preset: 'default',
         fonts: {
-            body: 'Merriweather',
-            heading: 'Oswald',
+            body: 'Source Serif Pro',
+            heading: 'Oswald',               // 硬朗無襯線
         },
         colors: {
-            primaryColor: '#5d4037',
-            secondaryColor: '#795548',
-            backgroundColor: '#efebe9',
-            textColor: '#3e2723',
-            mutedColor: '#8d6e63',
+            primaryColor: '#3d2914',         // 深棕皮革
+            secondaryColor: '#8b5a2b',       // 植鞣棕
+            backgroundColor: '#f5f0e8',      // 皮革原色
+            textColor: '#2d1f12',
+            mutedColor: '#7a6552',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -324,13 +310,15 @@ export const professionMap = {
         thumbnailRatio: '4/3',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '4:3',      // 經典比例，展示皮件細節
-            borderRadius: 'small',      // 小圓角，俐落如切割
-            animationSpeed: 0.9,        // 沉穩
+            thumbnailRatio: '4:3',
+            borderRadius: 'small',           // 小圓角，精工
+            animationSpeed: 0.9,
+            cardStyle: 'bordered',
+            hoverEffect: 'lift',
         },
         copywriting: {
             notFoundTitle: '這塊皮革還在裁切',
-            notFoundMessage: '這個頁面的皮革還沒準備好，回首頁看看已完成的精品吧！',
+            notFoundMessage: '回首頁看看已完成的精品。',
             notFoundEmoji: '🧵',
             loadingText: '手工縫製中...',
         },
@@ -342,36 +330,38 @@ export const professionMap = {
         category: 'craft',
         preset: 'default',
         fonts: {
-            body: 'Source Serif Pro',
-            heading: 'Josefin Sans',
+            body: 'Merriweather',
+            heading: 'Josefin Sans',         // 幾何現代
         },
         colors: {
-            primaryColor: '#6d4c41',
-            secondaryColor: '#8d6e63',
-            backgroundColor: '#faf8f5',
+            primaryColor: '#5d4037',         // 胡桃木
+            secondaryColor: '#a1887f',       // 橡木色
+            backgroundColor: '#faf8f5',      // 木屑白
             textColor: '#3e2723',
             mutedColor: '#8d6e63',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 2,
-        thumbnailRatio: '16/9',
+        thumbnailRatio: '16/9',              // 寬幅展示家具
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '16:9',     // 寬螢幕比例，展示家具
-            borderRadius: 'small',      // 小圓角，木工精準
-            animationSpeed: 0.8,        // 穩重
+            thumbnailRatio: '16:9',
+            borderRadius: 'small',
+            animationSpeed: 0.75,
+            cardStyle: 'default',
+            hoverEffect: 'scale',
         },
         copywriting: {
             notFoundTitle: '這塊木頭還在雕刻',
-            notFoundMessage: '這個頁面的木料還在工作台上，回首頁欣賞完成的作品吧！',
+            notFoundMessage: '回首頁欣賞完成的作品。',
             notFoundEmoji: '🪚',
-            loadingText: '打磨中，木屑紛飛...',
+            loadingText: '打磨中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🎨 藝術類 - 大膽、個性
+    // 🎨 藝術類 - 大膽前衛：高對比、強烈個性
     // ═══════════════════════════════════════════════════════════════════════════
     artist: {
         label: '藝術家',
@@ -379,15 +369,15 @@ export const professionMap = {
         category: 'art',
         preset: 'bold',
         fonts: {
-            body: 'Space Grotesk',
-            heading: 'Bebas Neue',
+            body: 'Space Grotesk',           // 前衛幾何
+            heading: 'Bebas Neue',           // 強烈標題
         },
         colors: {
-            primaryColor: '#1a1a1a',
-            secondaryColor: '#ff4444',
-            backgroundColor: '#ffffff',
-            textColor: '#1a1a1a',
-            mutedColor: '#666666',
+            primaryColor: '#000000',         // 純黑
+            secondaryColor: '#ff3d00',       // 螢光橘紅
+            backgroundColor: '#ffffff',      // 純白
+            textColor: '#000000',
+            mutedColor: '#757575',
         },
         heroStyle: 'minimal',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -395,13 +385,15 @@ export const professionMap = {
         thumbnailRatio: '4/3',
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '4:3',      // 經典畫框比例
-            borderRadius: 'none',       // 無圓角，畫框感
-            animationSpeed: 1.2,        // 快速，充滿活力
+            thumbnailRatio: '4:3',
+            borderRadius: 'none',            // 銳利畫框
+            animationSpeed: 1.4,             // 快速俐落
+            cardStyle: 'minimal',
+            hoverEffect: 'none',
         },
         copywriting: {
-            notFoundTitle: '這幅畫還在創作中',
-            notFoundMessage: '藝術需要時間醞釀，這個頁面尚未完成。回首頁探索已展出的作品！',
+            notFoundTitle: '作品創作中',
+            notFoundMessage: '回首頁探索已展出的作品。',
             notFoundEmoji: '🖼️',
             loadingText: '靈感湧現中...',
         },
@@ -413,15 +405,15 @@ export const professionMap = {
         category: 'art',
         preset: 'bold',
         fonts: {
-            body: 'Poppins',
-            heading: 'Righteous',
+            body: 'Nunito',                  // 圓潤友善
+            heading: 'Righteous',            // 復古卡通
         },
         colors: {
-            primaryColor: '#6366f1',
-            secondaryColor: '#a5b4fc',
+            primaryColor: '#5c6bc0',         // 靛藍紫
+            secondaryColor: '#ffab91',       // 珊瑚橘
             backgroundColor: '#fafafa',
-            textColor: '#1e1e1e',
-            mutedColor: '#71717a',
+            textColor: '#37474f',
+            mutedColor: '#78909c',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -429,15 +421,17 @@ export const professionMap = {
         thumbnailRatio: '1/1',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '1:1',      // 正方形，社群友善
-            borderRadius: 'medium',     // 中等圓角，親切感
-            animationSpeed: 1.1,        // 活潑
+            thumbnailRatio: '1:1',
+            borderRadius: 'large',           // 圓潤可愛
+            animationSpeed: 1.2,
+            cardStyle: 'elevated',
+            hoverEffect: 'scale',
         },
         copywriting: {
             notFoundTitle: '這張圖還在繪製',
-            notFoundMessage: '鉛筆還在紙上跳舞，這個頁面尚未完成。先去看看其他插畫吧！',
+            notFoundMessage: '先去看看其他插畫吧！',
             notFoundEmoji: '✏️',
-            loadingText: '描繪中，線條成形...',
+            loadingText: '描繪中...',
         },
     },
 
@@ -448,30 +442,32 @@ export const professionMap = {
         preset: 'minimal',
         fonts: {
             body: 'Work Sans',
-            heading: 'Montserrat',
+            heading: 'Montserrat',           // 現代幾何
         },
         colors: {
-            primaryColor: '#000000',
-            secondaryColor: '#333333',
-            backgroundColor: '#ffffff',
-            textColor: '#1a1a1a',
-            mutedColor: '#888888',
+            primaryColor: '#212121',         // 暗房黑
+            secondaryColor: '#424242',
+            backgroundColor: '#fafafa',
+            textColor: '#212121',
+            mutedColor: '#9e9e9e',
         },
         heroStyle: 'minimal',
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 3,
-        thumbnailRatio: '3/2',
+        thumbnailRatio: '3/2',               // 經典攝影比例
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '3:2',      // 經典攝影比例
-            borderRadius: 'none',       // 無圓角，專業感
-            animationSpeed: 1,          // 標準速度
+            thumbnailRatio: '3:2',
+            borderRadius: 'none',            // 無邊框，純粹
+            animationSpeed: 1.0,
+            cardStyle: 'minimal',
+            hoverEffect: 'scale',
         },
         copywriting: {
-            notFoundTitle: '這張照片曝光不足',
-            notFoundMessage: '快門還沒按下，這個頁面尚未捕捉到。回首頁瀏覽其他攝影作品！',
+            notFoundTitle: '曝光不足',
+            notFoundMessage: '回首頁瀏覽其他攝影作品。',
             notFoundEmoji: '📸',
-            loadingText: '對焦中，準備捕捉...',
+            loadingText: '對焦中...',
         },
     },
 
@@ -482,14 +478,14 @@ export const professionMap = {
         preset: 'bold',
         fonts: {
             body: 'Inter',
-            heading: 'Syne',
+            heading: 'Syne',                 // 實驗性
         },
         colors: {
-            primaryColor: '#0f172a',
-            secondaryColor: '#3b82f6',
-            backgroundColor: '#f8fafc',
-            textColor: '#0f172a',
-            mutedColor: '#64748b',
+            primaryColor: '#0066ff',         // 科技藍
+            secondaryColor: '#00d4aa',       // 薄荷綠
+            backgroundColor: '#f0f4f8',      // 冷灰藍
+            textColor: '#1a202c',
+            mutedColor: '#718096',
         },
         heroStyle: 'centered',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -497,20 +493,22 @@ export const professionMap = {
         thumbnailRatio: '16/9',
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '16:9',     // 螢幕比例，展示 UI
-            borderRadius: 'medium',     // 現代圓角
-            animationSpeed: 1.15,       // 俐落快速
+            thumbnailRatio: '16:9',
+            borderRadius: 'medium',
+            animationSpeed: 1.3,             // 俐落
+            cardStyle: 'elevated',
+            hoverEffect: 'lift',
         },
         copywriting: {
-            notFoundTitle: '設計稿遺失了',
-            notFoundMessage: '這個頁面的設計稿不小心被刪掉了！回首頁看看其他設計作品吧～',
+            notFoundTitle: '設計稿遺失',
+            notFoundMessage: '回首頁看看其他設計作品。',
             notFoundEmoji: '🎨',
-            loadingText: '渲染中，像素排列...',
+            loadingText: '渲染中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🌸 花藝 / 自然類 - 柔和、自然
+    // 🌸 花藝 / 自然類 - 柔美浪漫：粉彩、有機曲線
     // ═══════════════════════════════════════════════════════════════════════════
     florist: {
         label: '花藝師',
@@ -519,28 +517,30 @@ export const professionMap = {
         preset: 'soft',
         fonts: {
             body: 'Karla',
-            heading: 'Cormorant Garamond',
+            heading: 'Cormorant Garamond',   // 優雅襯線
         },
         colors: {
-            primaryColor: '#9d8b7d',
-            secondaryColor: '#c4b5a6',
-            backgroundColor: '#fdfcfa',
-            textColor: '#4a4a4a',
-            mutedColor: '#9a9a9a',
+            primaryColor: '#c48b9f',         // 玫瑰粉
+            secondaryColor: '#e8d5b7',       // 花蕊黃
+            backgroundColor: '#fdf8f5',      // 花瓣白
+            textColor: '#5d4e60',            // 紫灰
+            mutedColor: '#9a8f97',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 3,
-        thumbnailRatio: '4/3',
+        thumbnailRatio: '4/5',               // 垂直花束
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '4:5',      // 垂直比例，展示花束
-            borderRadius: 'large',      // 大圓角，柔美花瓣
-            animationSpeed: 0.7,        // 優雅緩慢
+            thumbnailRatio: '4:5',
+            borderRadius: 'xl',              // 超大圓角
+            animationSpeed: 0.6,             // 優雅緩慢
+            cardStyle: 'default',
+            hoverEffect: 'glow',
         },
         copywriting: {
-            notFoundTitle: '這束花還在含苞',
-            notFoundMessage: '這個頁面的花朵還沒綻放，回首頁欣賞盛開的花藝作品吧！',
+            notFoundTitle: '花朵還在含苞',
+            notFoundMessage: '回首頁欣賞盛開的花藝作品。',
             notFoundEmoji: '🌷',
             loadingText: '花朵綻放中...',
         },
@@ -553,14 +553,14 @@ export const professionMap = {
         preset: 'soft',
         fonts: {
             body: 'Nunito Sans',
-            heading: 'Playfair Display',
+            heading: 'Abril Fatface',        // 有機曲線
         },
         colors: {
-            primaryColor: '#4a7c59',
-            secondaryColor: '#7cb083',
-            backgroundColor: '#f8faf8',
-            textColor: '#2d3b30',
-            mutedColor: '#6b7d6e',
+            primaryColor: '#2d6a4f',         // 森林綠
+            secondaryColor: '#95d5b2',       // 嫩葉綠
+            backgroundColor: '#f1faee',      // 新芽白
+            textColor: '#1b4332',            // 深綠
+            mutedColor: '#52796f',
         },
         heroStyle: 'split',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -568,20 +568,22 @@ export const professionMap = {
         thumbnailRatio: '4/3',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '4:3',      // 經典比例，展示庭園
-            borderRadius: 'medium',     // 中等圓角，自然感
-            animationSpeed: 0.75,       // 緩慢生長
+            thumbnailRatio: '4:3',
+            borderRadius: 'large',
+            animationSpeed: 0.65,
+            cardStyle: 'default',
+            hoverEffect: 'lift',
         },
         copywriting: {
-            notFoundTitle: '這片園地還在播種',
-            notFoundMessage: '種子還在土裡等待發芽，回首頁看看已經茂盛的花園吧！',
+            notFoundTitle: '種子還在發芽',
+            notFoundMessage: '回首頁看看已經茂盛的花園。',
             notFoundEmoji: '🌱',
-            loadingText: '澆水施肥中，靜待成長...',
+            loadingText: '澆水施肥中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 💆 療癒 / 服務類 - 溫柔、親和
+    // 💆 療癒 / 服務類 - 平靜放鬆：莫蘭迪色、極慢動畫
     // ═══════════════════════════════════════════════════════════════════════════
     therapist: {
         label: '治療師 / 諮商師',
@@ -593,11 +595,11 @@ export const professionMap = {
             heading: 'Libre Baskerville',
         },
         colors: {
-            primaryColor: '#7c9885',
-            secondaryColor: '#a8c5b5',
-            backgroundColor: '#fafbfa',
-            textColor: '#3d4a41',
-            mutedColor: '#7d8a80',
+            primaryColor: '#5f7161',         // 鼠尾草綠
+            secondaryColor: '#a7c4a0',       // 薄荷綠
+            backgroundColor: '#f5f7f4',      // 薄霧白
+            textColor: '#3d4a3f',
+            mutedColor: '#7d8a7e',
         },
         heroStyle: 'centered',
         layout: ['Hero', 'About', 'Works', 'Contact'],
@@ -605,13 +607,15 @@ export const professionMap = {
         thumbnailRatio: '16/9',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '16:9',     // 寬廣舒適
-            borderRadius: 'pill',       // 藥丸形狀，溫柔親和
-            animationSpeed: 0.6,        // 非常緩慢，平靜
+            thumbnailRatio: '16:9',
+            borderRadius: 'pill',            // 藥丸形，溫柔
+            animationSpeed: 0.45,            // 極慢，平靜
+            cardStyle: 'default',
+            hoverEffect: 'glow',
         },
         copywriting: {
-            notFoundTitle: '這裡是個安全的空間',
-            notFoundMessage: '雖然這個頁面不存在，但沒關係，讓我們回到首頁，繼續這段旅程。',
+            notFoundTitle: '這裡是安全的空間',
+            notFoundMessage: '讓我們回到首頁，繼續這段旅程。',
             notFoundEmoji: '🌿',
             loadingText: '深呼吸，放鬆...',
         },
@@ -624,13 +628,13 @@ export const professionMap = {
         preset: 'soft',
         fonts: {
             body: 'Lato',
-            heading: 'Cormorant',
+            heading: 'Cormorant',            // 流動優雅
         },
         colors: {
-            primaryColor: '#b5a89a',
-            secondaryColor: '#d4c8bb',
-            backgroundColor: '#fdfdfb',
-            textColor: '#4a4540',
+            primaryColor: '#9d8189',         // 藕粉
+            secondaryColor: '#d8c3a5',       // 沙色
+            backgroundColor: '#f8f4f0',      // 棉麻白
+            textColor: '#4a4a4a',
             mutedColor: '#8a857e',
         },
         heroStyle: 'centered',
@@ -639,20 +643,22 @@ export const professionMap = {
         thumbnailRatio: '3/2',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '3:2',      // 平衡比例
-            borderRadius: 'large',      // 大圓角，流動感
-            animationSpeed: 0.5,        // 極慢，冥想般
+            thumbnailRatio: '3:2',
+            borderRadius: 'xl',
+            animationSpeed: 0.4,             // 最慢，冥想
+            cardStyle: 'minimal',
+            hoverEffect: 'none',
         },
         copywriting: {
             notFoundTitle: '呼吸，然後放下',
-            notFoundMessage: '這個頁面已經隨風而去，讓我們回到當下，從首頁重新開始。',
+            notFoundMessage: '從首頁重新開始。',
             notFoundEmoji: '🕊️',
             loadingText: '吸氣...吐氣...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🏠 建築 / 空間類 - 專業、結構感
+    // 🏠 建築 / 空間類 - 專業結構：黑白灰、銳利線條
     // ═══════════════════════════════════════════════════════════════════════════
     architect: {
         label: '建築師',
@@ -661,14 +667,14 @@ export const professionMap = {
         preset: 'minimal',
         fonts: {
             body: 'Inter',
-            heading: 'Archivo',
+            heading: 'Archivo Black',        // 粗黑幾何
         },
         colors: {
-            primaryColor: '#2c2c2c',
-            secondaryColor: '#4a4a4a',
+            primaryColor: '#1a1a1a',
+            secondaryColor: '#333333',
             backgroundColor: '#ffffff',
             textColor: '#1a1a1a',
-            mutedColor: '#7a7a7a',
+            mutedColor: '#666666',
         },
         heroStyle: 'minimal',
         layout: ['Hero', 'Works', 'OtherWorks'],
@@ -676,13 +682,15 @@ export const professionMap = {
         thumbnailRatio: '16/9',
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '16:9',     // 寬螢幕，展示建築全景
-            borderRadius: 'none',       // 無圓角，直線美學
-            animationSpeed: 1.2,        // 俐落精準
+            thumbnailRatio: '16:9',
+            borderRadius: 'none',            // 絕對銳利
+            animationSpeed: 1.5,             // 最快，精準
+            cardStyle: 'minimal',
+            hoverEffect: 'none',
         },
         copywriting: {
-            notFoundTitle: '這裡的藍圖遺失了',
-            notFoundMessage: '這個空間的設計圖還在繪製中，回首頁探索已完工的建築作品！',
+            notFoundTitle: '藍圖遺失',
+            notFoundMessage: '回首頁探索已完工的建築作品。',
             notFoundEmoji: '📐',
             loadingText: '結構計算中...',
         },
@@ -695,12 +703,12 @@ export const professionMap = {
         preset: 'minimal',
         fonts: {
             body: 'DM Sans',
-            heading: 'Playfair Display',
+            heading: 'Playfair Display',     // 優雅對比
         },
         colors: {
-            primaryColor: '#5c5c5c',
-            secondaryColor: '#a89f91',
-            backgroundColor: '#f9f8f6',
+            primaryColor: '#4a4a4a',
+            secondaryColor: '#b8a99a',       // 奶茶色
+            backgroundColor: '#f8f6f3',      // 亞麻白
             textColor: '#2d2d2d',
             mutedColor: '#8a8a8a',
         },
@@ -710,20 +718,22 @@ export const professionMap = {
         thumbnailRatio: '4/3',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '4:3',      // 經典空間比例
-            borderRadius: 'small',      // 小圓角，現代感
-            animationSpeed: 1,          // 標準速度
+            thumbnailRatio: '4:3',
+            borderRadius: 'small',
+            animationSpeed: 1.1,
+            cardStyle: 'bordered',
+            hoverEffect: 'lift',
         },
         copywriting: {
-            notFoundTitle: '這個空間還在規劃',
-            notFoundMessage: '這個頁面的家具還沒擺好，回首頁看看已經佈置好的空間吧！',
+            notFoundTitle: '空間還在規劃',
+            notFoundMessage: '回首頁看看已經佈置好的空間。',
             notFoundEmoji: '🏠',
             loadingText: '空間規劃中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 🎵 音樂 / 表演類 - 動感、個性
+    // 🎵 音樂 / 表演類 - 動感活力：高對比、快速動畫
     // ═══════════════════════════════════════════════════════════════════════════
     musician: {
         label: '音樂人',
@@ -732,35 +742,37 @@ export const professionMap = {
         preset: 'bold',
         fonts: {
             body: 'Rubik',
-            heading: 'Anton',
+            heading: 'Anton',                // 超粗黑
         },
         colors: {
             primaryColor: '#1a1a1a',
-            secondaryColor: '#e63946',
-            backgroundColor: '#fefefe',
+            secondaryColor: '#ff1744',       // 電吉他紅
+            backgroundColor: '#fafafa',
             textColor: '#1a1a1a',
-            mutedColor: '#6b6b6b',
+            mutedColor: '#757575',
         },
         heroStyle: 'centered',
         layout: ['Hero', 'Works', 'OtherWorks'],
         gridColumns: 2,
-        thumbnailRatio: '1/1',
+        thumbnailRatio: '1/1',               // 專輯封面
         navStyle: 'minimal',
         uiConfig: {
-            thumbnailRatio: '1:1',      // 專輯封面比例
-            borderRadius: 'small',      // 小圓角，唱片感
-            animationSpeed: 1.3,        // 快速，節奏感
+            thumbnailRatio: '1:1',
+            borderRadius: 'small',
+            animationSpeed: 1.5,             // 快節奏
+            cardStyle: 'elevated',
+            hoverEffect: 'scale',
         },
         copywriting: {
             notFoundTitle: '這首歌還在錄製',
-            notFoundMessage: '這個頁面的旋律還沒完成，回首頁聆聽其他已發行的作品！',
+            notFoundMessage: '回首頁聆聽其他已發行的作品！',
             notFoundEmoji: '🎸',
-            loadingText: '調音中，準備演出...',
+            loadingText: '調音中...',
         },
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 📝 文字 / 教育類
+    // 📝 文字 / 教育類 - 知性沉穩：書卷氣、慢速
     // ═══════════════════════════════════════════════════════════════════════════
     writer: {
         label: '作家 / 文字工作者',
@@ -768,15 +780,15 @@ export const professionMap = {
         category: 'writing',
         preset: 'soft',
         fonts: {
-            body: 'Crimson Text',
+            body: 'Crimson Text',            // 書籍襯線
             heading: 'Playfair Display',
         },
         colors: {
-            primaryColor: '#4a4a4a',
-            secondaryColor: '#8b7355',
-            backgroundColor: '#faf9f7',
+            primaryColor: '#3d3d3d',
+            secondaryColor: '#8b7355',       // 墨水棕
+            backgroundColor: '#fffef8',      // 書頁黃
             textColor: '#2d2d2d',
-            mutedColor: '#7a7a7a',
+            mutedColor: '#6b6b6b',
         },
         heroStyle: 'centered',
         layout: ['Hero', 'About', 'Works'],
@@ -784,13 +796,15 @@ export const professionMap = {
         thumbnailRatio: '3/2',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '3:2',      // 書本比例
-            borderRadius: 'small',      // 小圓角，書頁感
-            animationSpeed: 0.8,        // 沉穩
+            thumbnailRatio: '3:2',
+            borderRadius: 'small',
+            animationSpeed: 0.7,
+            cardStyle: 'bordered',
+            hoverEffect: 'lift',
         },
         copywriting: {
             notFoundTitle: '這一頁還是空白',
-            notFoundMessage: '故事還在醞釀，這個頁面的文字尚未落筆。回首頁閱讀已發表的作品！',
+            notFoundMessage: '回首頁閱讀已發表的作品。',
             notFoundEmoji: '📖',
             loadingText: '文字編織中...',
         },
@@ -802,15 +816,15 @@ export const professionMap = {
         category: 'education',
         preset: 'soft',
         fonts: {
-            body: 'Nunito',
-            heading: 'Poppins',
+            body: 'Nunito',                  // 友善易讀
+            heading: 'Poppins',              // 現代清晰
         },
         colors: {
-            primaryColor: '#4361ee',
-            secondaryColor: '#7209b7',
-            backgroundColor: '#fafbff',
-            textColor: '#2b2d42',
-            mutedColor: '#8d99ae',
+            primaryColor: '#3949ab',         // 學院藍
+            secondaryColor: '#7986cb',
+            backgroundColor: '#f5f7ff',      // 淺藍白
+            textColor: '#1a237e',
+            mutedColor: '#7986cb',
         },
         heroStyle: 'split',
         layout: ['Hero', 'About', 'Works', 'Contact'],
@@ -818,15 +832,17 @@ export const professionMap = {
         thumbnailRatio: '16/9',
         navStyle: 'default',
         uiConfig: {
-            thumbnailRatio: '16:9',     // 投影片比例
-            borderRadius: 'medium',     // 中等圓角，友善
-            animationSpeed: 1,          // 標準速度
+            thumbnailRatio: '16:9',
+            borderRadius: 'medium',
+            animationSpeed: 1.0,
+            cardStyle: 'elevated',
+            hoverEffect: 'lift',
         },
         copywriting: {
             notFoundTitle: '這堂課還沒開始',
-            notFoundMessage: '教室裡還沒有內容，回首頁看看其他精彩的課程吧！',
+            notFoundMessage: '回首頁看看其他精彩的課程。',
             notFoundEmoji: '🎓',
-            loadingText: '備課中，知識整理...',
+            loadingText: '備課中...',
         },
     },
 }
@@ -836,9 +852,17 @@ export const professionMap = {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
+ * 過濾空值
+ */
+function filterEmptyValues(obj) {
+    if (!obj || typeof obj !== 'object') return {}
+    return Object.fromEntries(
+        Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== '')
+    )
+}
+
+/**
  * 取得職業設定
- * @param {string} profession - 職業代碼
- * @returns {object|null} 職業設定，如果找不到返回 null
  */
 export function getProfessionConfig(profession) {
     if (!profession) return null
@@ -848,7 +872,6 @@ export function getProfessionConfig(profession) {
 
 /**
  * 取得所有可用的職業列表
- * @returns {Array} 職業列表 [{ value, label, emoji, category, preset }]
  */
 export function getProfessionList() {
     return Object.entries(professionMap).map(([value, config]) => ({
@@ -862,11 +885,9 @@ export function getProfessionList() {
 
 /**
  * 依類別分組的職業列表
- * @returns {object} { category: [professions] }
  */
 export function getProfessionsByCategory() {
     const categories = {}
-
     Object.entries(professionMap).forEach(([value, config]) => {
         const category = config.category || 'other'
         if (!categories[category]) {
@@ -879,28 +900,16 @@ export function getProfessionsByCategory() {
             preset: config.preset,
         })
     })
-
     return categories
 }
 
 /**
  * 取得職業的 UI 配置
- * 優先級：用戶設定 > 職業預設 > 系統預設
- *
- * @param {string} profession - 職業代碼
- * @param {object} userUiConfig - 用戶自訂的 UI 配置
- * @returns {object} 合併後的 UI 配置
  */
 export function getUiConfig(profession, userUiConfig = {}) {
     const professionConfig = getProfessionConfig(profession)
-
-    // 系統預設
     const defaults = {...DEFAULT_UI_CONFIG}
-
-    // 職業預設
     const professionDefaults = professionConfig?.uiConfig || {}
-
-    // 合併（用戶設定優先）
     return {
         ...defaults,
         ...professionDefaults,
@@ -910,27 +919,14 @@ export function getUiConfig(profession, userUiConfig = {}) {
 
 /**
  * 取得職業的情感化文案
- * 優先級：用戶設定 > 職業預設 > 系統預設
- *
- * @param {string} profession - 職業代碼
- * @param {object} userCopywriting - 用戶自訂的文案
- * @returns {object} 合併後的文案配置
  */
 export function getCopywriting(profession, userCopywriting = {}) {
     const professionConfig = getProfessionConfig(profession)
-
-    // 系統預設
     const defaults = {...DEFAULT_COPYWRITING}
-
-    // 職業預設
     const professionDefaults = professionConfig?.copywriting || {}
-
-    // 如果職業有設定 emoji，也用於 notFoundEmoji
     if (professionConfig?.emoji && !professionDefaults.notFoundEmoji) {
         professionDefaults.notFoundEmoji = professionConfig.emoji
     }
-
-    // 合併（用戶設定優先）
     return {
         ...defaults,
         ...professionDefaults,
@@ -940,8 +936,6 @@ export function getCopywriting(profession, userCopywriting = {}) {
 
 /**
  * 取得圓角的 CSS 值
- * @param {string} borderRadius - 圓角名稱（'none' | 'small' | 'medium' | 'large' | 'pill'）
- * @returns {string} CSS 值
  */
 export function getBorderRadiusValue(borderRadius) {
     return BORDER_RADIUS_MAP[borderRadius] || BORDER_RADIUS_MAP.medium
@@ -949,21 +943,13 @@ export function getBorderRadiusValue(borderRadius) {
 
 /**
  * 取得動畫持續時間
- * 基於動畫速度係數計算
- *
- * @param {number} animationSpeed - 動畫速度係數
- * @param {number} baseDuration - 基礎持續時間（毫秒）
- * @returns {number} 調整後的持續時間（毫秒）
  */
 export function getAnimationDuration(animationSpeed = 1, baseDuration = 300) {
-    // 速度係數越高，持續時間越短
     return Math.round(baseDuration / animationSpeed)
 }
 
 /**
  * 將縮圖比例轉換為 CSS aspect-ratio 值
- * @param {string} ratio - 比例字串（如 '4:3', '16:9', '1:1'）
- * @returns {string} CSS aspect-ratio 值（如 '4/3'）
  */
 export function getThumbnailAspectRatio(ratio) {
     if (!ratio) return '4/3'
@@ -971,173 +957,50 @@ export function getThumbnailAspectRatio(ratio) {
 }
 
 /**
- * 根據職業取得推薦的完整配置
- * 合併職業預設和用戶的自訂設定
- *
- * 優先級：用戶明確設定 > 職業預設 > 系統預設
- *
- * @param {string} profession - 職業代碼
- * @param {object} userConfig - 用戶的 site.config.json
- * @returns {object} 合併後的配置
+ * 合併職業預設和用戶設定
  */
 export function mergeWithProfessionDefaults(profession, userConfig) {
     const professionConfig = getProfessionConfig(profession)
-
-    // 如果沒有職業設定，直接返回用戶配置
     if (!professionConfig) {
         return userConfig
     }
 
-    // 深度合併，用戶設定優先
-    const merged = JSON.parse(JSON.stringify(userConfig)) // 深拷貝
+    const merged = JSON.parse(JSON.stringify(userConfig))
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 合併 theme（字體和顏色）
-    // 只有用戶「沒有」設定的值才會使用職業預設
-    // ═══════════════════════════════════════════════════════════════════════════
+    // 合併 theme
     const userTheme = userConfig.theme || {}
-
     merged.theme = {
-        // 先套用系統預設
-        ...DEFAULT_COLORS,
-        fontFamily: DEFAULT_FONTS.body,
-        headingFont: DEFAULT_FONTS.heading,
-        // 再套用職業預設
-        ...professionConfig.colors,
-        fontFamily: professionConfig.fonts.body,
-        headingFont: professionConfig.fonts.heading,
-        // 最後用戶的自訂設定覆蓋（過濾掉空值）
-        ...filterEmptyValues(userTheme),
+        fontFamily: userTheme.fontFamily || professionConfig.fonts?.body || DEFAULT_FONTS.body,
+        headingFont: userTheme.headingFont || professionConfig.fonts?.heading || DEFAULT_FONTS.heading,
+        primaryColor: userTheme.primaryColor || professionConfig.colors?.primaryColor || DEFAULT_COLORS.primaryColor,
+        secondaryColor: userTheme.secondaryColor || professionConfig.colors?.secondaryColor || DEFAULT_COLORS.secondaryColor,
+        backgroundColor: userTheme.backgroundColor || professionConfig.colors?.backgroundColor || DEFAULT_COLORS.backgroundColor,
+        textColor: userTheme.textColor || professionConfig.colors?.textColor || DEFAULT_COLORS.textColor,
+        mutedColor: userTheme.mutedColor || professionConfig.colors?.mutedColor || DEFAULT_COLORS.mutedColor,
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 合併 ui（只有用戶沒設定的才用職業預設）
-    // ═══════════════════════════════════════════════════════════════════════════
+    // 合併 ui
     const userUi = userConfig.ui || {}
-
     merged.ui = {
-        // 系統預設
-        themePreset: 'default',
-        heroStyle: 'split',
-        gridColumns: 3,
-        thumbnailRatio: '4/3',
-        navStyle: 'default',
-        layout: DEFAULT_LAYOUT,
-        showFooter: true,
-        showSocialLinks: true,
-        showOtherWorks: true,
-        smoothScroll: true,
-        showBackToTop: true,
-        // 職業預設
-        themePreset: professionConfig.preset,
-        heroStyle: professionConfig.heroStyle,
-        gridColumns: professionConfig.gridColumns,
-        thumbnailRatio: professionConfig.thumbnailRatio,
-        navStyle: professionConfig.navStyle,
-        layout: professionConfig.layout,
-        // 用戶設定覆蓋
-        ...filterEmptyValues(userUi),
+        ...userUi,
+        themePreset: userUi.themePreset || professionConfig.preset || 'default',
+        heroStyle: userUi.heroStyle || professionConfig.heroStyle || 'split',
+        gridColumns: userUi.gridColumns || professionConfig.gridColumns || 3,
+        thumbnailRatio: userUi.thumbnailRatio || professionConfig.thumbnailRatio || '4/3',
+        navStyle: userUi.navStyle || professionConfig.navStyle || 'default',
+        layout: userUi.layout || professionConfig.layout || DEFAULT_LAYOUT,
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 合併 uiConfig（深層 UI 配置）
-    // ═══════════════════════════════════════════════════════════════════════════
-    const userUiConfig = userConfig.uiConfig || {}
+    // 合併 uiConfig
+    merged.uiConfig = getUiConfig(profession, userConfig.uiConfig)
 
-    merged.uiConfig = getUiConfig(profession, userUiConfig)
+    // 合併 copywriting
+    merged.copywriting = getCopywriting(profession, userConfig.copywriting)
 
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 合併 copywriting（情感化文案）
-    // ═══════════════════════════════════════════════════════════════════════════
-    const userCopywriting = userConfig.copywriting || {}
-
-    merged.copywriting = getCopywriting(profession, userCopywriting)
-
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 保留其他區塊（profile, content, seo）
-    // ═══════════════════════════════════════════════════════════════════════════
+    // 保留其他配置
     merged.profile = userConfig.profile || {}
     merged.content = userConfig.content || {}
     merged.seo = userConfig.seo || {}
 
     return merged
-}
-
-/**
- * 過濾掉空值（null, undefined, 空字串）
- * @param {object} obj
- * @returns {object}
- */
-function filterEmptyValues(obj) {
-    const filtered = {}
-    for (const [key, value] of Object.entries(obj)) {
-        if (value !== null && value !== undefined && value !== '') {
-            filtered[key] = value
-        }
-    }
-    return filtered
-}
-
-/**
- * 檢查用戶是否有自訂某個設定
- * 用於判斷是否要套用職業預設
- *
- * @param {object} userConfig - 用戶配置
- * @param {string} path - 設定路徑，如 'theme.primaryColor'
- * @returns {boolean} 是否有自訂
- */
-export function hasUserOverride(userConfig, path) {
-    const keys = path.split('.')
-    let value = userConfig
-
-    for (const key of keys) {
-        if (value && typeof value === 'object' && key in value) {
-            value = value[key]
-        } else {
-            return false
-        }
-    }
-
-    // 檢查是否為有效值（非空、非預設）
-    return value !== undefined && value !== null && value !== ''
-}
-
-/**
- * 取得職業的預覽資訊（用於 UI 展示）
- * @param {string} profession - 職業代碼
- * @returns {object|null}
- */
-export function getProfessionPreview(profession) {
-    const config = getProfessionConfig(profession)
-    if (!config) return null
-
-    return {
-        label: config.label,
-        emoji: config.emoji,
-        preset: config.preset,
-        primaryColor: config.colors.primaryColor,
-        backgroundColor: config.colors.backgroundColor,
-        fontFamily: config.fonts.body,
-        heroStyle: config.heroStyle,
-        uiConfig: config.uiConfig,
-        copywriting: config.copywriting,
-    }
-}
-
-export default {
-    professionMap,
-    getProfessionConfig,
-    getProfessionList,
-    getProfessionsByCategory,
-    getUiConfig,
-    getCopywriting,
-    getBorderRadiusValue,
-    getAnimationDuration,
-    getThumbnailAspectRatio,
-    mergeWithProfessionDefaults,
-    hasUserOverride,
-    getProfessionPreview,
-    DEFAULT_UI_CONFIG,
-    DEFAULT_COPYWRITING,
-    BORDER_RADIUS_MAP,
 }
