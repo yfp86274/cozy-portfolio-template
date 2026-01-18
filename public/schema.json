@@ -142,6 +142,17 @@
       "type": "object",
       "description": "Layout and display options",
       "properties": {
+        "themePreset": {
+          "type": "string",
+          "enum": [
+            "default",
+            "minimal",
+            "soft",
+            "bold"
+          ],
+          "description": "Visual style preset that changes the overall look and feel",
+          "default": "default"
+        },
         "heroStyle": {
           "type": "string",
           "enum": [

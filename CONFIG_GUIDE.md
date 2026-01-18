@@ -106,6 +106,38 @@ Fonts are loaded from [Google Fonts](https://fonts.google.com).
 
 ### 🖼️ UI - Layout and Display Options
 
+#### 🎭 Theme Presets (NEW!)
+
+The `themePreset` option lets you completely change the visual "personality" of your site with a single setting. This
+affects corners, shadows, borders, and overall aesthetics.
+
+| Preset      | Best For                              | Look & Feel                                             |
+|-------------|---------------------------------------|---------------------------------------------------------|
+| `"default"` | Knitters, bakers, craftspeople        | Rounded corners, soft shadows, warm & organic           |
+| `"minimal"` | Chefs, architects, photographers      | Sharp edges, no shadows, clean & professional           |
+| `"soft"`    | Therapists, wellness coaches, artists | Extra rounded, very soft shadows, gentle & approachable |
+| `"bold"`    | Athletes, musicians, startups         | Slightly rounded, dramatic shadows, strong & impactful  |
+
+**Example - Switching to Minimal Style:**
+
+```json
+"ui": {
+"themePreset": "minimal",
+"heroStyle": "split",
+...
+}
+```
+
+**What changes with each preset:**
+
+- **Border radius**: From sharp (0px) to rounded (16px+)
+- **Shadows**: From none to soft to dramatic
+- **Borders**: Some presets add line-based aesthetics
+- **Button styles**: Pill buttons vs square buttons
+- **Transitions**: Snappy vs smooth animations
+
+💡 **Tip**: Try changing just the `themePreset` first - you might be surprised how different your site can look!
+
 #### Hero Section Style
 
 The `heroStyle` option controls how your homepage hero section appears:

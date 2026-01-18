@@ -1,9 +1,13 @@
 /**
  * Theme Utility
  *
- * Converts hex colors from site.config.js to CSS variables
+ * Converts hex colors from site.config.json to CSS variables
  * and injects them into the document at runtime.
+ *
+ * Now supports Theme Presets for different visual styles.
  */
+
+import {getPreset} from './presets'
 
 /**
  * Convert a hex color to RGB values
@@ -139,12 +143,34 @@ export function loadGoogleFonts(fonts) {
 /**
  * Initialize theme from configuration
  * Injects CSS variables into :root
- * @param {object} config - The site.config.js default export
+ * @param {object} config - The site.config.json default export
  */
 export function initializeTheme(config) {
-    const {theme, profile} = config
+    const {theme, profile, ui, seo} = config
     const root = document.documentElement
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STEP 1: Apply Theme Preset (Layout variables)
+    // ═══════════════════════════════════════════════════════════════════════════
+    const presetName = ui?.themePreset || 'default'
+    const preset = getPreset(presetName)
+
+    // Apply all preset CSS variables
+    Object.entries(preset).forEach(([key, value]) => {
+        // Skip non-CSS properties (name, label)
+        if (key.startsWith('--')) {
+            root.style.setProperty(key, value)
+        }
+    })
+
+    // Add preset name as data attribute for CSS targeting
+    root.dataset.preset = presetName
+
+    console.log('🎨 Preset applied:', presetName)
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STEP 2: Apply User Colors (Override preset colors)
+    // ═══════════════════════════════════════════════════════════════════════════
     // Set color CSS variables (as RGB values for Tailwind alpha support)
     root.style.setProperty('--color-primary', hexToRgb(theme.primaryColor))
     root.style.setProperty('--color-secondary', hexToRgb(theme.secondaryColor))
@@ -158,6 +184,9 @@ export function initializeTheme(config) {
     root.style.setProperty('--color-secondary-light', lighten(theme.secondaryColor, 15))
     root.style.setProperty('--color-background-alt', darken(theme.backgroundColor, 3))
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STEP 3: Apply Typography
+    // ═══════════════════════════════════════════════════════════════════════════
     // Set font family CSS variables
     root.style.setProperty('--font-body', `'${theme.fontFamily}', sans-serif`)
     root.style.setProperty('--font-heading', `'${theme.headingFont || theme.fontFamily}', serif`)
@@ -169,23 +198,27 @@ export function initializeTheme(config) {
     }
     loadGoogleFonts(fontsToLoad)
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STEP 4: Apply SEO Meta Tags
+    // ═══════════════════════════════════════════════════════════════════════════
     // Set page title from SEO config
-    if (config.seo?.siteTitle) {
-        document.title = config.seo.siteTitle
+    if (seo?.siteTitle) {
+        document.title = seo.siteTitle
     }
 
     // Set meta description
-    if (config.seo?.siteDescription) {
+    if (seo?.siteDescription) {
         let metaDesc = document.querySelector('meta[name="description"]')
         if (!metaDesc) {
             metaDesc = document.createElement('meta')
             metaDesc.name = 'description'
             document.head.appendChild(metaDesc)
         }
-        metaDesc.content = config.seo.siteDescription
+        metaDesc.content = seo.siteDescription
     }
 
     console.log('🎨 Theme initialized:', {
+        preset: presetName,
         primary: theme.primaryColor,
         font: theme.fontFamily
     })

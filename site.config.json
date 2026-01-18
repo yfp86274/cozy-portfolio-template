@@ -28,6 +28,7 @@
     "headingFont": "Playfair Display"
   },
   "ui": {
+    "themePreset": "default",
     "heroStyle": "split",
     "showFooter": true,
     "showSocialLinks": true,
