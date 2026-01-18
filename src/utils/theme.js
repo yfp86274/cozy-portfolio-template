@@ -1,36 +1,39 @@
 /**
  * Theme Utility
  *
- * Converts hex colors from site.config.json to CSS variables
- * and injects them into the document at runtime.
+ * 將 site.config.json 中的顏色轉換為 CSS 變數，
+ * 並在執行時注入到文件中。
  *
- * Now supports Theme Presets for different visual styles.
+ * 現在支援：
+ * - Theme Presets（視覺風格預設）
+ * - Profession Map（職業映射系統）
  */
 
 import {getPreset} from './presets'
+import {getProfessionConfig} from './professionMap'
 
 /**
- * Convert a hex color to RGB values
- * @param {string} hex - Hex color code (e.g., '#8B4513' or '8B4513')
- * @returns {string} RGB values as space-separated string (e.g., '139 69 19')
+ * 將 hex 顏色轉換為 RGB 值
+ * @param {string} hex - Hex 色碼（例如 '#8B4513' 或 '8B4513'）
+ * @returns {string} 空格分隔的 RGB 值（例如 '139 69 19'）
  */
 export function hexToRgb(hex) {
-    // Remove # if present
+    // 移除 # 符號
     const cleanHex = hex.replace('#', '')
 
-    // Parse hex values
+    // 解析 hex 值
     const r = parseInt(cleanHex.substring(0, 2), 16)
     const g = parseInt(cleanHex.substring(2, 4), 16)
     const b = parseInt(cleanHex.substring(4, 6), 16)
 
-    // Return as space-separated string for Tailwind CSS
+    // 返回空格分隔的字串（供 Tailwind CSS 使用）
     return `${r} ${g} ${b}`
 }
 
 /**
- * Convert a hex color to HSL values for generating shades
- * @param {string} hex - Hex color code
- * @returns {object} HSL values { h, s, l }
+ * 將 hex 顏色轉換為 HSL 值（用於生成色階）
+ * @param {string} hex - Hex 色碼
+ * @returns {object} HSL 值 { h, s, l }
  */
 export function hexToHsl(hex) {
     const cleanHex = hex.replace('#', '')
@@ -40,7 +43,9 @@ export function hexToHsl(hex) {
 
     const max = Math.max(r, g, b)
     const min = Math.min(r, g, b)
-    let h, s, l = (max + min) / 2
+    let h,
+        s,
+        l = (max + min) / 2
 
     if (max === min) {
         h = s = 0
@@ -49,13 +54,13 @@ export function hexToHsl(hex) {
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
         switch (max) {
             case r:
-                h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+                h = ((g - b) / d + (g < b ? 6 : 0)) / 6
                 break
             case g:
-                h = ((b - r) / d + 2) / 6;
+                h = ((b - r) / d + 2) / 6
                 break
             case b:
-                h = ((r - g) / d + 4) / 6;
+                h = ((r - g) / d + 4) / 6
                 break
         }
     }
@@ -63,15 +68,15 @@ export function hexToHsl(hex) {
     return {
         h: Math.round(h * 360),
         s: Math.round(s * 100),
-        l: Math.round(l * 100)
+        l: Math.round(l * 100),
     }
 }
 
 /**
- * Generate a lighter shade of a color
- * @param {string} hex - Base hex color
- * @param {number} amount - Amount to lighten (0-100)
- * @returns {string} RGB string for the lighter color
+ * 產生較亮的顏色
+ * @param {string} hex - 基礎 hex 色碼
+ * @param {number} amount - 亮化程度 (0-100)
+ * @returns {string} 較亮顏色的 RGB 字串
  */
 export function lighten(hex, amount) {
     const hsl = hexToHsl(hex)
@@ -80,10 +85,10 @@ export function lighten(hex, amount) {
 }
 
 /**
- * Generate a darker shade of a color
- * @param {string} hex - Base hex color
- * @param {number} amount - Amount to darken (0-100)
- * @returns {string} RGB string for the darker color
+ * 產生較暗的顏色
+ * @param {string} hex - 基礎 hex 色碼
+ * @param {number} amount - 暗化程度 (0-100)
+ * @returns {string} 較暗顏色的 RGB 字串
  */
 export function darken(hex, amount) {
     const hsl = hexToHsl(hex)
@@ -92,13 +97,13 @@ export function darken(hex, amount) {
 }
 
 /**
- * Convert HSL to RGB string
+ * HSL 轉 RGB 字串
  */
 function hslToRgbString(h, s, l) {
     s /= 100
     l /= 100
     const a = s * Math.min(l, 1 - l)
-    const f = n => {
+    const f = (n) => {
         const k = (n + h / 30) % 12
         const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
         return Math.round(255 * color)
@@ -107,29 +112,33 @@ function hslToRgbString(h, s, l) {
 }
 
 /**
- * Generate Google Fonts URL for specified fonts
- * @param {string[]} fonts - Array of font names
+ * 產生 Google Fonts URL
+ * @param {string[]} fonts - 字體名稱陣列
  * @returns {string} Google Fonts URL
  */
 export function getGoogleFontsUrl(fonts) {
     const uniqueFonts = [...new Set(fonts.filter(Boolean))]
-    const fontParams = uniqueFonts.map(font => {
-        const formatted = font.replace(/\s+/g, '+')
-        return `family=${formatted}:wght@300;400;500;600;700`
-    }).join('&')
+    const fontParams = uniqueFonts
+        .map((font) => {
+            const formatted = font.replace(/\s+/g, '+')
+            return `family=${formatted}:wght@300;400;500;600;700`
+        })
+        .join('&')
 
     return `https://fonts.googleapis.com/css2?${fontParams}&display=swap`
 }
 
 /**
- * Load Google Fonts dynamically
- * @param {string[]} fonts - Array of font names to load
+ * 動態載入 Google Fonts
+ * @param {string[]} fonts - 要載入的字體名稱陣列
  */
 export function loadGoogleFonts(fonts) {
     const url = getGoogleFontsUrl(fonts)
 
-    // Check if font is already loaded
-    const existingLink = document.querySelector(`link[href*="fonts.googleapis.com"]`)
+    // 檢查字體是否已載入
+    const existingLink = document.querySelector(
+        `link[href*="fonts.googleapis.com"]`
+    )
     if (existingLink) {
         existingLink.href = url
     } else {
@@ -141,57 +150,74 @@ export function loadGoogleFonts(fonts) {
 }
 
 /**
- * Initialize theme from configuration
- * Injects CSS variables into :root
- * @param {object} config - The site.config.json default export
+ * 從配置初始化主題
+ * 將 CSS 變數注入到 :root
+ *
+ * @param {object} config - site.config.json 的內容（可能已經與職業預設合併）
  */
 export function initializeTheme(config) {
     const {theme, profile, ui, seo} = config
     const root = document.documentElement
 
+    // 檢查是否有職業設定
+    const profession = profile?.profession
+    const professionConfig = profession ? getProfessionConfig(profession) : null
+
     // ═══════════════════════════════════════════════════════════════════════════
-    // STEP 1: Apply Theme Preset (Layout variables)
+    // STEP 1: 套用 Theme Preset（佈局變數）
     // ═══════════════════════════════════════════════════════════════════════════
-    const presetName = ui?.themePreset || 'default'
+    const presetName = ui?.themePreset || professionConfig?.preset || 'default'
     const preset = getPreset(presetName)
 
-    // Apply all preset CSS variables
+    // 套用所有 preset CSS 變數
     Object.entries(preset).forEach(([key, value]) => {
-        // Skip non-CSS properties (name, label)
+        // 跳過非 CSS 屬性（name, label 等）
         if (key.startsWith('--')) {
             root.style.setProperty(key, value)
         }
     })
 
-    // Add preset name as data attribute for CSS targeting
+    // 將 preset 名稱設為 data 屬性（供 CSS 選擇器使用）
     root.dataset.preset = presetName
 
-    console.log('🎨 Preset applied:', presetName)
+    // 如果有職業，也加上職業標記
+    if (profession) {
+        root.dataset.profession = profession
+    }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // STEP 2: Apply User Colors (Override preset colors)
+    // STEP 2: 套用用戶顏色（覆蓋 preset 顏色）
     // ═══════════════════════════════════════════════════════════════════════════
-    // Set color CSS variables (as RGB values for Tailwind alpha support)
+    // 設定顏色 CSS 變數（RGB 格式，支援 Tailwind alpha）
     root.style.setProperty('--color-primary', hexToRgb(theme.primaryColor))
     root.style.setProperty('--color-secondary', hexToRgb(theme.secondaryColor))
     root.style.setProperty('--color-background', hexToRgb(theme.backgroundColor))
     root.style.setProperty('--color-text', hexToRgb(theme.textColor))
     root.style.setProperty('--color-muted', hexToRgb(theme.mutedColor))
 
-    // Generate color shades for hover states, etc.
+    // 產生顏色變體（用於 hover 狀態等）
     root.style.setProperty('--color-primary-light', lighten(theme.primaryColor, 15))
     root.style.setProperty('--color-primary-dark', darken(theme.primaryColor, 10))
-    root.style.setProperty('--color-secondary-light', lighten(theme.secondaryColor, 15))
-    root.style.setProperty('--color-background-alt', darken(theme.backgroundColor, 3))
+    root.style.setProperty(
+        '--color-secondary-light',
+        lighten(theme.secondaryColor, 15)
+    )
+    root.style.setProperty(
+        '--color-background-alt',
+        darken(theme.backgroundColor, 3)
+    )
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // STEP 3: Apply Typography
+    // STEP 3: 套用字體
     // ═══════════════════════════════════════════════════════════════════════════
-    // Set font family CSS variables
+    // 設定字體 CSS 變數
     root.style.setProperty('--font-body', `'${theme.fontFamily}', sans-serif`)
-    root.style.setProperty('--font-heading', `'${theme.headingFont || theme.fontFamily}', serif`)
+    root.style.setProperty(
+        '--font-heading',
+        `'${theme.headingFont || theme.fontFamily}', serif`
+    )
 
-    // Load Google Fonts
+    // 載入 Google Fonts
     const fontsToLoad = [theme.fontFamily]
     if (theme.headingFont && theme.headingFont !== theme.fontFamily) {
         fontsToLoad.push(theme.headingFont)
@@ -199,14 +225,14 @@ export function initializeTheme(config) {
     loadGoogleFonts(fontsToLoad)
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // STEP 4: Apply SEO Meta Tags
+    // STEP 4: 套用 SEO Meta Tags
     // ═══════════════════════════════════════════════════════════════════════════
-    // Set page title from SEO config
+    // 設定頁面標題
     if (seo?.siteTitle) {
         document.title = seo.siteTitle
     }
 
-    // Set meta description
+    // 設定 meta description
     if (seo?.siteDescription) {
         let metaDesc = document.querySelector('meta[name="description"]')
         if (!metaDesc) {
@@ -217,20 +243,25 @@ export function initializeTheme(config) {
         metaDesc.content = seo.siteDescription
     }
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 調試資訊
+    // ═══════════════════════════════════════════════════════════════════════════
     console.log('🎨 Theme initialized:', {
         preset: presetName,
+        profession: profession || 'none',
         primary: theme.primaryColor,
-        font: theme.fontFamily
+        font: theme.fontFamily,
     })
 }
 
 /**
- * Placeholder image generator
- * Returns a data URL for a colored placeholder
- * @param {string} color - Hex color for the placeholder
- * @param {number} width - Width of placeholder
- * @param {number} height - Height of placeholder
- * @returns {string} Data URL for placeholder image
+ * 佔位圖產生器
+ * 返回一個帶顏色的佔位圖 data URL
+ *
+ * @param {string} color - 佔位圖的 hex 顏色
+ * @param {number} width - 寬度
+ * @param {number} height - 高度
+ * @returns {string} 佔位圖的 Data URL
  */
 export function getPlaceholderImage(color = '#f5f5f5', width = 400, height = 300) {
     const canvas = document.createElement('canvas')
@@ -238,11 +269,11 @@ export function getPlaceholderImage(color = '#f5f5f5', width = 400, height = 300
     canvas.height = height
     const ctx = canvas.getContext('2d')
 
-    // Fill with color
+    // 填充顏色
     ctx.fillStyle = color
     ctx.fillRect(0, 0, width, height)
 
-    // Add subtle pattern
+    // 加入細微紋理
     ctx.fillStyle = 'rgba(0,0,0,0.03)'
     for (let i = 0; i < width; i += 20) {
         for (let j = 0; j < height; j += 20) {
@@ -262,5 +293,5 @@ export default {
     darken,
     loadGoogleFonts,
     initializeTheme,
-    getPlaceholderImage
+    getPlaceholderImage,
 }

@@ -260,6 +260,21 @@ function diagnoseJsonError(content, error) {
     }
 }
 
+// 有效的職業列表
+const VALID_PROFESSIONS = [
+    'chef', 'baker', 'barista',
+    'knitter', 'potter', 'jeweler', 'leatherworker', 'woodworker',
+    'artist', 'illustrator', 'photographer', 'designer',
+    'florist', 'gardener',
+    'therapist', 'yoga',
+    'architect', 'interior',
+    'musician',
+    'writer', 'teacher'
+]
+
+// 有效的區塊名稱
+const VALID_SECTIONS = ['Hero', 'Works', 'OtherWorks', 'About', 'Contact', 'Gallery', 'Testimonials']
+
 /**
  * 驗證設定結構
  */
@@ -270,7 +285,6 @@ function validateConfigStructure(config) {
     // 必填的頂層欄位
     const requiredSections = {
         profile: '個人資料',
-        theme: '外觀主題',
     }
 
     for (const [field, label] of Object.entries(requiredSections)) {
@@ -303,6 +317,21 @@ function validateConfigStructure(config) {
             })
         }
 
+        // 檢查職業欄位（新功能）
+        if (config.profile.profession) {
+            const profession = config.profile.profession.toLowerCase().trim()
+            if (!VALID_PROFESSIONS.includes(profession)) {
+                warnings.push({
+                    field: 'profile.profession',
+                    message: `「${config.profile.profession}」不是有效的職業選項`,
+                    suggestion: `有效的選項有：${VALID_PROFESSIONS.join('、')}。設定職業後，網站會自動套用最適合的風格！`,
+                })
+            } else {
+                // 職業設定正確，給予正面回饋
+                print(`✨ 檢測到職業設定：${profession}，將自動套用推薦風格`, 'magenta')
+            }
+        }
+
         // 檢查社群連結格式
         if (config.profile.social) {
             const socialPlatforms = ['instagram', 'pinterest', 'etsy', 'youtube', 'tiktok']
@@ -319,7 +348,7 @@ function validateConfigStructure(config) {
         }
     }
 
-    // 檢查主題顏色
+    // 檢查主題顏色（只有在沒設定職業或有自訂顏色時才檢查）
     if (config.theme) {
         const colorFields = {
             primaryColor: '主要顏色',
@@ -337,22 +366,47 @@ function validateConfigStructure(config) {
                 })
             }
         }
-
-        // 檢查字體名稱是否有空格但沒引號（常見錯誤）
-        if (config.theme.fontFamily && config.theme.fontFamily.includes(' ')) {
-            // 這其實是 OK 的，JSON 字串本來就會保留空格
-        }
     }
 
     // 檢查 UI 預設
-    if (config.ui && config.ui.themePreset) {
-        const validPresets = ['default', 'minimal', 'soft', 'bold']
-        if (!validPresets.includes(config.ui.themePreset.toLowerCase())) {
-            warnings.push({
-                field: 'ui.themePreset',
-                message: `「${config.ui.themePreset}」不是有效的風格選項`,
-                suggestion: `有效的選項有：${validPresets.join('、')}`,
-            })
+    if (config.ui) {
+        if (config.ui.themePreset) {
+            const validPresets = ['default', 'minimal', 'soft', 'bold']
+            if (!validPresets.includes(config.ui.themePreset.toLowerCase())) {
+                warnings.push({
+                    field: 'ui.themePreset',
+                    message: `「${config.ui.themePreset}」不是有效的風格選項`,
+                    suggestion: `有效的選項有：${validPresets.join('、')}`,
+                })
+            }
+        }
+
+        // 檢查 layout 配置（新功能）
+        if (config.ui.layout) {
+            if (!Array.isArray(config.ui.layout)) {
+                warnings.push({
+                    field: 'ui.layout',
+                    message: 'layout 應該是一個陣列',
+                    suggestion: '例如：["Hero", "Works", "OtherWorks"]',
+                })
+            } else {
+                const invalidSections = config.ui.layout.filter(s => !VALID_SECTIONS.includes(s))
+                if (invalidSections.length > 0) {
+                    warnings.push({
+                        field: 'ui.layout',
+                        message: `以下區塊名稱無效：${invalidSections.join('、')}`,
+                        suggestion: `有效的區塊有：${VALID_SECTIONS.join('、')}`,
+                    })
+                }
+
+                if (config.ui.layout.length === 0) {
+                    warnings.push({
+                        field: 'ui.layout',
+                        message: 'layout 陣列是空的',
+                        suggestion: '至少要有一個區塊，例如：["Hero", "Works"]',
+                    })
+                }
+            }
         }
     }
 
@@ -365,6 +419,15 @@ function validateConfigStructure(config) {
                 suggestion: '建議控制在 160 字元以內，Google 才能完整顯示',
             })
         }
+    }
+
+    // 如果沒有設定職業，給個提示
+    if (!config.profile?.profession) {
+        collectedIssues.suggestions.push({
+            field: 'profile.profession',
+            message: '您可以設定職業來自動套用最適合的網站風格！',
+            suggestion: `在 profile 中加入 "profession": "knitter"（或其他職業）`,
+        })
     }
 
     return {warnings, errors}
@@ -400,7 +463,11 @@ function isValidHexColor(color) {
  * 生成錯誤報告 Markdown 文件
  */
 function generateErrorReport() {
-    if (collectedIssues.errors.length === 0 && collectedIssues.warnings.length === 0) {
+    const hasIssues = collectedIssues.errors.length > 0 ||
+        collectedIssues.warnings.length > 0 ||
+        collectedIssues.suggestions.length > 0
+
+    if (!hasIssues) {
         // 沒有錯誤，刪除舊的報告檔案（如果存在）
         const reportPath = path.join(projectRoot, 'CONFIG_ERRORS.md')
         if (fs.existsSync(reportPath)) {
@@ -448,7 +515,7 @@ ${err.example}
 
     // 警告區塊
     if (collectedIssues.warnings.length > 0) {
-        report += `## 💡 建議改善的地方
+        report += `## ⚠️ 建議改善的地方
 
 這些不是錯誤，但改善後網站會更好：
 
@@ -458,11 +525,25 @@ ${err.example}
         collectedIssues.warnings.forEach((warn) => {
             report += `| \`${warn.field}\` | ${warn.message} | ${warn.suggestion} |\n`
         })
+        report += '\n---\n\n'
+    }
+
+    // 建議區塊（新功能提示）
+    if (collectedIssues.suggestions.length > 0) {
+        report += `## 💡 小提示
+
+這些是可以讓您的網站更棒的建議：
+
+| 欄位 | 說明 | 建議 |
+|------|------|------|
+`
+        collectedIssues.suggestions.forEach((sug) => {
+            report += `| \`${sug.field}\` | ${sug.message} | ${sug.suggestion} |\n`
+        })
+        report += '\n---\n\n'
     }
 
     report += `
----
-
 ## 🆘 需要幫助嗎？
 
 如果您不確定怎麼修正，可以：
@@ -472,13 +553,38 @@ ${err.example}
 3. **回報問題**：到 GitHub Issues 詢問
 
 記得修正後重新執行 \`npm run validate\` 來確認問題已解決！
+
+---
+
+## 🪄 職業快速設定
+
+只要在 \`profile.profession\` 設定您的職業，網站就會自動套用最適合的風格！
+
+\`\`\`json
+{
+  "profile": {
+    "name": "您的名字",
+    "profession": "knitter"  // 👈 加上這行！
+  }
+}
+\`\`\`
+
+**可用的職業：**
+- 🍳 餐飲類：\`chef\`、\`baker\`、\`barista\`
+- 🧶 手作類：\`knitter\`、\`potter\`、\`jeweler\`、\`leatherworker\`、\`woodworker\`
+- 🎨 藝術類：\`artist\`、\`illustrator\`、\`photographer\`、\`designer\`
+- 🌸 花藝類：\`florist\`、\`gardener\`
+- 💆 療癒類：\`therapist\`、\`yoga\`
+- 🏠 空間類：\`architect\`、\`interior\`
+- 🎵 表演類：\`musician\`
+- 📝 文字類：\`writer\`、\`teacher\`
 `
 
     // 寫入報告檔案
     const reportPath = path.join(projectRoot, 'CONFIG_ERRORS.md')
     fs.writeFileSync(reportPath, report, 'utf-8')
-    print('\n📄 已生成錯誤報告：CONFIG_ERRORS.md', 'cyan')
-    print('   打開這個檔案可以看到更詳細的修正說明', 'cyan')
+    print('\n📄 已生成檢查報告：CONFIG_ERRORS.md', 'cyan')
+    print('   打開這個檔案可以看到更詳細的說明', 'cyan')
 }
 
 /**
@@ -489,6 +595,7 @@ function getDefaultConfig() {
         profile: {
             name: '您的名字',
             role: '您的專長',
+            profession: '',
             email: 'hello@example.com',
             bio: '在這裡介紹您自己...',
             avatar: '/images/avatar.jpg',
@@ -508,6 +615,8 @@ function getDefaultConfig() {
             heroStyle: 'split',
             showFooter: true,
             showSocialLinks: true,
+            showOtherWorks: true,
+            layout: ['Hero', 'Works', 'OtherWorks'],
         },
         content: {
             heroTitle: '歡迎光臨',
@@ -515,6 +624,10 @@ function getDefaultConfig() {
             heroButtonText: '瀏覽作品',
             worksTitle: '我的作品',
             otherWorksTitle: '更多作品',
+            aboutTitle: '關於我',
+            aboutContent: '',
+            contactTitle: '聯絡我',
+            contactMessage: '有任何問題或合作提案，歡迎與我聯繫！',
         },
         seo: {
             siteTitle: '我的作品集',
