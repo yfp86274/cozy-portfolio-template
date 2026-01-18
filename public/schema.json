@@ -1,0 +1,279 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/site.config.schema.json",
+  "title": "Site Configuration",
+  "description": "Configuration schema for the portfolio website template",
+  "type": "object",
+  "required": [
+    "profile",
+    "theme",
+    "ui",
+    "content",
+    "seo"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for IDE support"
+    },
+    "profile": {
+      "type": "object",
+      "description": "Your personal information",
+      "required": [
+        "name",
+        "role",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Your name (appears in header/footer)",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "description": "Your profession or title"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Your contact email address"
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short biography or tagline"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Path to your avatar image (place in public/images/)"
+        },
+        "social": {
+          "type": "object",
+          "description": "Social media profile links",
+          "properties": {
+            "instagram": {
+              "type": "string",
+              "description": "Instagram profile URL"
+            },
+            "pinterest": {
+              "type": "string",
+              "description": "Pinterest profile URL"
+            },
+            "etsy": {
+              "type": "string",
+              "description": "Etsy shop URL"
+            },
+            "twitter": {
+              "type": "string",
+              "description": "Twitter/X profile URL"
+            },
+            "linkedin": {
+              "type": "string",
+              "description": "LinkedIn profile URL"
+            },
+            "youtube": {
+              "type": "string",
+              "description": "YouTube channel URL"
+            },
+            "tiktok": {
+              "type": "string",
+              "description": "TikTok profile URL"
+            },
+            "behance": {
+              "type": "string",
+              "description": "Behance portfolio URL"
+            },
+            "dribbble": {
+              "type": "string",
+              "description": "Dribbble profile URL"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "description": "Colors and typography settings",
+      "required": [
+        "primaryColor",
+        "secondaryColor",
+        "backgroundColor",
+        "textColor",
+        "fontFamily"
+      ],
+      "properties": {
+        "primaryColor": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "description": "Main brand color (hex format, e.g., #8B4513)"
+        },
+        "secondaryColor": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "description": "Secondary/accent color (hex format)"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "description": "Page background color (hex format)"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "description": "Main text color (hex format)"
+        },
+        "mutedColor": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+          "description": "Muted/secondary text color (hex format)"
+        },
+        "fontFamily": {
+          "type": "string",
+          "description": "Main body font from Google Fonts"
+        },
+        "headingFont": {
+          "type": "string",
+          "description": "Optional heading font from Google Fonts"
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "description": "Layout and display options",
+      "properties": {
+        "heroStyle": {
+          "type": "string",
+          "enum": [
+            "split",
+            "centered",
+            "minimal"
+          ],
+          "description": "Hero section layout style",
+          "default": "split"
+        },
+        "showFooter": {
+          "type": "boolean",
+          "description": "Show or hide the footer section",
+          "default": true
+        },
+        "showSocialLinks": {
+          "type": "boolean",
+          "description": "Show or hide social media links",
+          "default": true
+        },
+        "showOtherWorks": {
+          "type": "boolean",
+          "description": "Show or hide the 'Other Works' section",
+          "default": true
+        },
+        "navStyle": {
+          "type": "string",
+          "enum": [
+            "default",
+            "minimal"
+          ],
+          "description": "Navigation bar style",
+          "default": "default"
+        },
+        "gridColumns": {
+          "type": "integer",
+          "enum": [
+            2,
+            3,
+            4
+          ],
+          "description": "Number of columns in the work grid (desktop)",
+          "default": 3
+        },
+        "thumbnailRatio": {
+          "type": "string",
+          "enum": [
+            "4/3",
+            "3/2",
+            "16/9",
+            "1/1"
+          ],
+          "description": "Aspect ratio for work thumbnails",
+          "default": "4/3"
+        },
+        "smoothScroll": {
+          "type": "boolean",
+          "description": "Enable smooth scroll behavior",
+          "default": true
+        },
+        "showBackToTop": {
+          "type": "boolean",
+          "description": "Show 'back to top' button on mobile",
+          "default": true
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "description": "Text content for various sections",
+      "properties": {
+        "heroTitle": {
+          "type": "string",
+          "description": "Main heading in the hero section"
+        },
+        "heroSubtitle": {
+          "type": "string",
+          "description": "Subtitle in the hero section"
+        },
+        "heroButtonText": {
+          "type": "string",
+          "description": "Text for the hero call-to-action button"
+        },
+        "worksTitle": {
+          "type": "string",
+          "description": "Title for the main works/portfolio section"
+        },
+        "otherWorksTitle": {
+          "type": "string",
+          "description": "Title for the secondary works section"
+        },
+        "footerText": {
+          "type": "string",
+          "description": "Custom text displayed in the footer"
+        },
+        "notFoundTitle": {
+          "type": "string",
+          "description": "Title for the 404 error page"
+        },
+        "notFoundMessage": {
+          "type": "string",
+          "description": "Message displayed on the 404 error page"
+        },
+        "notFoundButtonText": {
+          "type": "string",
+          "description": "Button text on the 404 error page"
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "description": "Search engine optimization settings",
+      "properties": {
+        "siteTitle": {
+          "type": "string",
+          "description": "Browser tab title and search engine title"
+        },
+        "siteDescription": {
+          "type": "string",
+          "description": "Meta description for search engines",
+          "maxLength": 160
+        },
+        "keywords": {
+          "type": "string",
+          "description": "Comma-separated keywords for SEO"
+        },
+        "ogImage": {
+          "type": "string",
+          "description": "Social media preview image path (1200x630px recommended)"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

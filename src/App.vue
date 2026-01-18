@@ -5,7 +5,7 @@ import TheHeader from '@/components/TheHeader.vue'
 import TheFooter from '@/components/TheFooter.vue'
 import {useConfig} from '@/composables/useConfig'
 import {initializeTheme} from '@/utils/theme'
-import siteConfig from '@/site.config.js'
+import siteConfig from '@/../site.config.json'
 
 // Get config for conditional rendering
 const {ui} = useConfig()

@@ -1,12 +1,12 @@
 /**
  * Configuration Composable
  *
- * Provides reactive access to site.config.js across all components.
+ * Provides reactive access to site.config.json across all components.
  * This is the central point for reading configuration values.
  */
 
 import {reactive, readonly} from 'vue'
-import siteConfig from '@/site.config.js'
+import siteConfig from '@/../site.config.json'
 
 // Create a reactive copy of the config
 const config = reactive({...siteConfig})
