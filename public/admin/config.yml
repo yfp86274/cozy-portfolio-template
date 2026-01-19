@@ -10,8 +10,6 @@ backend:
   repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME  # 🔧 請改成您的 GitHub 用戶名/儲存庫名稱
   branch: main
   base_url: https://api.netlify.com  # 使用 Netlify 進行 OAuth 認證
-  # 如果您使用 GitHub Pages，可以改用這個設定：
-  # auth_endpoint: https://api.netlify.com/auth/done
 
 # 本地開發設定（在 Codespaces 中測試時使用）
 local_backend: true
@@ -32,6 +30,14 @@ locale: 'zh_Hant'
 editor:
   preview: false  # 關閉預覽以簡化介面
 
+# 搜尋功能
+search: false
+
+# Slug 設定
+slug:
+  encoding: "ascii"
+  clean_accents: true
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📝 內容集合定義
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -47,56 +53,88 @@ collections:
       - name: 'site-config'
         label: '📋 網站配置'
         file: 'site.config.json'
-        description: '這是您網站的核心設定檔，所有的個人資料、風格和文案都在這裡'
+        description: '這是您網站的核心設定檔'
         fields:
           
           # ═══════════════════════════════════════════════════════════════════
-          # 👤 個人資料區塊
+          # 👤 個人資料區塊 - 最重要，預設展開
           # ═══════════════════════════════════════════════════════════════════
           - name: 'profile'
-            label: '👤 個人資料'
+            label: '👤 個人資料（必填）'
             widget: 'object'
             collapsed: false
             summary: '{{fields.name}} - {{fields.role}}'
-            hint: '這裡是您的基本資料，訪客會在網站上看到這些內容'
+            hint: '✨ 這是訪客第一眼看到的資訊，請認真填寫！'
             fields:
               - name: 'name'
-                label: '📛 您的名字'
+                label: '您的名字 / 品牌名稱'
                 widget: 'string'
-                hint: '例如：Emma Woolcraft、小美手作、阿明師傅'
+                hint: '💡 例如：Emma Woolcraft、小美手作坊、阿明師傅的廚房'
                 required: true
 
               - name: 'role'
-                label: '💼 您的專長/頭銜'
+                label: '您的專長 / 頭銜'
                 widget: 'string'
-                hint: '例如：手工編織創作者、甜點師、攝影師'
+                hint: '💡 例如：手工編織創作者、法式甜點師、人像攝影師'
                 required: true
 
               - name: 'profession'
-                label: '🎨 職業風格'
-                widget: 'profession-select'
-                hint: '選擇職業後，網站會自動套用最適合的配色和風格！'
+                label: '🎨 職業風格（選了自動配色！）'
+                widget: 'select'
+                default: ''
+                options:
+                  - { label: '── 🍽️ 美食料理類 ──', value: '_food_header' }
+                  - { label: '🍳 廚師 / 料理人', value: 'chef' }
+                  - { label: '🧁 烘焙師 / 甜點師', value: 'baker' }
+                  - { label: '☕ 咖啡師', value: 'barista' }
+                  - { label: '── 🎨 手作工藝類 ──', value: '_craft_header' }
+                  - { label: '🧶 編織創作者', value: 'knitter' }
+                  - { label: '🏺 陶藝家', value: 'potter' }
+                  - { label: '💍 珠寶 / 飾品設計師', value: 'jeweler' }
+                  - { label: '👜 皮革工藝師', value: 'leatherworker' }
+                  - { label: '🪵 木工 / 木藝師', value: 'woodworker' }
+                  - { label: '── 🖼️ 視覺藝術類 ──', value: '_art_header' }
+                  - { label: '🎨 藝術家', value: 'artist' }
+                  - { label: '✏️ 插畫家', value: 'illustrator' }
+                  - { label: '📷 攝影師', value: 'photographer' }
+                  - { label: '🎯 設計師', value: 'designer' }
+                  - { label: '── 🌿 自然花草類 ──', value: '_nature_header' }
+                  - { label: '🌸 花藝師', value: 'florist' }
+                  - { label: '🌿 園藝師', value: 'gardener' }
+                  - { label: '── 💆 身心療癒類 ──', value: '_wellness_header' }
+                  - { label: '💚 治療師 / 諮商師', value: 'therapist' }
+                  - { label: '🧘 瑜伽老師', value: 'yoga' }
+                  - { label: '── 🏠 空間設計類 ──', value: '_space_header' }
+                  - { label: '🏛️ 建築師', value: 'architect' }
+                  - { label: '🛋️ 室內設計師', value: 'interior' }
+                  - { label: '── 📝 其他創作類 ──', value: '_other_header' }
+                  - { label: '🎵 音樂人', value: 'musician' }
+                  - { label: '📝 作家 / 文字工作者', value: 'writer' }
+                  - { label: '📚 老師 / 講師', value: 'teacher' }
+                  - { label: '── ⚪ 不選擇 ──', value: '_none_header' }
+                  - { label: '🤔 還沒決定（使用預設風格）', value: '' }
+                hint: '🪄 選擇您的職業，網站會自動套用最適合的配色、字體和風格！這是最神奇的功能～'
                 required: false
 
               - name: 'email'
-                label: '📧 電子郵件'
+                label: '📧 聯絡信箱'
                 widget: 'string'
-                hint: '訪客可以透過這個信箱聯絡您'
+                hint: '💡 訪客可以透過這個信箱聯絡您洽談合作'
                 pattern:
                   - '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-                  - '請輸入有效的電子郵件格式，例如：hello@example.com'
+                  - '❌ 請輸入正確的 Email 格式，例如：hello@example.com'
                 required: true
 
               - name: 'bio'
                 label: '📝 自我介紹'
                 widget: 'text'
-                hint: '用一兩句話介紹您自己和您的作品（建議 50-150 字）'
+                hint: '💡 用 2-3 句話介紹您自己和創作理念（建議 50-150 字）'
                 required: false
 
               - name: 'avatar'
-                label: '🖼️ 大頭照'
+                label: '🖼️ 大頭照 / 品牌 Logo'
                 widget: 'image'
-                hint: '建議使用正方形圖片，至少 400x400 像素'
+                hint: '💡 建議使用正方形圖片（400×400 像素以上），臉部特寫或 Logo 效果最佳'
                 required: false
                 default: '/images/avatar.jpg'
                 media_library:
@@ -104,200 +142,216 @@ collections:
                     multiple: false
 
               - name: 'social'
-                label: '🔗 社群連結'
+                label: '🔗 社群連結（選填）'
                 widget: 'object'
                 collapsed: true
-                hint: '填入您的社群媒體網址，留空的會自動隱藏'
+                hint: '💡 只需填您有在經營的平台，留空的會自動隱藏'
                 fields:
-                  - { name: 'instagram', label: 'Instagram', widget: 'string', required: false, hint: '完整網址，例如：https://instagram.com/yourname' }
-                  - { name: 'pinterest', label: 'Pinterest', widget: 'string', required: false }
-                  - { name: 'etsy', label: 'Etsy 商店', widget: 'string', required: false }
-                  - { name: 'youtube', label: 'YouTube', widget: 'string', required: false }
-                  - { name: 'tiktok', label: 'TikTok', widget: 'string', required: false }
-                  - { name: 'twitter', label: 'Twitter / X', widget: 'string', required: false }
-                  - { name: 'linkedin', label: 'LinkedIn', widget: 'string', required: false }
-                  - { name: 'behance', label: 'Behance', widget: 'string', required: false }
-                  - { name: 'dribbble', label: 'Dribbble', widget: 'string', required: false }
+                  - { name: 'instagram', label: '📸 Instagram', widget: 'string', required: false, hint: '例如：https://instagram.com/yourname' }
+                  - { name: 'facebook', label: '👍 Facebook', widget: 'string', required: false, hint: '您的粉絲專頁網址' }
+                  - { name: 'pinterest', label: '📌 Pinterest', widget: 'string', required: false }
+                  - { name: 'etsy', label: '🛒 Etsy 商店', widget: 'string', required: false }
+                  - { name: 'shopee', label: '🛍️ 蝦皮商店', widget: 'string', required: false }
+                  - { name: 'youtube', label: '▶️ YouTube', widget: 'string', required: false }
+                  - { name: 'tiktok', label: '🎵 TikTok', widget: 'string', required: false }
+                  - { name: 'twitter', label: '🐦 Twitter / X', widget: 'string', required: false }
+                  - { name: 'linkedin', label: '💼 LinkedIn', widget: 'string', required: false }
+                  - { name: 'behance', label: '🎨 Behance', widget: 'string', required: false }
+                  - { name: 'dribbble', label: '🏀 Dribbble', widget: 'string', required: false }
+                  - { name: 'website', label: '🌐 其他網站', widget: 'string', required: false }
 
           # ═══════════════════════════════════════════════════════════════════
           # 🎨 主題外觀區塊
           # ═══════════════════════════════════════════════════════════════════
           - name: 'theme'
-            label: '🎨 主題外觀'
+            label: '🎨 自訂顏色（進階選項）'
             widget: 'object'
             collapsed: true
-            hint: '💡 小提示：如果您有設定「職業風格」，這裡可以留空，系統會自動幫您配色！'
+            hint: '⚡ 已選擇職業風格？這裡可以跳過！系統會自動配色。只有想要「完全自訂」時才需要改這裡。'
             fields:
               - name: 'primaryColor'
-                label: '🔴 主要顏色'
+                label: '🎯 主色調'
                 widget: 'color'
                 required: false
-                hint: '網站的主色調，用於按鈕和重點區域'
+                hint: '按鈕、連結、重點區域的顏色'
                 allowInput: true
 
               - name: 'secondaryColor'
-                label: '🟠 次要顏色'
+                label: '✨ 輔助色'
                 widget: 'color'
                 required: false
-                hint: '輔助顏色，用於裝飾和區隔'
+                hint: '裝飾、標籤、次要元素的顏色'
+                allowInput: true
+
+              - name: 'accentColor'
+                label: '💫 強調色'
+                widget: 'color'
+                required: false
+                hint: '特別突出的元素，如促銷標籤'
                 allowInput: true
 
               - name: 'backgroundColor'
-                label: '⬜ 背景顏色'
+                label: '📄 背景色'
                 widget: 'color'
                 required: false
-                hint: '網站的底色'
+                hint: '網站的底色（建議淺色）'
                 allowInput: true
 
               - name: 'textColor'
-                label: '⬛ 文字顏色'
+                label: '📝 文字色'
                 widget: 'color'
                 required: false
-                hint: '主要文字的顏色'
+                hint: '主要內文的顏色（建議深色）'
                 allowInput: true
 
               - name: 'mutedColor'
-                label: '🔘 淺色文字'
+                label: '💬 淡色文字'
                 widget: 'color'
                 required: false
-                hint: '次要文字和說明的顏色'
+                hint: '說明文字、日期等次要資訊'
                 allowInput: true
 
               - name: 'fontFamily'
                 label: '🔤 內文字體'
                 widget: 'select'
                 required: false
+                default: ''
                 options:
-                  - { label: '預設（讓系統決定）', value: '' }
-                  - { label: 'Inter - 現代簡潔', value: 'Inter' }
-                  - { label: 'Noto Sans TC - 中文友善', value: 'Noto Sans TC' }
-                  - { label: 'Lora - 溫暖典雅', value: 'Lora' }
-                  - { label: 'Nunito - 圓潤友善', value: 'Nunito' }
-                  - { label: 'Quicksand - 輕盈可愛', value: 'Quicksand' }
-                  - { label: 'Work Sans - 專業俐落', value: 'Work Sans' }
-                hint: '網站內文使用的字體'
+                  - { label: '🤖 自動（依職業決定）', value: '' }
+                  - { label: 'Noto Sans TC — 標準中文', value: 'Noto Sans TC' }
+                  - { label: 'Inter — 現代簡潔', value: 'Inter' }
+                  - { label: 'Lora — 溫暖書卷', value: 'Lora' }
+                  - { label: 'Nunito — 圓潤親切', value: 'Nunito' }
+                  - { label: 'Quicksand — 輕盈可愛', value: 'Quicksand' }
+                  - { label: 'Work Sans — 專業俐落', value: 'Work Sans' }
 
               - name: 'headingFont'
                 label: '🔠 標題字體'
                 widget: 'select'
                 required: false
+                default: ''
                 options:
-                  - { label: '預設（讓系統決定）', value: '' }
-                  - { label: 'Playfair Display - 優雅襯線', value: 'Playfair Display' }
-                  - { label: 'Noto Serif TC - 中文典雅', value: 'Noto Serif TC' }
-                  - { label: 'Cormorant Garamond - 經典高雅', value: 'Cormorant Garamond' }
-                  - { label: 'Poppins - 現代清晰', value: 'Poppins' }
-                  - { label: 'Amatic SC - 手寫風格', value: 'Amatic SC' }
-                  - { label: 'Bebas Neue - 大膽有力', value: 'Bebas Neue' }
-                hint: '標題和大字使用的字體'
+                  - { label: '🤖 自動（依職業決定）', value: '' }
+                  - { label: 'Noto Serif TC — 典雅中文', value: 'Noto Serif TC' }
+                  - { label: 'Playfair Display — 優雅襯線', value: 'Playfair Display' }
+                  - { label: 'Cormorant Garamond — 經典高雅', value: 'Cormorant Garamond' }
+                  - { label: 'Poppins — 現代清晰', value: 'Poppins' }
+                  - { label: 'Amatic SC — 手寫風格', value: 'Amatic SC' }
+                  - { label: 'Bebas Neue — 大膽有力', value: 'Bebas Neue' }
 
           # ═══════════════════════════════════════════════════════════════════
-          # 🖥️ 介面設定區塊
+          # 🖥️ 版面設定區塊
           # ═══════════════════════════════════════════════════════════════════
           - name: 'ui'
-            label: '🖥️ 介面設定'
+            label: '🖥️ 版面配置'
             widget: 'object'
             collapsed: true
-            hint: '調整網站的版面配置和顯示選項'
+            hint: '💡 調整網站的排版方式和顯示選項'
             fields:
-              - name: 'themePreset'
-                label: '🎭 風格預設'
-                widget: 'select'
-                options:
-                  - { label: '預設風格', value: 'default' }
-                  - { label: '極簡風格 - 留白、專注內容', value: 'minimal' }
-                  - { label: '柔和風格 - 溫暖、友善', value: 'soft' }
-                  - { label: '大膽風格 - 高對比、現代', value: 'bold' }
-                default: 'default'
-
               - name: 'heroStyle'
                 label: '🏠 首頁版型'
                 widget: 'select'
-                options:
-                  - { label: '分割式 - 左右並列', value: 'split' }
-                  - { label: '置中式 - 內容居中', value: 'centered' }
-                  - { label: '極簡式 - 乾淨留白', value: 'minimal' }
                 default: 'split'
-                hint: '首頁歡迎區的排版方式'
+                options:
+                  - { label: '⬛⬜ 分割式 — 照片在左、文字在右', value: 'split' }
+                  - { label: '🎯 置中式 — 所有內容居中', value: 'centered' }
+                  - { label: '◻️ 極簡式 — 大量留白', value: 'minimal' }
+                hint: '首頁「關於我」區塊的排版方式'
 
               - name: 'gridColumns'
-                label: '📊 作品格線'
+                label: '📊 作品欄數'
                 widget: 'select'
-                options:
-                  - { label: '2 欄 - 大圖展示', value: 2 }
-                  - { label: '3 欄 - 平衡布局', value: 3 }
-                  - { label: '4 欄 - 密集展示', value: 4 }
                 default: 3
-                hint: '作品展示區的欄位數'
+                options:
+                  - { label: '2 欄 — 大圖展示，適合攝影作品', value: 2 }
+                  - { label: '3 欄 — 均衡配置（推薦）', value: 3 }
+                  - { label: '4 欄 — 密集展示，適合大量作品', value: 4 }
+                hint: '作品集區塊每排顯示幾個作品'
 
               - name: 'thumbnailRatio'
-                label: '🖼️ 縮圖比例'
+                label: '🖼️ 作品縮圖比例'
                 widget: 'select'
-                options:
-                  - { label: '4:3 - 傳統相片', value: '4/3' }
-                  - { label: '3:2 - 攝影標準', value: '3/2' }
-                  - { label: '16:9 - 寬螢幕', value: '16/9' }
-                  - { label: '1:1 - 正方形', value: '1/1' }
-                  - { label: '4:5 - 直式（Instagram 風格）', value: '4/5' }
                 default: '4/3'
-                hint: '作品縮圖的長寬比'
+                options:
+                  - { label: '📷 4:3 — 傳統相機比例', value: '4/3' }
+                  - { label: '📸 3:2 — 單眼相機比例', value: '3/2' }
+                  - { label: '🖥️ 16:9 — 寬螢幕比例', value: '16/9' }
+                  - { label: '⬜ 1:1 — 正方形（IG 風格）', value: '1/1' }
+                  - { label: '📱 4:5 — 直式（IG 直式貼文）', value: '4/5' }
+                hint: '作品縮圖的長寬比例'
+
+              - name: 'themePreset'
+                label: '🎭 整體風格'
+                widget: 'select'
+                default: 'default'
+                options:
+                  - { label: '✨ 預設 — 均衡配置', value: 'default' }
+                  - { label: '◻️ 極簡 — 大量留白、專注內容', value: 'minimal' }
+                  - { label: '🌸 柔和 — 溫暖、友善、圓角', value: 'soft' }
+                  - { label: '⚡ 大膽 — 高對比、現代感', value: 'bold' }
 
               - name: 'navStyle'
-                label: '📍 導覽列樣式'
+                label: '📍 導覽列'
                 widget: 'select'
-                options:
-                  - { label: '預設 - 完整導覽', value: 'default' }
-                  - { label: '極簡 - 只有名字', value: 'minimal' }
                 default: 'default'
+                options:
+                  - { label: '📋 完整 — 顯示所有選單', value: 'default' }
+                  - { label: '◻️ 極簡 — 只顯示名字', value: 'minimal' }
 
               - name: 'showFooter'
-                label: '顯示頁尾'
+                label: '👣 顯示頁尾'
                 widget: 'boolean'
                 default: true
+                hint: '網站最底部的版權資訊區塊'
 
               - name: 'showSocialLinks'
-                label: '顯示社群連結'
+                label: '🔗 顯示社群圖示'
                 widget: 'boolean'
                 default: true
+                hint: '在頁首/頁尾顯示社群媒體連結'
 
               - name: 'showOtherWorks'
-                label: '顯示「更多作品」區塊'
+                label: '📂 顯示「更多作品」'
                 widget: 'boolean'
                 default: true
+                hint: '作品詳情頁底部的相關作品推薦'
 
               - name: 'smoothScroll'
-                label: '平滑滾動效果'
+                label: '🎢 平滑滾動'
                 widget: 'boolean'
                 default: true
+                hint: '點擊連結時的滑順捲動效果'
 
               - name: 'showBackToTop'
-                label: '顯示「回到頂部」按鈕'
+                label: '⬆️ 回到頂部按鈕'
                 widget: 'boolean'
                 default: true
+                hint: '滾動時右下角出現的快速回頂按鈕'
 
           # ═══════════════════════════════════════════════════════════════════
           # 📄 網站文案區塊
           # ═══════════════════════════════════════════════════════════════════
           - name: 'content'
-            label: '📄 網站文案'
+            label: '📄 文字內容'
             widget: 'object'
             collapsed: true
-            hint: '網站上顯示的各種文字內容'
+            hint: '💡 自訂網站上顯示的各種文案'
             fields:
               - name: 'heroTitle'
                 label: '🏠 首頁大標題'
                 widget: 'string'
-                hint: '首頁最醒目的標題，例如：「用雙手編織溫暖」'
+                hint: '💡 首頁最醒目的一句話，例如：「用雙手編織溫暖」、「記錄生命中的美好瞬間」'
 
               - name: 'heroSubtitle'
                 label: '📝 首頁副標題'
                 widget: 'text'
-                hint: '大標題下方的說明文字'
+                hint: '💡 大標題下方的詳細說明（1-2 句話）'
 
               - name: 'heroButtonText'
-                label: '🔘 首頁按鈕文字'
+                label: '🔘 首頁按鈕'
                 widget: 'string'
                 default: '瀏覽作品'
+                hint: '💡 通常是「瀏覽作品」、「查看作品集」之類'
 
               - name: 'worksTitle'
                 label: '🎨 作品區標題'
@@ -305,28 +359,27 @@ collections:
                 default: '作品集'
 
               - name: 'otherWorksTitle'
-                label: '📂 其他作品區標題'
+                label: '📂 相關作品標題'
                 widget: 'string'
                 default: '更多作品'
 
               - name: 'footerText'
                 label: '👣 頁尾文字'
                 widget: 'string'
-                hint: '顯示在網站最底部的文字'
+                hint: '💡 例如：© 2024 小美手作坊 版權所有'
 
               - name: 'notFoundTitle'
-                label: '❌ 404 頁面標題'
+                label: '❌ 404 標題'
                 widget: 'string'
                 default: '找不到頁面'
-                hint: '當訪客進入不存在的頁面時看到的標題'
 
               - name: 'notFoundMessage'
-                label: '📋 404 頁面訊息'
+                label: '❌ 404 說明'
                 widget: 'text'
                 default: '您要找的頁面似乎不存在'
 
               - name: 'notFoundButtonText'
-                label: '🏠 404 返回按鈕'
+                label: '❌ 404 按鈕'
                 widget: 'string'
                 default: '回首頁'
 
@@ -334,29 +387,29 @@ collections:
           # 🔍 SEO 設定區塊
           # ═══════════════════════════════════════════════════════════════════
           - name: 'seo'
-            label: '🔍 搜尋引擎設定 (SEO)'
+            label: '🔍 搜尋引擎優化 (SEO)'
             widget: 'object'
             collapsed: true
-            hint: '這些設定會影響 Google 搜尋結果和社群分享時的顯示'
+            hint: '💡 這些設定影響 Google 搜尋結果和社群分享時的顯示'
             fields:
               - name: 'siteTitle'
                 label: '📰 網站標題'
                 widget: 'string'
-                hint: '顯示在瀏覽器分頁和搜尋結果的標題'
+                hint: '💡 顯示在 Google 搜尋結果和瀏覽器分頁上'
 
               - name: 'siteDescription'
                 label: '📝 網站描述'
                 widget: 'text'
-                hint: '搜尋結果顯示的說明文字（建議 50-160 字）'
+                hint: '💡 Google 搜尋結果中標題下方的說明文字（建議 50-160 字）'
 
               - name: 'keywords'
                 label: '🏷️ 關鍵字'
                 widget: 'string'
-                hint: '用逗號分隔，例如：手作、編織、毛線、手工藝'
+                hint: '💡 用半形逗號分隔，例如：手作,編織,毛線,手工藝,禮物'
 
               - name: 'ogImage'
-                label: '🖼️ 社群分享圖片'
+                label: '🖼️ 社群分享圖'
                 widget: 'image'
-                hint: '分享到 Facebook、Line 時顯示的圖片（建議 1200x630 像素）'
+                hint: '💡 分享到 FB、LINE 時顯示的圖片（建議 1200×630 像素）'
                 required: false
                 default: '/images/og-image.jpg'
