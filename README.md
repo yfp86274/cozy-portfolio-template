@@ -1,314 +1,134 @@
 # 🧶 手作人作品集網站模板
 
-**零代碼建立你的專業作品集網站** | Create your portfolio website with zero coding
+**專為不懂代碼的你設計** — 只需要整理文件夾、填個表單，就能擁有專業的作品集網站。
 
-> 為編織愛好者、廚師、藝術家、手工匠人設計 — 只需上傳圖片和修改文字，就能擁有精美的個人網站。
-
----
-
-## 🚀 最快的開始方式：一鍵啟動！
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YOUR_USERNAME/YOUR_REPO?quickstart=1)
-
-點擊上方按鈕，等待 1-2 分鐘，您就可以：
-
-- 📝 直接在網頁上編輯您的網站設定
-- 👀 即時預覽每一個修改
-- 🚀 一鍵部署到網路上
-
-**完全不需要安裝任何東西！**
-
----
-
-## 🎨 自動套用職業風格
-
-只要設定您的職業，網站會自動套用最適合的配色和風格！
-
-```json
-{
-  "profile": {
-    "name": "Emma",
-    "profession": "knitter"  ← 加上這行！
-  }
-}
-```
-
-| 🍳 餐飲類  |    🧶 手作類     |    🎨 藝術類    |  🌸 自然類  |
-|:-------:|:-------------:|:------------:|:--------:|
-|  chef   |    knitter    |    artist    | florist  |
-|  baker  |    potter     | illustrator  | gardener |
-| barista |    jeweler    | photographer |          |
-|         | leatherworker |   designer   |          |
-|         |  woodworker   |              |          |
-
-[查看所有職業風格 →](CONFIG_GUIDE.md#職業風格)
+> 適合編織愛好者、廚師、陶藝家、攝影師、插畫家、花藝師...所有熱愛創作的人！
 
 ---
 
 ## ✨ 這個模板能做什麼？
 
-- 📱 **完美適應所有設備** — 電腦、平板、手機都好看
-- 🎨 **一鍵切換風格** — 提供多種預設風格，適合不同職業
-- 📁 **自動生成作品集** — 只需把圖片放進資料夾
-- 🌐 **免費託管** — 使用 GitHub Pages，完全免費
-- 🔧 **無需寫代碼** — 只需編輯一個配置文件
-- 🛡️ **防呆設計** — 即使填錯也不會白屏
+- 📱 **任何設備都好看** — 電腦、平板、手機自動適應
+- 🎨 **一鍵切換風格** — 選擇你的職業，自動套用最適合的配色
+- 📁 **上傳照片就完成** — 把作品照片放進文件夾，網站自動生成
+- 🌐 **完全免費** — 使用 GitHub Pages 託管，不花一毛錢
+- 🛡️ **怎麼填都不會壞** — 即使設定填錯，網站也會正常顯示
 
 ---
 
-## 📖 詳細指南
+## 🚀 傻瓜式操作指南（只要 4 步驟！）
 
-- 📋 [快速入門指南](QUICK_START.md) — 5 分鐘上手
-- 📝 [完整設定指南](CONFIG_GUIDE.md) — 所有選項詳解
-- 🎨 [CMS 管理介面](public/admin/README.md) — 圖形化編輯
+### 步驟 1：Fork 這個項目
 
----
-
-## 🚀 快速開始（4 步驟）
-
-### Step 1: 複製這個模板
-
-1. 點擊頁面上方的綠色 **「Use this template」** 按鈕
-2. 選擇 **「Create a new repository」**
-3. 輸入你的倉庫名稱（例如：`my-portfolio`）
-4. 點擊 **「Create repository」**
-
-<!-- 📸 截圖占位：Use this template 按鈕位置 -->
+1. 點擊頁面右上角的 **Fork** 按鈕
+2. 等待幾秒鐘，你就擁有自己的網站倉庫了！
 
 ---
 
-### Step 2: 配置你的網站
+### 步驟 2：生成你的設定
 
-**打開網頁編輯器（最簡單的方式！）**
+1. 打開 `public/config-maker.html` 這個文件
+2. 點擊 **Raw** 按鈕，然後右鍵「另存為」到電腦
+3. 用瀏覽器打開這個 HTML 文件
+4. 填寫你的資料（名字、職業、社交帳號等）
+5. 點擊「複製」按鈕
 
-1. 在你的新倉庫頁面，按下鍵盤上的 **`.`** 鍵（英文句號）
-2. 等待幾秒鐘，GitHub 網頁編輯器會自動打開
-3. 在左側找到 `site.config.json` 文件並點擊
+> 💡 **或者直接在 GitHub 上操作：**
+> 進入 `https://你的用戶名.github.io/你的倉庫名/config-maker.html`
 
-<!-- 📸 截圖占位：按 . 鍵開啟編輯器 -->
+---
 
-**編輯你的資訊：**
+### 步驟 3：更新設定檔
 
-找到這些內容並修改成你自己的：
+1. 回到你的 GitHub 倉庫
+2. 找到根目錄的 `site.config.json` 文件
+3. 點擊鉛筆 ✏️ 圖標進行編輯
+4. **全選** 原有內容，然後 **貼上** 你剛才複製的設定
+5. 滾動到下方，點擊 **Commit changes** 保存
+
+你的設定應該看起來像這樣（很簡單！）：
 
 ```json
 {
-   "profile": {
-      "name": "你的名字",
-      "role": "你的職業（如：編織藝術家）",
-      "profession": "knitter",
-      "email": "your@email.com",
-      "bio": "簡單介紹自己..."
-   }
+  "profile": {
+    "name": "你的名字",
+    "role": "你的職業/頭銜",
+    "profession": "knitter",
+    "email": "hello@example.com",
+    "social": {
+      "instagram": "https://instagram.com/yourname",
+      "etsy": "https://yourshop.etsy.com"
+    }
+  },
+  "seo": {
+    "siteTitle": "你的名字 | 作品集",
+    "siteDescription": "簡短介紹你的網站"
+  }
 }
 ```
 
-**保存變更：**
-
-1. 按下 `Ctrl + S`（Mac 用戶按 `Cmd + S`）
-2. 左側會出現一個數字圖標，點擊它
-3. 在文字框中輸入說明（如：「更新我的資訊」）
-4. 點擊 **「Commit & Push」** ✓
-
 ---
 
-### Step 3: 上傳你的作品
+### 步驟 4：上傳你的作品照片
 
-**方法一：使用 GitHub 網頁版**
+**方法 A：直接在 GitHub 上傳（最簡單）**
 
-1. 回到你的倉庫主頁
-2. 進入 `src` → `assets` → `works` 資料夾
-3. 點擊 **「Add file」** → **「Create new file」**
-4. 輸入資料夾名稱 + `/` + 文件名（例如：`My Scarf/cover.jpg`）
+1. 進入 `src` → `assets` → `works` 文件夾
+2. 點擊 **Add file** → **Upload files**
+3. 創建作品文件夾並上傳照片
 
-   > 💡 **命名提示：**
-   > - 可以用 `01_作品名稱` 來控制順序
-   > - 或直接用 `作品名稱`（系統會自動排序）
-
-5. 點擊 **「Upload files」** 上傳你的圖片
-
-**方法二：拖放上傳**
-
-1. 進入 `src/assets/works/` 資料夾
-2. 直接將整個作品資料夾從電腦拖進瀏覽器視窗
-
-**資料夾結構示例：**
+**文件夾結構範例：**
 
 ```
 src/assets/works/
-├── 01_Cozy Winter Scarf/
-│   ├── cover.jpg          ← 封面圖（會顯示在首頁）
-│   ├── detail-1.jpg       ← 詳情頁圖片
-│   ├── detail-2.jpg
-│   └── readme.md          ← 可選：作品故事/介紹
-├── 02_Baby Blanket/
+├── 01_我的圍巾/           ← 用數字控制順序
+│   ├── cover.jpg          ← 封面圖（首頁顯示）
+│   ├── 細節1.jpg          ← 其他圖片（詳情頁顯示）
+│   └── 細節2.jpg
+├── 02_手工皂系列/
 │   └── ...
-└── My Latest Work/        ← 不加數字也可以！
-    └── ...
+└── 可愛的貓咪/            ← 不加數字也可以！
+    └── 唯一的圖片.jpg     ← 沒有 cover.jpg？自動用第一張！
 ```
 
-> 📝 **小技巧：** 在資料夾中創建 `readme.md` 或 `description.txt` 文件，寫下作品的故事，它會自動顯示在詳情頁！
+**命名小技巧：**
+
+| 你這樣命名             | 網站顯示為          | 排序        |
+|-------------------|----------------|-----------|
+| `01_Winter Scarf` | Winter Scarf   | 第 1 位     |
+| `02_手工皂`          | 手工皂            | 第 2 位     |
+| `My Latest Work`  | My Latest Work | 自動排序（按字母） |
+
+> 💡 **貼心提示：**
+> - 系統會自動忽略 `.DS_Store`、`Thumbs.db` 等系統文件
+> - 支援的圖片格式：jpg, png, webp, gif
+> - 想添加作品描述？在文件夾裡創建 `readme.md` 或 `description.txt`
 
 ---
 
-### Step 4: 等待網站上線
+### 完成！等待網站上線
 
-每次你保存更改後，GitHub 會自動幫你建構網站：
-
-1. 在倉庫頁面點擊 **「Actions」** 標籤
-2. 你會看到一個正在運行的任務（🟡 黃色圓點）
-3. 等待它變成 ✅ 綠色勾勾（大約 1-2 分鐘）
-4. 你的網站已經上線！
-
-**查看你的網站：**
-
-前往 `Settings` → `Pages`，找到你的網站網址：
-
-```
-https://你的用戶名.github.io/你的倉庫名/
-```
-
-<!-- 📸 截圖占位：Actions 頁面的黃點變綠點 -->
+1. 進入倉庫的 **Settings** → **Pages**
+2. 在 **Source** 選擇 `GitHub Actions`
+3. 每次保存後，等待約 1-2 分鐘
+4. 你的網站將在：`https://你的用戶名.github.io/你的倉庫名/`
 
 ---
 
-## 🎨 風格預設庫
+## 🎨 職業風格一覽
 
-選擇最適合你的風格！在 `site.config.json` 中修改 `themePreset`：
+選擇你的職業，網站會自動套用最適合的配色和風格！
 
-### 🧶 手工藝 / 編織 / 陶藝
+| 類別         | 可選職業                                                                          |
+|------------|-------------------------------------------------------------------------------|
+| 🍳 **餐飲**  | `chef`（廚師）、`baker`（烘焙師）、`barista`（咖啡師）                                        |
+| 🧶 **手作**  | `knitter`（編織）、`potter`（陶藝）、`jeweler`（珠寶）、`leatherworker`（皮革）、`woodworker`（木工） |
+| 🎨 **藝術**  | `artist`（藝術家）、`illustrator`（插畫）、`photographer`（攝影）、`designer`（設計）             |
+| 🌸 **自然**  | `florist`（花藝）、`gardener`（園藝）                                                  |
+| 💚 **療癒**  | `therapist`（治療師）、`yoga`（瑜伽）、`teacher`（老師）、`writer`（作家）                        |
+| 🏛️ **空間** | `architect`（建築）、`interior`（室內設計）、`musician`（音樂）                               |
 
-```json
-{
-   "ui": {
-      "themePreset": "craft"
-   }
-}
-```
-
-*溫暖的圓角設計，柔和陰影，適合展示手作作品*
-
-其他別名：`default`, `warm`, `cozy`, `knitting`, `pottery`, `handmade`
-
----
-
-### 👨‍🍳 廚師 / 餐飲 / 美食攝影
-
-```json
-{
-   "ui": {
-      "themePreset": "chef"
-   }
-}
-```
-
-*乾淨的直線邊框，高對比度，讓食物照片更突出*
-
-其他別名：`minimal`, `food`, `restaurant`, `clean`, `professional`
-
----
-
-### 🎨 藝術家 / 插畫師 / 設計師
-
-```json
-{
-   "ui": {
-      "themePreset": "artist"
-   }
-}
-```
-
-*大膽的視覺風格，強烈陰影，展現創意個性*
-
-其他別名：`bold`, `designer`, `creative`, `illustrator`, `studio`
-
----
-
-### 💆 療癒 / 健康 / 教育
-
-```json
-{
-   "ui": {
-      "themePreset": "therapist"
-   }
-}
-```
-
-*超圓潤的設計，極柔和的陰影，給人平靜感*
-
-其他別名：`soft`, `wellness`, `gentle`, `calm`, `yoga`
-
----
-
-## 🎨 自訂顏色
-
-想要完全自訂顏色？修改 `theme` 部分：
-
-```json
-{
-   "theme": {
-      "primaryColor": "#8B4513",
-      // 主色（按鈕、標題）
-      "backgroundColor": "#FDF5E6",
-      // 背景色
-      "textColor": "#3D2914",
-      // 文字色
-      "mutedColor": "#8B7355"
-      // 淡色文字
-   }
-}
-```
-
-**🎯 配色推薦：**
-
-| 風格   | primaryColor | backgroundColor | textColor |
-|------|--------------|-----------------|-----------|
-| 自然溫暖 | `#8B4513`    | `#FDF5E6`       | `#3D2914` |
-| 現代簡約 | `#2D2D2D`    | `#FFFFFF`       | `#1A1A1A` |
-| 海洋清新 | `#1E6091`    | `#F0F7FA`       | `#0D3B5C` |
-| 森林綠意 | `#2D5A27`    | `#F5F9F4`       | `#1A3518` |
-
-> 💡 使用 [Coolors.co](https://coolors.co) 生成配色，或 [Realtime Colors](https://realtimecolors.com) 預覽效果
-
----
-
-## 🔤 更換字體
-
-```json
-{
-   "theme": {
-      "fontFamily": "Lora",
-      // 內文字體
-      "headingFont": "Playfair Display"
-      // 標題字體
-   }
-}
-```
-
-**推薦字體組合：**
-
-| 風格  | headingFont        | fontFamily  |
-|-----|--------------------|-------------|
-| 優雅  | `Playfair Display` | `Lora`      |
-| 現代  | `Inter`            | `Inter`     |
-| 手寫感 | `Dancing Script`   | `Nunito`    |
-| 專業  | `Montserrat`       | `Open Sans` |
-
-瀏覽更多字體：[Google Fonts](https://fonts.google.com)
-
----
-
-## 📁 資料夾命名規則
-
-系統非常寬容，以下命名方式**都有效**：
-
-| 資料夾名稱                | 顯示名稱            | 排序 |
-|----------------------|-----------------|----|
-| `01_Brand Design`    | Brand Design    | 1  |
-| `02_Web Project`     | Web Project     | 2  |
-| `My Awesome Work`    | My Awesome Work | 自動 |
-| `手工皂系列`              | 手工皂系列           | 自動 |
-| `10-Logo-Collection` | Logo Collection | 10 |
+> 在 `site.config.json` 的 `profession` 欄位填入上表的英文代碼即可！
 
 ---
 
@@ -316,37 +136,63 @@ https://你的用戶名.github.io/你的倉庫名/
 
 ### 網站沒有更新？
 
-- 確認 Actions 已經完成（綠色勾勾）
-- 嘗試清除瀏覽器緩存並刷新（Ctrl+Shift+R）
+- 確認 GitHub Actions 已完成（倉庫 → Actions → 綠色勾勾 ✓）
+- 清除瀏覽器緩存（Ctrl+Shift+R 或 Cmd+Shift+R）
 
 ### 圖片沒有顯示？
-
 - 確認圖片格式正確（jpg, png, webp, gif）
-- 文件名避免使用特殊字符
+- 檔名避免特殊字符，用英文或中文都可以
 
 ### JSON 格式錯誤？
 
-- 最後一項不要加逗號
-- 所有文字都要用**雙引號** `"` 包起來
-- 使用 [JSONLint](https://jsonlint.com) 檢查
+- 每一行結尾都要有逗號（最後一行除外）
+- 所有文字用**雙引號** `"` 包起來
+- 使用配置生成器可以避免這個問題！
 
 ### 如何添加作品描述？
 
-在作品資料夾中創建 `readme.md` 文件，寫下你的故事：
+在作品文件夾中創建 `readme.md` 文件：
 
 ```markdown
 這條圍巾是我為冬天特別設計的...
-
 使用了 100% 美麗諾羊毛，柔軟親膚。
 ```
 
 ---
 
+## 🛠️ 進階設定（可選）
+
+如果你想自訂更多細節，可以在 `site.config.json` 添加這些內容：
+
+```json
+{
+  "profile": {
+    "name": "你的名字",
+    "profession": "knitter"
+  },
+  "theme": {
+    "primaryColor": "#8B4513",
+    "backgroundColor": "#FDF5E6"
+  },
+  "ui": {
+    "heroStyle": "split",
+    "gridColumns": 3
+  },
+  "seo": {
+    "siteTitle": "網站標題"
+  }
+}
+```
+
+> 💡 但大多數情況下，你只需要填 `profile` 和 `seo` 就夠了！
+
+---
+
 ## 🆘 需要幫助？
 
-1. 📖 查看 [CONFIG_GUIDE.md](./CONFIG_GUIDE.md) 了解更多配置選項
-2. 🐛 遇到問題？創建 [Issue](../../issues)
-3. 💬 有建議？歡迎提交 Pull Request
+- 📖 查看 [CONFIG_GUIDE.md](./CONFIG_GUIDE.md) 了解所有選項
+- 🐛 遇到問題？創建 [Issue](../../issues)
+- 💬 想要新功能？歡迎提交建議
 
 ---
 

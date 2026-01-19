@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧶 網站設定生成器 | Config Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .emoji-icon {
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            font-family: 'Fira Code', 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .profession-option {
+            transition: all 0.15s ease;
+        }
+
+        .profession-option:hover {
+            transform: translateX(4px);
+        }
+
+        .input-field {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-field:focus {
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast {
+            animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.7s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 to-orange-50 min-h-screen">
+<!-- 頂部說明區 -->
+<header class="bg-white/80 backdrop-blur-sm border-b border-amber-200 sticky top-0 z-10">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🧶</span>
+                <div>
+                    <h1 class="text-xl font-bold text-amber-900">網站設定生成器</h1>
+                    <p class="text-sm text-amber-700">輕鬆建立你的作品集網站設定</p>
+                </div>
+            </div>
+            <a href="https://github.com" target="_blank"
+               class="text-sm text-amber-600 hover:text-amber-800 flex items-center gap-1">
+                <span>需要幫助？</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- 步驟指引 -->
+    <div class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6 mb-8">
+        <h2 class="text-lg font-semibold text-amber-900 mb-4 flex items-center gap-2">
+            <span>📋</span> 三步驟完成設定
+        </h2>
+        <div class="grid md:grid-cols-3 gap-4">
+            <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-xl">
+                <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">1</span>
+                <div>
+                    <p class="font-medium text-amber-900">填寫表單</p>
+                    <p class="text-sm text-amber-700">在左側輸入你的資料</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-xl">
+                <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">2</span>
+                <div>
+                    <p class="font-medium text-amber-900">複製代碼</p>
+                    <p class="text-sm text-amber-700">點擊「複製」按鈕</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-xl">
+                <span class="flex-shrink-0 w-8 h-8 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold">3</span>
+                <div>
+                    <p class="font-medium text-amber-900">貼上到檔案</p>
+                    <p class="text-sm text-amber-700">覆蓋 <code
+                            class="bg-amber-100 px-1 rounded">site.config.json</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        <!-- 左側：表單區 -->
+        <div class="space-y-6">
+            <!-- 基本資料 -->
+            <section class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6">
+                <h3 class="text-lg font-semibold text-amber-900 mb-4 flex items-center gap-2">
+                    <span class="emoji-icon">👤</span> 基本資料
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            你的名字 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="name" placeholder="例如：Emma"
+                               class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none"
+                               oninput="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            你的角色/頭銜 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="role" placeholder="例如：編織藝術家"
+                               class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none"
+                               oninput="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Email
+                        </label>
+                        <input type="email" id="email" placeholder="hello@example.com"
+                               class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none"
+                               oninput="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            自我介紹
+                        </label>
+                        <textarea id="bio" rows="3" placeholder="簡單介紹你自己和你的作品..."
+                                  class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none resize-none"
+                                  oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 職業選擇 -->
+            <section class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6">
+                <h3 class="text-lg font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                    <span class="emoji-icon">🎨</span> 職業風格
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">選擇後會自動套用最適合的配色和版面風格</p>
+
+                <div class="space-y-3">
+                    <!-- 餐飲類 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('food')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">🍳 餐飲類</span>
+                            <svg id="food-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="food-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="chef" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🍳 廚師 / 料理人</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="baker" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🧁 烘焙師 / 甜點師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="barista" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>☕ 咖啡師</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 手作類 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('craft')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">🧶 手作類</span>
+                            <svg id="craft-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="craft-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="knitter" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🧶 編織創作者</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="potter" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🏺 陶藝家</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="jeweler" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>💍 珠寶 / 飾品設計師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="leatherworker" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>👜 皮革工藝師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="woodworker" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🪵 木工 / 木藝師</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 藝術類 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('art')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">🎨 藝術類</span>
+                            <svg id="art-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="art-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="artist" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🎨 藝術家</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="illustrator" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>✏️ 插畫家</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="photographer" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>📷 攝影師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="designer" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🎯 設計師</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 自然 / 花藝類 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('nature')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">🌸 自然 / 花藝類</span>
+                            <svg id="nature-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="nature-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="florist" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🌸 花藝師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="gardener" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🌿 園藝師</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 療癒 / 教育類 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('wellness')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">💚 療癒 / 教育類</span>
+                            <svg id="wellness-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="wellness-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="therapist" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>💚 治療師 / 諮商師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="yoga" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🧘 瑜伽老師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="teacher" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>📚 老師 / 講師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="writer" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>📝 作家 / 文字工作者</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 其他 -->
+                    <div class="border border-gray-100 rounded-xl overflow-hidden">
+                        <button onclick="toggleCategory('other')"
+                                class="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <span class="font-medium text-gray-700">🏛️ 空間 / 建築類</span>
+                            <svg id="other-arrow" class="w-5 h-5 text-gray-400 transition-transform" fill="none"
+                                 stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="other-options" class="hidden p-2 space-y-1">
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="architect" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🏛️ 建築師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="interior" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🛋️ 室內設計師</span>
+                            </label>
+                            <label class="profession-option flex items-center gap-3 p-2 rounded-lg hover:bg-amber-50 cursor-pointer">
+                                <input type="radio" name="profession" value="musician" onchange="updatePreview()"
+                                       class="w-4 h-4 text-amber-600">
+                                <span>🎵 音樂人</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 社交連結 -->
+            <section class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6">
+                <h3 class="text-lg font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                    <span class="emoji-icon">🔗</span> 社交連結
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">填入完整網址，留空則不顯示</p>
+
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">📸</span>
+                        <input type="url" id="instagram" placeholder="https://instagram.com/yourname"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">🛒</span>
+                        <input type="url" id="etsy" placeholder="https://yourshop.etsy.com"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">📌</span>
+                        <input type="url" id="pinterest" placeholder="https://pinterest.com/yourname"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">🎬</span>
+                        <input type="url" id="youtube" placeholder="https://youtube.com/@yourname"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">🎵</span>
+                        <input type="url" id="tiktok" placeholder="https://tiktok.com/@yourname"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 text-center">💼</span>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourname"
+                               class="input-field flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEO 設定 -->
+            <section class="bg-white rounded-2xl shadow-sm border border-amber-100 p-6">
+                <h3 class="text-lg font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                    <span class="emoji-icon">🔍</span> 搜尋引擎設定 (SEO)
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">這些資訊會影響 Google 搜尋結果的顯示</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            網站標題
+                        </label>
+                        <input type="text" id="siteTitle" placeholder="例如：Emma 的編織作品集"
+                               class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none"
+                               oninput="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            網站描述
+                        </label>
+                        <textarea id="siteDescription" rows="2"
+                                  placeholder="簡短描述你的網站，會顯示在搜尋結果中..."
+                                  class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none resize-none"
+                                  oninput="updatePreview()"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            關鍵字（用逗號分隔）
+                        </label>
+                        <input type="text" id="keywords" placeholder="編織, 手作, 圍巾, 毛線"
+                               class="input-field w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none"
+                               oninput="updatePreview()">
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 右側：預覽區 -->
+        <div class="lg:sticky lg:top-24 lg:self-start">
+            <div class="bg-white rounded-2xl shadow-sm border border-amber-100 overflow-hidden">
+                <div class="flex items-center justify-between p-4 bg-gray-50 border-b border-gray-100">
+                    <h3 class="font-semibold text-gray-700 flex items-center gap-2">
+                        <span>📄</span> 生成的設定檔
+                    </h3>
+                    <button onclick="copyConfig()"
+                            class="copy-btn flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <span>複製</span>
+                    </button>
+                </div>
+                <div class="p-4 bg-gray-900 max-h-[70vh] overflow-auto">
+                    <pre id="configPreview" class="code-block text-green-400 whitespace-pre-wrap"></pre>
+                </div>
+            </div>
+
+            <!-- 說明提示 -->
+            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div class="flex gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div class="text-sm text-blue-800">
+                        <p class="font-medium mb-1">如何使用這份設定？</p>
+                        <ol class="list-decimal list-inside space-y-1 text-blue-700">
+                            <li>複製上方的 JSON 代碼</li>
+                            <li>打開你的專案根目錄</li>
+                            <li>找到 <code class="bg-blue-100 px-1 rounded">site.config.json</code></li>
+                            <li>用複製的內容取代整個檔案內容</li>
+                            <li>儲存檔案，完成！</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Toast 通知 -->
+<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div class="toast bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span>已複製到剪貼簿！</span>
+    </div>
+</div>
+
+<script>
+    // 職業類別展開/收合
+    function toggleCategory(category) {
+        const options = document.getElementById(`${category}-options`);
+        const arrow = document.getElementById(`${category}-arrow`);
+
+        if (options.classList.contains('hidden')) {
+            options.classList.remove('hidden');
+            options.classList.add('fade-in');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            options.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    // 生成配置物件
+    function generateConfig() {
+        const name = document.getElementById('name').value.trim();
+        const role = document.getElementById('role').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const bio = document.getElementById('bio').value.trim();
+
+        const professionRadio = document.querySelector('input[name="profession"]:checked');
+        const profession = professionRadio ? professionRadio.value : '';
+
+        const instagram = document.getElementById('instagram').value.trim();
+        const etsy = document.getElementById('etsy').value.trim();
+        const pinterest = document.getElementById('pinterest').value.trim();
+        const youtube = document.getElementById('youtube').value.trim();
+        const tiktok = document.getElementById('tiktok').value.trim();
+        const linkedin = document.getElementById('linkedin').value.trim();
+
+        const siteTitle = document.getElementById('siteTitle').value.trim();
+        const siteDescription = document.getElementById('siteDescription').value.trim();
+        const keywords = document.getElementById('keywords').value.trim();
+
+        // 建構簡潔的配置
+        const config = {
+            profile: {
+                name: name || '我的名字',
+                role: role || '創作者',
+                profession: profession || 'knitter'
+            },
+            seo: {}
+        };
+
+        // 只加入有填寫的欄位
+        if (email) config.profile.email = email;
+        if (bio) config.profile.bio = bio;
+
+        // 社交連結 - 只加入有填寫的
+        const social = {};
+        if (instagram) social.instagram = instagram;
+        if (etsy) social.etsy = etsy;
+        if (pinterest) social.pinterest = pinterest;
+        if (youtube) social.youtube = youtube;
+        if (tiktok) social.tiktok = tiktok;
+        if (linkedin) social.linkedin = linkedin;
+
+        if (Object.keys(social).length > 0) {
+            config.profile.social = social;
+        }
+
+        // SEO
+        if (siteTitle) {
+            config.seo.siteTitle = siteTitle;
+        } else {
+            config.seo.siteTitle = `${name || '我的'} | 作品集`;
+        }
+
+        if (siteDescription) config.seo.siteDescription = siteDescription;
+        if (keywords) config.seo.keywords = keywords;
+
+        return config;
+    }
+
+    // 更新預覽
+    function updatePreview() {
+        const config = generateConfig();
+        const preview = document.getElementById('configPreview');
+        preview.textContent = JSON.stringify(config, null, 2);
+    }
+
+    // 複製配置
+    async function copyConfig() {
+        const config = generateConfig();
+        const jsonString = JSON.stringify(config, null, 2);
+
+        try {
+            await navigator.clipboard.writeText(jsonString);
+            showToast();
+        } catch (err) {
+            // Fallback for older browsers
+            const textarea = document.createElement('textarea');
+            textarea.value = jsonString;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast();
+        }
+    }
+
+    // 顯示 Toast
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        updatePreview();
+        // 預設展開手作類
+        toggleCategory('craft');
+    });
+</script>
+</body>
+</html>

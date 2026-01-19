@@ -1,15 +1,19 @@
 /**
- * 🛡️ Configuration Composable - 防禦性編程版本
+ * 🛡️ Configuration Composable - 極簡化版本 v3.0
  *
- * 提供對 site.config.json 的響應式存取，並具備以下特性：
+ * 設計理念：用戶只需要填寫「個人資料」和「職業」，
+ * 系統會根據職業自動套用最適合的：
+ * - 配色方案 (colors)
+ * - 字體組合 (fonts)
+ * - UI 佈局 (layout, heroStyle, gridColumns)
+ * - 風格細節 (borderRadius, animationSpeed)
+ * - 情感化文案 (copywriting)
  *
- * ✨ 防禦性特點：
- * 1. 即使 JSON 格式錯誤也不會白屏
- * 2. 缺少任何欄位都會自動使用預設值
- * 3. Deep Merge 策略：用戶設定 > 職業預設 > 系統預設
+ * ✨ 極簡原則：
+ * 1. site.config.json 只需要 profile + seo
+ * 2. 所有 UI 細節由 profession 自動決定
+ * 3. 即使 JSON 格式錯誤也不會白屏
  * 4. 開發環境下會顯示友善的小助手提示
- *
- * 專為手作人設計，讓他們即使填錯也不會看到恐怖的錯誤畫面 ❤️
  */
 
 import {computed, reactive, readonly, ref} from 'vue'
@@ -21,12 +25,29 @@ import {
     getBorderRadiusValue,
     getProfessionConfig,
     getThumbnailAspectRatio,
-    mergeWithProfessionDefaults,
 } from '@/utils/professionMap'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 🛡️ 系統預設值（終極回退）
 // ═══════════════════════════════════════════════════════════════════════════
+
+/** 預設字體 */
+const DEFAULT_FONTS = {
+    body: 'Inter',
+    heading: 'Inter',
+}
+
+/** 預設顏色 */
+const DEFAULT_COLORS = {
+    primaryColor: '#6B4423',
+    secondaryColor: '#8B6914',
+    backgroundColor: '#FFFBF5',
+    textColor: '#2D2D2D',
+    mutedColor: '#6B6B6B',
+}
+
+/** 預設佈局 */
+const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
 
 /** 系統預設設定 - 當一切都失敗時使用 */
 const SYSTEM_DEFAULTS = {
@@ -50,13 +71,9 @@ const SYSTEM_DEFAULTS = {
         },
     },
     theme: {
-        primaryColor: '#6B4423',
-        secondaryColor: '#8B6914',
-        backgroundColor: '#FFFBF5',
-        textColor: '#2D2D2D',
-        mutedColor: '#6B6B6B',
-        fontFamily: 'Inter',
-        headingFont: 'Inter',
+        ...DEFAULT_COLORS,
+        fontFamily: DEFAULT_FONTS.body,
+        headingFont: DEFAULT_FONTS.heading,
     },
     ui: {
         themePreset: 'default',
@@ -69,7 +86,7 @@ const SYSTEM_DEFAULTS = {
         thumbnailRatio: '4/3',
         smoothScroll: true,
         showBackToTop: true,
-        layout: ['Hero', 'Works', 'OtherWorks'],
+        layout: DEFAULT_LAYOUT,
     },
     uiConfig: {...DEFAULT_UI_CONFIG},
     copywriting: {...DEFAULT_COPYWRITING},
@@ -95,9 +112,6 @@ const SYSTEM_DEFAULTS = {
         ogImage: '/images/og-image.jpg',
     },
 }
-
-/** 預設的頁面佈局 */
-const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
 
 /** 支援的社群平台（順序會影響顯示） */
 const SUPPORTED_SOCIALS = [
@@ -129,6 +143,9 @@ const AVAILABLE_SECTIONS = {
 
 /**
  * 深度合併物件（支援嵌套物件）
+ * @param {Object} target - 目標物件
+ * @param {Object} source - 來源物件
+ * @returns {Object} 合併後的物件
  */
 function deepMerge(target, source) {
     if (!source || typeof source !== 'object') return target
@@ -140,6 +157,7 @@ function deepMerge(target, source) {
         const sourceValue = source[key]
         const targetValue = target[key]
 
+        // 跳過 null、undefined 和空字串
         if (sourceValue === null || sourceValue === undefined) continue
         if (sourceValue === '' && targetValue !== undefined) continue
 
@@ -160,6 +178,10 @@ function deepMerge(target, source) {
 
 /**
  * 安全讀取嵌套物件屬性
+ * @param {Object} obj - 物件
+ * @param {string} path - 路徑（如 'profile.name'）
+ * @param {*} fallback - 預設值
+ * @returns {*} 屬性值或預設值
  */
 function safeGet(obj, path, fallback = null) {
     if (!obj || !path) return fallback
@@ -173,6 +195,84 @@ function safeGet(obj, path, fallback = null) {
         }
     }
     return value ?? fallback
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🪄 職業配置自動填補邏輯（核心魔法）
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 根據職業自動生成完整的配置
+ * 這是極簡化設計的核心 - 用戶只需填寫 profession，系統自動補齊一切
+ *
+ * @param {string} profession - 職業代碼（如 'knitter', 'chef', 'photographer'）
+ * @returns {Object} 完整的 UI 和主題配置
+ */
+function generateConfigFromProfession(profession) {
+    const professionConfig = getProfessionConfig(profession)
+
+    if (!professionConfig) {
+        // 沒有找到職業配置，返回系統預設
+        return {
+            theme: {...SYSTEM_DEFAULTS.theme},
+            ui: {...SYSTEM_DEFAULTS.ui},
+            uiConfig: {...SYSTEM_DEFAULTS.uiConfig},
+            copywriting: {...SYSTEM_DEFAULTS.copywriting},
+            content: {...SYSTEM_DEFAULTS.content},
+        }
+    }
+
+    // 🎨 根據職業生成主題配置
+    const theme = {
+        primaryColor: professionConfig.colors?.primaryColor || DEFAULT_COLORS.primaryColor,
+        secondaryColor: professionConfig.colors?.secondaryColor || DEFAULT_COLORS.secondaryColor,
+        backgroundColor: professionConfig.colors?.backgroundColor || DEFAULT_COLORS.backgroundColor,
+        textColor: professionConfig.colors?.textColor || DEFAULT_COLORS.textColor,
+        mutedColor: professionConfig.colors?.mutedColor || DEFAULT_COLORS.mutedColor,
+        fontFamily: professionConfig.fonts?.body || DEFAULT_FONTS.body,
+        headingFont: professionConfig.fonts?.heading || DEFAULT_FONTS.heading,
+    }
+
+    // 📐 根據職業生成 UI 配置
+    const ui = {
+        themePreset: professionConfig.preset || 'default',
+        heroStyle: professionConfig.heroStyle || 'split',
+        showFooter: true,
+        showSocialLinks: true,
+        showOtherWorks: true,
+        navStyle: professionConfig.navStyle || 'default',
+        gridColumns: professionConfig.gridColumns || 3,
+        thumbnailRatio: professionConfig.thumbnailRatio || '4/3',
+        smoothScroll: true,
+        showBackToTop: true,
+        layout: professionConfig.layout || DEFAULT_LAYOUT,
+    }
+
+    // 🔧 根據職業生成進階 UI 配置
+    const uiConfig = {
+        ...DEFAULT_UI_CONFIG,
+        ...(professionConfig.uiConfig || {}),
+    }
+
+    // 💬 根據職業生成情感化文案
+    const copywriting = {
+        ...DEFAULT_COPYWRITING,
+        ...(professionConfig.copywriting || {}),
+    }
+
+    // 確保 notFoundEmoji 有值
+    if (!copywriting.notFoundEmoji && professionConfig.emoji) {
+        copywriting.notFoundEmoji = professionConfig.emoji
+    }
+
+    // 📝 根據職業生成預設內容
+    const content = {
+        ...SYSTEM_DEFAULTS.content,
+        notFoundTitle: copywriting.notFoundTitle || SYSTEM_DEFAULTS.content.notFoundTitle,
+        notFoundMessage: copywriting.notFoundMessage || SYSTEM_DEFAULTS.content.notFoundMessage,
+    }
+
+    return {theme, ui, uiConfig, copywriting, content}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -202,34 +302,55 @@ try {
 
 /**
  * 處理設定並回傳合併後的配置
+ * @param {Object} userConfig - 用戶的配置（極簡版本只包含 profile 和 seo）
+ * @returns {Object} 完整的配置
  */
 function processConfig(userConfig) {
     const warnings = []
 
-    // 取得職業設定
+    // 取得職業代碼
     const profession = safeGet(userConfig, 'profile.profession', null)
     const professionConfig = getProfessionConfig(profession)
+
+    // 🪄 核心魔法：根據職業自動生成所有配置
+    const generatedConfig = generateConfigFromProfession(profession)
 
     // 第一層：系統預設
     let mergedConfig = JSON.parse(JSON.stringify(SYSTEM_DEFAULTS))
 
-    // 第二層：如果有職業，套用職業預設
-    if (profession && professionConfig) {
-        try {
-            const withProfession = mergeWithProfessionDefaults(profession, SYSTEM_DEFAULTS)
-            mergedConfig = deepMerge(mergedConfig, withProfession)
-        } catch (e) {
-            warnings.push({
-                field: 'profile.profession',
-                message: `職業 "${profession}" 的設定套用失敗`,
-                friendly: `「${profession}」這個職業的風格套用有點問題，不過沒關係，我們用基本風格！`,
-            })
-        }
-    }
+    // 第二層：套用職業自動生成的配置
+    mergedConfig.theme = {...mergedConfig.theme, ...generatedConfig.theme}
+    mergedConfig.ui = {...mergedConfig.ui, ...generatedConfig.ui}
+    mergedConfig.uiConfig = {...mergedConfig.uiConfig, ...generatedConfig.uiConfig}
+    mergedConfig.copywriting = {...mergedConfig.copywriting, ...generatedConfig.copywriting}
+    mergedConfig.content = {...mergedConfig.content, ...generatedConfig.content}
 
-    // 第三層：套用用戶設定
+    // 第三層：套用用戶設定（只有 profile 和 seo 會被覆蓋）
     try {
-        mergedConfig = deepMerge(mergedConfig, userConfig)
+        // Profile
+        if (userConfig.profile) {
+            mergedConfig.profile = deepMerge(mergedConfig.profile, userConfig.profile)
+        }
+
+        // SEO
+        if (userConfig.seo) {
+            mergedConfig.seo = deepMerge(mergedConfig.seo, userConfig.seo)
+        }
+
+        // 如果用戶有自訂 theme，也允許覆蓋（進階用戶）
+        if (userConfig.theme) {
+            mergedConfig.theme = deepMerge(mergedConfig.theme, userConfig.theme)
+        }
+
+        // 如果用戶有自訂 ui，也允許覆蓋（進階用戶）
+        if (userConfig.ui) {
+            mergedConfig.ui = deepMerge(mergedConfig.ui, userConfig.ui)
+        }
+
+        // 如果用戶有自訂 content，也允許覆蓋
+        if (userConfig.content) {
+            mergedConfig.content = deepMerge(mergedConfig.content, userConfig.content)
+        }
     } catch (e) {
         warnings.push({
             field: 'general',
@@ -246,8 +367,11 @@ function processConfig(userConfig) {
 
 /**
  * 驗證設定並收集警告
+ * @param {Object} config - 配置物件
+ * @param {Array} warnings - 警告陣列
  */
 function validateConfig(config, warnings) {
+    // 檢查必要區塊
     const requiredSections = ['profile', 'theme', 'ui', 'content', 'seo']
     for (const section of requiredSections) {
         if (!config[section] || typeof config[section] !== 'object') {
@@ -455,157 +579,248 @@ if (typeof window !== 'undefined') {
 // ═══════════════════════════════════════════════════════════════════════════
 
 export function useConfig() {
-  const profile = readonly(config.profile)
-  const theme = readonly(config.theme)
-  const ui = readonly(config.ui)
-  const uiConfig = readonly(config.uiConfig || DEFAULT_UI_CONFIG)
-  const copywriting = readonly(config.copywriting || DEFAULT_COPYWRITING)
-  const content = readonly(config.content)
-  const seo = readonly(config.seo)
+    const profile = readonly(config.profile)
+    const theme = readonly(config.theme)
+    const ui = readonly(config.ui)
+    const uiConfig = readonly(config.uiConfig || DEFAULT_UI_CONFIG)
+    const copywriting = readonly(config.copywriting || DEFAULT_COPYWRITING)
+    const content = readonly(config.content)
+    const seo = readonly(config.seo)
 
-  const currentProfession = computed(() => ({
-    code: profession,
-    config: professionConfig,
-    label: professionConfig?.label || null,
-    emoji: professionConfig?.emoji || null,
-  }))
+    /** 當前職業資訊 */
+    const currentProfession = computed(() => ({
+        code: profession,
+        config: professionConfig,
+        label: professionConfig?.label || null,
+        emoji: professionConfig?.emoji || null,
+    }))
 
+    /** 載入狀態 */
     const loadStatus = computed(() => configLoadStatus.value)
 
-  const get = (path, fallback = null) => {
-      let value = safeGet(config, path)
-      if (value === null || value === undefined) {
-          value = safeGet(SYSTEM_DEFAULTS, path)
-      }
-    return value ?? fallback
-  }
-
-  const isEnabled = (feature) => {
-      const value = safeGet(config, `ui.${feature}`)
-      const defaultTrueFeatures = ['showFooter', 'showSocialLinks', 'smoothScroll', 'showBackToTop']
-      if (value === undefined && defaultTrueFeatures.includes(feature)) return true
-      return !!value
-  }
-
-  const getSocialLinks = () => {
-      const social = config.profile?.social || {}
-    return SUPPORTED_SOCIALS.filter(
-        (name) => social[name] && social[name].trim() !== ''
-    ).map((name) => ({name, url: social[name]}))
-  }
-
-  const getGridClass = () => {
-      const cols = config.ui?.gridColumns || 3
-    const gridMap = {
-      2: 'md:grid-cols-2',
-      3: 'md:grid-cols-2 lg:grid-cols-3',
-      4: 'md:grid-cols-2 lg:grid-cols-4',
+    /**
+     * 安全獲取配置值
+     * @param {string} path - 路徑（如 'profile.name'）
+     * @param {*} fallback - 預設值
+     * @returns {*} 配置值
+     */
+    const get = (path, fallback = null) => {
+        let value = safeGet(config, path)
+        if (value === null || value === undefined) {
+            value = safeGet(SYSTEM_DEFAULTS, path)
+        }
+        return value ?? fallback
     }
-    return gridMap[cols] || gridMap[3]
-  }
 
-  const getAspectClass = () => {
-      const ratio = config.ui?.thumbnailRatio || '4/3'
-    const ratioMap = {
-      '4/3': 'aspect-[4/3]',
-      '3/2': 'aspect-[3/2]',
-      '16/9': 'aspect-[16/9]',
-      '1/1': 'aspect-square',
-        '4/5': 'aspect-[4/5]',
+    /**
+     * 檢查功能是否啟用
+     * @param {string} feature - 功能名稱
+     * @returns {boolean}
+     */
+    const isEnabled = (feature) => {
+        const value = safeGet(config, `ui.${feature}`)
+        const defaultTrueFeatures = ['showFooter', 'showSocialLinks', 'smoothScroll', 'showBackToTop']
+        if (value === undefined && defaultTrueFeatures.includes(feature)) return true
+        return !!value
     }
-    return ratioMap[ratio] || ratioMap['4/3']
-  }
 
+    /**
+     * 獲取有效的社交連結
+     * @returns {Array<{name: string, url: string}>}
+     */
+    const getSocialLinks = () => {
+        const social = config.profile?.social || {}
+        return SUPPORTED_SOCIALS.filter(
+            (name) => social[name] && social[name].trim() !== ''
+        ).map((name) => ({name, url: social[name]}))
+    }
+
+    /**
+     * 獲取網格樣式類別
+     * @returns {string}
+     */
+    const getGridClass = () => {
+        const cols = config.ui?.gridColumns || 3
+        const gridMap = {
+            2: 'md:grid-cols-2',
+            3: 'md:grid-cols-2 lg:grid-cols-3',
+            4: 'md:grid-cols-2 lg:grid-cols-4',
+        }
+        return gridMap[cols] || gridMap[3]
+    }
+
+    /**
+     * 獲取縮圖比例類別
+     * @returns {string}
+     */
+    const getAspectClass = () => {
+        const ratio = config.ui?.thumbnailRatio || '4/3'
+        const ratioMap = {
+            '4/3': 'aspect-[4/3]',
+            '3/2': 'aspect-[3/2]',
+            '16/9': 'aspect-[16/9]',
+            '1/1': 'aspect-square',
+            '4/5': 'aspect-[4/5]',
+        }
+        return ratioMap[ratio] || ratioMap['4/3']
+    }
+
+    /**
+     * 獲取 Hero 樣式
+     * @returns {string}
+     */
     const getHeroStyle = () => config.ui?.heroStyle || 'split'
 
-  const getLayout = () => {
-      const layout = config.ui?.layout
-      if (!layout || !Array.isArray(layout) || layout.length === 0) return DEFAULT_LAYOUT
-      const validLayout = layout.filter((section) => section in AVAILABLE_SECTIONS)
-    return validLayout.length > 0 ? validLayout : DEFAULT_LAYOUT
-  }
+    /**
+     * 獲取頁面佈局
+     * @returns {Array<string>}
+     */
+    const getLayout = () => {
+        const layout = config.ui?.layout
+        if (!layout || !Array.isArray(layout) || layout.length === 0) return DEFAULT_LAYOUT
+        const validLayout = layout.filter((section) => section in AVAILABLE_SECTIONS)
+        return validLayout.length > 0 ? validLayout : DEFAULT_LAYOUT
+    }
 
+    /**
+     * 獲取區塊組件名稱
+     * @param {string} section - 區塊名稱
+     * @returns {string|null}
+     */
     const getSectionComponent = (section) => AVAILABLE_SECTIONS[section] || null
+
+    /**
+     * 檢查是否有職業設定
+     * @returns {boolean}
+     */
     const hasProfession = () => !!profession && !!professionConfig
 
-  const getProfessionDefaults = () => {
-    if (!professionConfig) return null
-    return {
-      preset: professionConfig.preset,
-      fonts: professionConfig.fonts,
-      colors: professionConfig.colors,
-      heroStyle: professionConfig.heroStyle,
-      layout: professionConfig.layout,
-      uiConfig: professionConfig.uiConfig,
-      copywriting: professionConfig.copywriting,
+    /**
+     * 獲取職業預設配置
+     * @returns {Object|null}
+     */
+    const getProfessionDefaults = () => {
+        if (!professionConfig) return null
+        return {
+            preset: professionConfig.preset,
+            fonts: professionConfig.fonts,
+            colors: professionConfig.colors,
+            heroStyle: professionConfig.heroStyle,
+            layout: professionConfig.layout,
+            uiConfig: professionConfig.uiConfig,
+            copywriting: professionConfig.copywriting,
+        }
     }
-  }
 
+    /**
+     * 獲取主題預設
+     * @returns {string}
+     */
     const getThemePreset = () => config.ui?.themePreset || 'default'
+
+    /**
+     * 獲取導航樣式
+     * @returns {string}
+     */
     const getNavStyle = () => config.ui?.navStyle || 'default'
 
-  const getUiThumbnailRatio = () => {
-    const ratio = config.uiConfig?.thumbnailRatio || DEFAULT_UI_CONFIG.thumbnailRatio
-    return getThumbnailAspectRatio(ratio)
-  }
+    /**
+     * 獲取縮圖比例（CSS 格式）
+     * @returns {string}
+     */
+    const getUiThumbnailRatio = () => {
+        const ratio = config.uiConfig?.thumbnailRatio || DEFAULT_UI_CONFIG.thumbnailRatio
+        return getThumbnailAspectRatio(ratio)
+    }
 
-  const getBorderRadius = () => {
-    const borderRadius = config.uiConfig?.borderRadius || DEFAULT_UI_CONFIG.borderRadius
-    return getBorderRadiusValue(borderRadius)
-  }
+    /**
+     * 獲取圓角值
+     * @returns {string}
+     */
+    const getBorderRadius = () => {
+        const borderRadius = config.uiConfig?.borderRadius || DEFAULT_UI_CONFIG.borderRadius
+        return getBorderRadiusValue(borderRadius)
+    }
 
+    /**
+     * 獲取動畫速度
+     * @returns {number}
+     */
     const getAnimationSpeed = () => config.uiConfig?.animationSpeed || DEFAULT_UI_CONFIG.animationSpeed
 
-  const calcAnimationDuration = (baseDuration = 300) => {
-    const speed = getAnimationSpeed()
-    return getAnimationDuration(speed, baseDuration)
-  }
-
-  const getNotFoundConfig = () => {
-    const cw = config.copywriting || DEFAULT_COPYWRITING
-    return {
-      title: cw.notFoundTitle || DEFAULT_COPYWRITING.notFoundTitle,
-      message: cw.notFoundMessage || DEFAULT_COPYWRITING.notFoundMessage,
-      emoji: cw.notFoundEmoji || professionConfig?.emoji || DEFAULT_COPYWRITING.notFoundEmoji,
-      buttonText: config.content?.notFoundButtonText || '回首頁',
+    /**
+     * 計算動畫持續時間
+     * @param {number} baseDuration - 基礎時間（毫秒）
+     * @returns {number}
+     */
+    const calcAnimationDuration = (baseDuration = 300) => {
+        const speed = getAnimationSpeed()
+        return getAnimationDuration(speed, baseDuration)
     }
-  }
 
+    /**
+     * 獲取 404 頁面配置
+     * @returns {Object}
+     */
+    const getNotFoundConfig = () => {
+        const cw = config.copywriting || DEFAULT_COPYWRITING
+        return {
+            title: cw.notFoundTitle || DEFAULT_COPYWRITING.notFoundTitle,
+            message: cw.notFoundMessage || DEFAULT_COPYWRITING.notFoundMessage,
+            emoji: cw.notFoundEmoji || professionConfig?.emoji || DEFAULT_COPYWRITING.notFoundEmoji,
+            buttonText: config.content?.notFoundButtonText || '回首頁',
+        }
+    }
+
+    /**
+     * 獲取載入文字
+     * @returns {string}
+     */
     const getLoadingText = () => config.copywriting?.loadingText || DEFAULT_COPYWRITING.loadingText
 
-  return {
-    config: readonly(config),
-    profile,
-    theme,
-    ui,
-    uiConfig,
-    copywriting,
-    content,
-    seo,
-    currentProfession,
-    hasProfession,
-    getProfessionDefaults,
-      loadStatus,
-    get,
-    isEnabled,
-    getSocialLinks,
-    getGridClass,
-    getAspectClass,
-    getHeroStyle,
-    getThemePreset,
-    getNavStyle,
-    getUiThumbnailRatio,
-    getBorderRadius,
-    getAnimationSpeed,
-    calcAnimationDuration,
-    getNotFoundConfig,
-    getLoadingText,
-    getLayout,
-    getSectionComponent,
-    availableSections: Object.keys(AVAILABLE_SECTIONS),
-    defaultLayout: DEFAULT_LAYOUT,
-  }
+    return {
+        // 響應式配置
+        config: readonly(config),
+        profile,
+        theme,
+        ui,
+        uiConfig,
+        copywriting,
+        content,
+        seo,
+
+        // 職業相關
+        currentProfession,
+        hasProfession,
+        getProfessionDefaults,
+
+        // 狀態
+        loadStatus,
+
+        // 工具方法
+        get,
+        isEnabled,
+        getSocialLinks,
+        getGridClass,
+        getAspectClass,
+        getHeroStyle,
+        getThemePreset,
+        getNavStyle,
+        getUiThumbnailRatio,
+        getBorderRadius,
+        getAnimationSpeed,
+        calcAnimationDuration,
+        getNotFoundConfig,
+        getLoadingText,
+        getLayout,
+        getSectionComponent,
+
+        // 常數
+        availableSections: Object.keys(AVAILABLE_SECTIONS),
+        defaultLayout: DEFAULT_LAYOUT,
+    }
 }
 
+// 導出供其他模組使用
 export {siteConfig, mergedConfig, SYSTEM_DEFAULTS}
 export default useConfig

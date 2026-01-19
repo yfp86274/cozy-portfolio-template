@@ -10,9 +10,7 @@
     "preview": "vite preview",
     "validate": "node scripts/validate-config.js",
     "analyze-error": "node scripts/friendly-error-reporter.js",
-    "cms": "npx decap-server",
-    "start": "npm run dev",
-    "full-start": "concurrently \"npm run dev\" \"npm run cms\""
+    "start": "npm run dev"
   },
   "keywords": [
     "portfolio",

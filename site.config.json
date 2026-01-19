@@ -1,59 +1,19 @@
 {
-  "$schema": "./public/schema.json",
   "profile": {
     "name": "Emma Woolcraft",
     "role": "Fiber Artist & Knitting Designer",
+    "profession": "knitter",
     "email": "hello@emmawoolcraft.com",
     "bio": "Creating warmth through handcrafted knits and sustainable fiber art.",
-    "avatar": "/images/avatar.jpg",
     "social": {
       "instagram": "https://instagram.com/emmawoolcraft",
       "pinterest": "https://pinterest.com/emmawoolcraft",
-      "etsy": "https://emmawoolcraft.etsy.com",
-      "twitter": "",
-      "linkedin": "",
-      "youtube": "",
-      "tiktok": "",
-      "behance": "",
-      "dribbble": ""
+      "etsy": "https://emmawoolcraft.etsy.com"
     }
-  },
-  "theme": {
-    "primaryColor": "#8B4513",
-    "secondaryColor": "#A0522D",
-    "backgroundColor": "#FDF5E6",
-    "textColor": "#3D2914",
-    "mutedColor": "#8B7355",
-    "fontFamily": "Lora",
-    "headingFont": "Playfair Display"
-  },
-  "ui": {
-    "themePreset": "default",
-    "heroStyle": "split",
-    "showFooter": true,
-    "showSocialLinks": true,
-    "showOtherWorks": true,
-    "navStyle": "default",
-    "gridColumns": 3,
-    "thumbnailRatio": "4/3",
-    "smoothScroll": true,
-    "showBackToTop": true
-  },
-  "content": {
-    "heroTitle": "Handcrafted with Love",
-    "heroSubtitle": "Sustainable fiber art and knitting designs for the modern home",
-    "heroButtonText": "View My Work",
-    "worksTitle": "Portfolio",
-    "otherWorksTitle": "More Creations",
-    "footerText": "Made with yarn and patience",
-    "notFoundTitle": "Page Not Found",
-    "notFoundMessage": "The page you're looking for doesn't exist.",
-    "notFoundButtonText": "Go Home"
   },
   "seo": {
     "siteTitle": "Emma Woolcraft | Fiber Artist",
     "siteDescription": "Handcrafted knitting designs and sustainable fiber art by Emma Woolcraft.",
-    "keywords": "knitting, fiber art, sustainable fashion, handmade, wool",
-    "ogImage": "/images/og-image.jpg"
+    "keywords": "knitting, fiber art, sustainable fashion, handmade, wool"
   }
 }
