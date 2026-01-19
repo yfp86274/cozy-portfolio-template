@@ -1,8 +1,47 @@
-# 🎨 Portfolio Template
+# 🧶 手作人作品集網站模板
 
 **零代碼建立你的專業作品集網站** | Create your portfolio website with zero coding
 
 > 為編織愛好者、廚師、藝術家、手工匠人設計 — 只需上傳圖片和修改文字，就能擁有精美的個人網站。
+
+---
+
+## 🚀 最快的開始方式：一鍵啟動！
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YOUR_USERNAME/YOUR_REPO?quickstart=1)
+
+點擊上方按鈕，等待 1-2 分鐘，您就可以：
+
+- 📝 直接在網頁上編輯您的網站設定
+- 👀 即時預覽每一個修改
+- 🚀 一鍵部署到網路上
+
+**完全不需要安裝任何東西！**
+
+---
+
+## 🎨 自動套用職業風格
+
+只要設定您的職業，網站會自動套用最適合的配色和風格！
+
+```json
+{
+  "profile": {
+    "name": "Emma",
+    "profession": "knitter"  ← 加上這行！
+  }
+}
+```
+
+| 🍳 餐飲類  |    🧶 手作類     |    🎨 藝術類    |  🌸 自然類  |
+|:-------:|:-------------:|:------------:|:--------:|
+|  chef   |    knitter    |    artist    | florist  |
+|  baker  |    potter     | illustrator  | gardener |
+| barista |    jeweler    | photographer |          |
+|         | leatherworker |   designer   |          |
+|         |  woodworker   |              |          |
+
+[查看所有職業風格 →](CONFIG_GUIDE.md#職業風格)
 
 ---
 
@@ -13,6 +52,15 @@
 - 📁 **自動生成作品集** — 只需把圖片放進資料夾
 - 🌐 **免費託管** — 使用 GitHub Pages，完全免費
 - 🔧 **無需寫代碼** — 只需編輯一個配置文件
+- 🛡️ **防呆設計** — 即使填錯也不會白屏
+
+---
+
+## 📖 詳細指南
+
+- 📋 [快速入門指南](QUICK_START.md) — 5 分鐘上手
+- 📝 [完整設定指南](CONFIG_GUIDE.md) — 所有選項詳解
+- 🎨 [CMS 管理介面](public/admin/README.md) — 圖形化編輯
 
 ---
 
@@ -48,6 +96,7 @@
    "profile": {
       "name": "你的名字",
       "role": "你的職業（如：編織藝術家）",
+      "profession": "knitter",
       "email": "your@email.com",
       "bio": "簡單介紹自己..."
    }

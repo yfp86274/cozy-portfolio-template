@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex"/>
+    <title>網站設定管理 ✨</title>
+
+    <!-- Decap CMS 核心 -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <!-- 自訂樣式：讓介面更親切 -->
+    <style>
+        /* 覆蓋預設字體，使用更友善的中文字體 */
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+
+        /* 歡迎訊息 */
+        .welcome-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-banner a {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+
+        /* 載入動畫 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-emoji {
+            font-size: 64px;
+            animation: bounce 1s infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 讓標籤更易讀 */
+        [class*="ControlLabel"] {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+        }
+
+        /* 提示文字更明顯 */
+        [class*="ControlHint"] {
+            font-size: 13px !important;
+            color: #666 !important;
+            margin-top: 4px !important;
+        }
+    </style>
+</head>
+<body>
+<!-- 友善的載入畫面 -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-emoji">🎨</div>
+    <div class="loading-text">正在準備您的設定介面...</div>
+</div>
+
+<script>
+    // 當 CMS 載入完成後隱藏載入畫面
+    window.addEventListener('load', function () {
+        setTimeout(function () {
+            document.getElementById('loadingScreen').classList.add('hidden');
+        }, 1000);
+    });
+
+    // 註冊自訂 Widget（職業選擇器）
+    CMS.registerWidget('profession-select', {
+        control: function (props) {
+            const professions = [
+                {value: '', label: '🤔 還沒決定（使用預設風格）'},
+                {value: 'chef', label: '🍳 廚師 / 料理人'},
+                {value: 'baker', label: '🧁 烘焙師 / 甜點師'},
+                {value: 'barista', label: '☕ 咖啡師'},
+                {value: 'knitter', label: '🧶 編織創作者'},
+                {value: 'potter', label: '🏺 陶藝家'},
+                {value: 'jeweler', label: '💍 珠寶 / 飾品設計師'},
+                {value: 'leatherworker', label: '👜 皮革工藝師'},
+                {value: 'woodworker', label: '🪵 木工 / 木藝師'},
+                {value: 'artist', label: '🎨 藝術家'},
+                {value: 'illustrator', label: '✏️ 插畫家'},
+                {value: 'photographer', label: '📷 攝影師'},
+                {value: 'designer', label: '🎯 設計師'},
+                {value: 'florist', label: '🌸 花藝師'},
+                {value: 'gardener', label: '🌿 園藝師'},
+                {value: 'therapist', label: '💚 治療師 / 諮商師'},
+                {value: 'yoga', label: '🧘 瑜伽老師'},
+                {value: 'architect', label: '🏛️ 建築師'},
+                {value: 'interior', label: '🛋️ 室內設計師'},
+                {value: 'musician', label: '🎵 音樂人'},
+                {value: 'writer', label: '📝 作家 / 文字工作者'},
+                {value: 'teacher', label: '📚 老師 / 講師'},
+            ];
+
+            const h = CMS.h;
+            return h('div', {style: {marginBottom: '10px'}},
+                h('select', {
+                    value: props.value || '',
+                    onChange: function (e) {
+                        props.onChange(e.target.value);
+                    },
+                    style: {
+                        width: '100%',
+                        padding: '10px',
+                        fontSize: '14px',
+                        borderRadius: '4px',
+                        border: '1px solid #ddd',
+                    }
+                }, professions.map(function (p) {
+                    return h('option', {value: p.value, key: p.value}, p.label);
+                })),
+                h('p', {
+                    style: {
+                        fontSize: '12px',
+                        color: '#888',
+                        marginTop: '8px',
+                        lineHeight: '1.5'
+                    }
+                }, '💡 選擇職業後，網站會自動套用最適合您的配色和風格！')
+            );
+        },
+        preview: function (props) {
+            return CMS.h('span', {}, props.value || '未設定');
+        }
+    });
+</script>
+</body>
+</html>

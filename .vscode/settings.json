@@ -37,5 +37,17 @@
   "files.exclude": {
     "node_modules": true,
     ".git": true
-  }
+  },
+  "task.allowAutomaticTasks": "on",
+  "workbench.tips.enabled": false,
+  "workbench.startupEditor": "readme",
+  "explorer.confirmDelete": true,
+  "explorer.confirmDragAndDrop": true,
+  "terminal.integrated.tabs.title": "${process}",
+  "terminal.integrated.tabs.description": "",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "json.format.enable": true,
+  "json.validate.enable": true
 }
+
