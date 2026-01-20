@@ -1,19 +1,25 @@
-{
+<![
+  CDATA
+  [
+    {
   "profile": {
-    "name": "Emma Woolcraft",
-    "role": "Fiber Artist & Knitting Designer",
-    "profession": "knitter",
-    "email": "hello@emmawoolcraft.com",
-    "bio": "Creating warmth through handcrafted knits and sustainable fiber art.",
+    "name": "夜喵酷叮",
+    "role": "創意開發者 & 開源貢獻者",
+    "profession": "designer",
+    "email": "hello@nightcatcoding.com",
+    "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
+    "avatar": "/images/avatar.jpg",
     "social": {
-      "instagram": "https://instagram.com/emmawoolcraft",
-      "pinterest": "https://pinterest.com/emmawoolcraft",
-      "etsy": "https://emmawoolcraft.etsy.com"
+      "github": "https://github.com/night-cat-coding",
+      "twitter": "https://twitter.com/nightcatcoding",
+      "instagram": ""
     }
   },
   "seo": {
-    "siteTitle": "Emma Woolcraft | Fiber Artist",
-    "siteDescription": "Handcrafted knitting designs and sustainable fiber art by Emma Woolcraft.",
-    "keywords": "knitting, fiber art, sustainable fashion, handmade, wool"
+    "siteTitle": "夜喵酷叮 | 創意開發者",
+    "siteDescription": "夜喵酷叮的作品集。專注於開源專案、創意開發，讓代碼也能有溫度。",
+    "keywords": "開發者, 設計師, Vue, 開源, 作品集, 模板, Night Cat Coding"
   }
 }
+  ]
+]>

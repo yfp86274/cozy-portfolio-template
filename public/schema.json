@@ -28,9 +28,9 @@
           "description": "📝 填寫您希望在網站上顯示的名字",
           "minLength": 1,
           "examples": [
-            "小美手作",
-            "Emma Woolcraft",
-            "張大廚"
+            "夜喵酷叮",
+            "Night Cat Coding",
+            "手作小舖"
           ]
         },
         "role": {
@@ -182,7 +182,7 @@
           "title": "網站標題",
           "description": "🏷️ 顯示在瀏覽器分頁和搜尋結果的標題",
           "examples": [
-            "小美手作 | 編織藝術家"
+            "夜喵酷叮 | 創意開發者"
           ]
         },
         "siteDescription": {

@@ -45,8 +45,8 @@
 ```
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
 │             │      │             │      │             │      │             │
-│   1. Fork   │  ──▶ │   2. 設定   │  ──▶ │   3. 傳圖   │  ──▶ │  4. 完成！  │
-│   複製專案   │      │   填表單    │      │   拖拉上傳   │      │   等1分鐘   │
+│   1. Fork   │  ──▶ │   2. 設定   │ ──▶ │   3. 傳圖   │  ──▶ │  4. 完成！  │
+│   複製專案   │      │   填表單    │      │   拖拉上傳   │      │   等1分鐘    │
 │             │      │             │      │             │      │             │
 └─────────────┘      └─────────────┘      └─────────────┘      └─────────────┘
 ```
@@ -74,10 +74,10 @@
    ```
 
 2. 在設定精靈中：
-    - 🎭 **選擇你的身份**（廚師、編織、陶藝等），網站會自動套用最適合的風格
-    - 👤 **填入你的資料**（名字、頭銜、Email、自我介紹）
-    - 🔗 **填入社群連結**（Instagram、Etsy 等，不用的留空）
-    - 🔍 **SEO 設定**（可選，會自動生成）
+   - 🎭 **選擇你的身份**（廚師、編織、陶藝等），網站會自動套用最適合的風格
+   - 👤 **填入你的資料**（名字、頭銜、Email、自我介紹）
+   - 🔗 **填入社群連結**（Instagram、Etsy 等，不用的留空）
+   - 🔍 **SEO 設定**（可選，會自動生成）
 
 3. 點擊「**複製設定代碼**」按鈕
 
@@ -128,31 +128,30 @@
 ```
 src/assets/works/
 │
-├── 01_冬日圍巾/              ← 數字開頭，會排在最前面
-│   ├── cover.jpg            ← 命名為 cover 的會當封面
-│   ├── 細節照片1.jpg         ← 其他照片會在詳情頁顯示
+├── 01_深夜專案/               ← 數字開頭，會排在最前面
+│   ├── cover.jpg             ← 命名為 cover 的會當封面
+│   ├── 細節照片1.jpg          ← 其他照片會在詳情頁顯示
 │   ├── 細節照片2.jpg
-│   └── readme.md            ← 可選：作品描述文字
+│   └── readme.md             ← 可選：作品描述文字
 │
-├── 02_手工皂系列/            ← 02 會排在 01 後面
-│   ├── 主圖.jpg             ← 沒有 cover？系統自動選第一張當封面
+├── 02_貓咪主題網站/           ← 02 會排在 01 後面
+│   ├── 主圖.jpg              ← 沒有 cover？系統自動選第一張當封面
 │   └── 製作過程.jpg
 │
-└── 我的貓咪/                 ← 不加數字也可以！會按字母排序
+└── 開源模板/                  ← 不加數字也可以！會按字母排序
     └── photo.jpg
 ```
 
 #### 📝 命名小技巧：
 
-| 你這樣命名             | 網站顯示         | 排序位置      |
-|-------------------|--------------|-----------|
-| `01_Winter Scarf` | Winter Scarf | 第 1 位     |
-| `02_手工皂`          | 手工皂          | 第 2 位     |
-| `10_新作品`          | 新作品          | 第 10 位    |
-| `My Cat`          | My Cat       | 按字母排在數字後面 |
+| 你這樣命名                   | 網站顯示               | 排序位置      |
+|-------------------------|--------------------|-----------|
+| `01_Portfolio_Template` | Portfolio Template | 第 1 位     |
+| `02_手作網站`               | 手作網站               | 第 2 位     |
+| `10_新專案`                | 新專案                | 第 10 位    |
+| `Side_Project`          | Side Project       | 按字母排在數字後面 |
 
 #### 📷 支援的圖片格式：
-
 - ✅ `.jpg` / `.jpeg`
 - ✅ `.png`
 - ✅ `.webp`（推薦，檔案小品質好）
@@ -164,13 +163,16 @@ src/assets/works/
 在作品資料夾中創建 `readme.md` 文件，直接寫文字：
 
 ```markdown
-這條圍巾是我為冬天特別設計的作品。
+這是一個為手作人打造的作品集模板。
 
-使用 100% 美麗諾羊毛，柔軟親膚，
-適合送禮或自用。
+特點：
 
-製作時間：約 2 週
-材料：美麗諾羊毛、竹針
+- 零代碼建站
+- 自動風格適配
+- 響應式設計
+
+開發時間：約 2 週
+技術棧：Vue 3 + Vite + Tailwind CSS
 ```
 
 ---
@@ -248,13 +250,13 @@ src/assets/works/
 ### 🔄 網站沒有更新？
 
 1. 確認 GitHub Actions 已完成：
-    - 進入倉庫 → **Actions** 頁面
-    - 看到綠色勾勾 ✓ 表示建置成功
-    - 看到紅色 ✗ 點進去查看錯誤訊息
+   - 進入倉庫 → **Actions** 頁面
+   - 看到綠色勾勾 ✓ 表示建置成功
+   - 看到紅色 ✗ 點進去查看錯誤訊息
 
 2. 清除瀏覽器緩存：
-    - Windows/Linux：`Ctrl + Shift + R`
-    - Mac：`Cmd + Shift + R`
+   - Windows/Linux：`Ctrl + Shift + R`
+   - Mac：`Cmd + Shift + R`
 
 3. 等待 1-2 分鐘讓 GitHub Pages 更新
 
@@ -264,9 +266,9 @@ src/assets/works/
 
 常見的錯誤會自動修正：
 
-- ✅ 多餘的逗號：`{ "name": "小美", }` → 自動移除
-- ✅ 單引號：`{ 'name': '小美' }` → 自動轉換成雙引號
-- ✅ 沒有引號的 Key：`{ name: "小美" }` → 自動加上引號
+- ✅ 多餘的逗號：`{ "name": "夜喵", }` → 自動移除
+- ✅ 單引號：`{ 'name': '夜喵' }` → 自動轉換成雙引號
+- ✅ 沒有引號的 Key：`{ name: "夜喵" }` → 自動加上引號
 
 如果還是有問題，使用設定精靈重新生成一份就好！
 
@@ -284,13 +286,13 @@ src/assets/works/
 ```json
 {
   "profile": {
-    "name": "你的名字",
-    "profession": "knitter"
+     "name": "夜喵酷叮",
+     "profession": "designer"
   },
   "theme": {
-    "primaryColor": "#8B4513",
-    "backgroundColor": "#FDF5E6",
-    "textColor": "#3D2914"
+     "primaryColor": "#6366f1",
+     "backgroundColor": "#0f0f23",
+     "textColor": "#e0e0e0"
   }
 }
 ```
@@ -402,10 +404,10 @@ src/assets/works/
    ```
 
 2. In the Config Wizard:
-    - 🎭 **Select your identity** (chef, knitter, potter, etc.) - the website will auto-apply the best style
-    - 👤 **Fill in your info** (name, title, email, bio)
-    - 🔗 **Add social links** (Instagram, Etsy, etc. - leave empty if not needed)
-    - 🔍 **SEO settings** (optional, auto-generated)
+   - 🎭 **Select your identity** (chef, knitter, potter, etc.) - the website will auto-apply the best style
+   - 👤 **Fill in your info** (name, title, email, bio)
+   - 🔗 **Add social links** (Instagram, Etsy, etc. - leave empty if not needed)
+   - 🔍 **SEO settings** (optional, auto-generated)
 
 3. Click the "**Copy Config Code**" button
 
@@ -448,7 +450,7 @@ src/assets/works/
 1. Press `.` to open the web editor
 2. Navigate to `src` → `assets` → `works` folder
 3. **Right-click on `works`** → **New Folder**
-4. Name your work, e.g., `01_Winter_Scarf`
+4. Name your work, e.g., `01_Night_Project`
 5. **Drag and drop your photos directly!**
 
 #### Folder Naming Rules:
@@ -456,22 +458,21 @@ src/assets/works/
 ```
 src/assets/works/
 │
-├── 01_Winter_Scarf/          ← Numbers first = sorted first
+├── 01_Portfolio_Template/    ← Numbers first = sorted first
 │   ├── cover.jpg             ← Named "cover" = used as thumbnail
 │   ├── detail1.jpg           ← Other images show on detail page
 │   ├── detail2.jpg
 │   └── readme.md             ← Optional: work description
 │
-├── 02_Handmade_Soap/         ← 02 comes after 01
+├── 02_Cat_Theme_Website/     ← 02 comes after 01
 │   ├── main.jpg              ← No cover? System picks first image
 │   └── process.jpg
 │
-└── My_Cat/                   ← No number = alphabetical order
+└── Open_Source_Template/     ← No number = alphabetical order
     └── photo.jpg
 ```
 
 #### 📷 Supported Image Formats:
-
 - ✅ `.jpg` / `.jpeg`
 - ✅ `.png`
 - ✅ `.webp` (recommended - small size, great quality)
@@ -483,13 +484,16 @@ src/assets/works/
 Create a `readme.md` file in your work folder:
 
 ```markdown
-This scarf is specially designed for winter.
+A portfolio template crafted for creative professionals.
 
-Made with 100% Merino wool, soft and skin-friendly.
-Perfect for gifting or personal use.
+Features:
 
-Time to make: ~2 weeks
-Materials: Merino wool, bamboo needles
+- Zero-code website building
+- Auto style adaptation
+- Responsive design
+
+Development time: ~2 weeks
+Tech stack: Vue 3 + Vite + Tailwind CSS
 ```
 
 ---
@@ -567,13 +571,13 @@ Choose your profession, and the website auto-applies the best colors, fonts, and
 ### 🔄 Website Not Updating?
 
 1. Check GitHub Actions status:
-    - Go to repo → **Actions** tab
-    - Green ✓ = build successful
-    - Red ✗ = click to see error message
+   - Go to repo → **Actions** tab
+   - Green ✓ = build successful
+   - Red ✗ = click to see error message
 
 2. Clear browser cache:
-    - Windows/Linux: `Ctrl + Shift + R`
-    - Mac: `Cmd + Shift + R`
+   - Windows/Linux: `Ctrl + Shift + R`
+   - Mac: `Cmd + Shift + R`
 
 3. Wait 1-2 minutes for GitHub Pages to update
 
@@ -583,9 +587,9 @@ Choose your profession, and the website auto-applies the best colors, fonts, and
 
 Common errors are automatically corrected:
 
-- ✅ Trailing commas: `{ "name": "Emma", }` → auto-removed
-- ✅ Single quotes: `{ 'name': 'Emma' }` → auto-converted to double quotes
-- ✅ Unquoted keys: `{ name: "Emma" }` → auto-quoted
+- ✅ Trailing commas: `{ "name": "NightCat", }` → auto-removed
+- ✅ Single quotes: `{ 'name': 'NightCat' }` → auto-converted to double quotes
+- ✅ Unquoted keys: `{ name: "NightCat" }` → auto-quoted
 
 If issues persist, just regenerate with the Config Wizard!
 
@@ -603,13 +607,13 @@ The Config Wizard auto-selects colors based on profession, but you can override 
 ```json
 {
   "profile": {
-    "name": "Your Name",
-    "profession": "knitter"
+     "name": "Night Cat Coding",
+     "profession": "designer"
   },
   "theme": {
-    "primaryColor": "#8B4513",
-    "backgroundColor": "#FDF5E6",
-    "textColor": "#3D2914"
+     "primaryColor": "#6366f1",
+     "backgroundColor": "#0f0f23",
+     "textColor": "#e0e0e0"
   }
 }
 ```
@@ -654,7 +658,7 @@ If this template helped you, consider buying me a coffee!
 
 ## 📜 License
 
-MIT License © 2026 [夜喵酷叮 | Night Cat Coding](https://github.com/yfp86274)
+MIT License © 2024 [夜喵酷叮 | Night Cat Coding](https://github.com/night-cat-coding)
 
 Made with ❤️ for creative professionals who don't code
 

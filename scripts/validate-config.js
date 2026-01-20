@@ -181,7 +181,7 @@ function diagnoseJsonError(content, error) {
             where: `大約在第 ${line || '?'} 行附近`,
             why: '在 JSON 裡面，最後一個項目後面不能有逗號。就像列清單時，最後一項不用加「、」一樣。',
             howToFix: '請找到 } 或 ] 前面的逗號，把它刪掉就好了。',
-            example: '正確：{ "name": "小美" }\n錯誤：{ "name": "小美", }',
+            example: '正確：{ "name": "夜喵" }\n錯誤：{ "name": "夜喵", }',
         },
         {
             test: () => content.includes("'"),
@@ -190,7 +190,7 @@ function diagnoseJsonError(content, error) {
             where: `檔案中使用了單引號 '`,
             why: 'JSON 只認得雙引號 "，不認得單引號 \'。這是 JSON 的規定。',
             howToFix: '請把所有的單引號 \' 換成雙引號 "',
-            example: '正確："name": "小美"\n錯誤：\'name\': \'小美\'',
+            example: '正確："name": "夜喵"\n錯誤：\'name\': \'夜喵\'',
         },
         {
             test: () => content.match(/:\s*[,}\]]/g),
@@ -199,7 +199,7 @@ function diagnoseJsonError(content, error) {
             where: `大約在第 ${line || '?'} 行，某個冒號後面沒有值`,
             why: '每個設定項目的冒號後面都要有值，不能空著。',
             howToFix: '請在冒號後面填上適當的值。文字要用雙引號包起來，數字直接寫。',
-            example: '正確："name": "小美"\n錯誤："name": ',
+            example: '正確："name": "夜喵"\n錯誤："name": ',
         },
         {
             test: () => {
@@ -224,7 +224,7 @@ function diagnoseJsonError(content, error) {
             where: `大約在第 ${line || '?'} 行附近`,
             why: 'JSON 裡面，每個項目之間要用逗號隔開（最後一個除外）。',
             howToFix: '請在兩個項目之間加上逗號。',
-            example: '正確："name": "小美",\n       "role": "手作人"',
+            example: '正確："name": "夜喵",\n       "role": "創意開發者"',
         },
         {
             test: () => {
@@ -237,7 +237,7 @@ function diagnoseJsonError(content, error) {
             where: `整個檔案`,
             why: '每個 { 都要有對應的 }，就像每個開始都要有結束。',
             howToFix: '請檢查所有的大括號 { } 是否都有配對。可能是少了一個，或多了一個。',
-            example: '正確：{ "profile": { "name": "小美" } }',
+            example: '正確：{ "profile": { "name": "夜喵" } }',
         },
     ]
 

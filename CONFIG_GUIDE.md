@@ -55,11 +55,11 @@
 
 | 欄位 | 說明 | 範例 |
 |------|------|------|
-| `name` | 你的名字或品牌名 | `"Emma Woolcraft"` |
-| `role` | 你的職業/頭銜 | `"編織藝術家"` |
-| `profession` | 職業代碼（決定網站風格）⭐ | `"knitter"` |
-| `email` | 聯絡 Email | `"hello@example.com"` |
-| `bio` | 簡短自我介紹 | `"用雙手編織溫暖與故事"` |
+| `name` | 你的名字或品牌名 | `"夜喵酷叮"` |
+| `role` | 你的職業/頭銜 | `"創意開發者 & 開源貢獻者"` |
+| `profession` | 職業代碼（決定網站風格）⭐ | `"designer"` |
+| `email` | 聯絡 Email | `"hello@nightcatcoding.com"` |
+| `bio` | 簡短自我介紹 | `"用代碼編織創意，讓每個專案都有貓的靈魂"` |
 | `avatar` | 頭像圖片路徑 | `"/images/avatar.jpg"` |
 
 ### ⭐ profession 職業代碼
@@ -117,34 +117,31 @@
 
 ```json
 "social": {
-  "instagram": "https://instagram.com/yourname",
-  "pinterest": "https://pinterest.com/yourname",
-  "etsy": "https://yourshop.etsy.com",
-  "youtube": "https://youtube.com/@yourname",
-  "tiktok": "https://tiktok.com/@yourname",
-  "twitter": "",
-  "linkedin": "",
+  "github": "https://github.com/night-cat-coding",
+  "twitter": "https://twitter.com/nightcatcoding",
+  "instagram": "https://instagram.com/nightcatcoding",
+  "youtube": "https://youtube.com/@nightcatcoding",
   "behance": "",
   "dribbble": ""
 }
 ```
 
-**支援的平台**：Instagram、Pinterest、Etsy、YouTube、TikTok、Twitter/X、LinkedIn、Behance、Dribbble
+**支援的平台**：GitHub、Twitter/X、Instagram、Pinterest、Etsy、YouTube、TikTok、LinkedIn、Behance、Dribbble
 
 ### 完整範例
 
 ```json
 "profile": {
-  "name": "Emma Woolcraft",
-  "role": "編織藝術家 & 纖維創作者",
-  "profession": "knitter",
-  "email": "hello@emmawoolcraft.com",
-  "bio": "用雙手編織溫暖與故事，每一針都是對生活的熱愛。",
+  "name": "夜喵酷叮",
+  "role": "創意開發者 & 開源貢獻者",
+  "profession": "designer",
+  "email": "hello@nightcatcoding.com",
+  "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
   "avatar": "/images/avatar.jpg",
   "social": {
-    "instagram": "https://instagram.com/emmawoolcraft",
-    "etsy": "https://emmawoolcraft.etsy.com",
-    "pinterest": "https://pinterest.com/emmawoolcraft"
+    "github": "https://github.com/night-cat-coding",
+    "twitter": "https://twitter.com/nightcatcoding",
+    "instagram": "https://instagram.com/nightcatcoding"
   }
 }
 ```
@@ -180,15 +177,15 @@
 
 ### 配色範例
 
-#### 🌿 大地暖色系
+#### 🌙 深夜科技風（夜喵風格）
 
 ```json
 "theme": {
-  "primaryColor": "#8B4513",
-  "secondaryColor": "#A0522D",
-  "backgroundColor": "#FDF5E6",
-  "textColor": "#3D2914",
-  "mutedColor": "#8B7355"
+  "primaryColor": "#6366f1",
+  "secondaryColor": "#22d3ee",
+  "backgroundColor": "#0f0f23",
+  "textColor": "#e0e0e0",
+  "mutedColor": "#6b7280"
 }
 ```
 
@@ -287,11 +284,11 @@
 
 ```json
 "ui": {
-  "themePreset": "default",
+  "themePreset": "bold",
   "heroStyle": "split",
   "gridColumns": 3,
-  "thumbnailRatio": "4/3",
-  "navStyle": "default",
+  "thumbnailRatio": "16/9",
+  "navStyle": "minimal",
   "showFooter": true,
   "showSocialLinks": true,
   "showOtherWorks": true,
@@ -321,12 +318,12 @@
 
 ```json
 "content": {
-  "heroTitle": "用雙手編織故事",
-  "heroSubtitle": "每一針都是對生活的熱愛",
-  "heroButtonText": "探索作品",
-  "worksTitle": "精選創作",
-  "otherWorksTitle": "更多作品",
-  "footerText": "© 2024 Emma Woolcraft"
+  "heroTitle": "用代碼編織創意",
+  "heroSubtitle": "讓每個專案都有貓的靈魂 🐱",
+  "heroButtonText": "探索專案",
+  "worksTitle": "精選作品",
+  "otherWorksTitle": "更多專案",
+  "footerText": "© 2024 夜喵酷叮 | Night Cat Coding"
 }
 ```
 
@@ -347,9 +344,9 @@
 
 ```json
 "seo": {
-  "siteTitle": "Emma Woolcraft | 編織藝術家",
-  "siteDescription": "手工編織藝術家 Emma 的作品集。專注於永續纖維藝術，為你的生活編織溫暖。",
-  "keywords": "編織, 纖維藝術, 手作, 羊毛, 圍巾, 永續時尚",
+  "siteTitle": "夜喵酷叮 | 創意開發者",
+  "siteDescription": "夜喵酷叮的作品集。專注於開源專案、創意開發，讓代碼也能有溫度。",
+  "keywords": "開發者, 設計師, Vue, 開源, 作品集, 模板",
   "ogImage": "/images/og-image.jpg"
 }
 ```
@@ -392,9 +389,9 @@
 
 這個模板有內建的「容錯機制」，會自動修復常見的 JSON 錯誤：
 
-- ✅ 尾隨逗號：`{ "name": "小美", }` → 自動移除
-- ✅ 單引號：`{ 'name': '小美' }` → 自動轉成雙引號
-- ✅ 無引號的 Key：`{ name: "小美" }` → 自動加引號
+- ✅ 尾隨逗號：`{ "name": "夜喵", }` → 自動移除
+- ✅ 單引號：`{ 'name': '夜喵' }` → 自動轉成雙引號
+- ✅ 無引號的 Key：`{ name: "夜喵" }` → 自動加引號
 
 ### 手動驗證
 
@@ -412,7 +409,7 @@
 ### 顏色沒有改變？
 
 - 確保顏色以 `#` 開頭
-- 使用 6 位數十六進位：`#8B4513`（不是 `#8B4`）
+- 使用 6 位數十六進位：`#6366f1`（不是 `#636`）
 
 ### 字體沒有載入？
 
@@ -439,37 +436,37 @@
 ```json
 {
   "profile": {
-    "name": "Emma Woolcraft",
-    "role": "編織藝術家 & 纖維創作者",
-    "profession": "knitter",
-    "email": "hello@emmawoolcraft.com",
-    "bio": "用雙手編織溫暖與故事，每一針都是對生活的熱愛。",
+    "name": "夜喵酷叮",
+    "role": "創意開發者 & 開源貢獻者",
+    "profession": "designer",
+    "email": "hello@nightcatcoding.com",
+    "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
     "avatar": "/images/avatar.jpg",
     "social": {
-      "instagram": "https://instagram.com/emmawoolcraft",
-      "etsy": "https://emmawoolcraft.etsy.com",
-      "pinterest": "https://pinterest.com/emmawoolcraft"
+      "github": "https://github.com/night-cat-coding",
+      "twitter": "https://twitter.com/nightcatcoding",
+      "instagram": "https://instagram.com/nightcatcoding"
     }
   },
   "theme": {
-    "primaryColor": "#a0785a",
-    "backgroundColor": "#fdf6ec"
+    "primaryColor": "#6366f1",
+    "backgroundColor": "#0f0f23"
   },
   "ui": {
     "heroStyle": "split",
     "gridColumns": 3,
-    "thumbnailRatio": "4/3",
+    "thumbnailRatio": "16/9",
     "showOtherWorks": true
   },
   "content": {
-    "heroTitle": "用雙手編織故事",
-    "heroSubtitle": "每一針都是對生活的熱愛",
-    "heroButtonText": "探索作品"
+    "heroTitle": "用代碼編織創意",
+    "heroSubtitle": "讓每個專案都有貓的靈魂 🐱",
+    "heroButtonText": "探索專案"
   },
   "seo": {
-    "siteTitle": "Emma Woolcraft | 編織藝術家",
-    "siteDescription": "手工編織藝術家 Emma 的作品集網站。",
-    "keywords": "編織, 纖維藝術, 手作, 羊毛"
+    "siteTitle": "夜喵酷叮 | 創意開發者",
+    "siteDescription": "夜喵酷叮的作品集網站。",
+    "keywords": "開發者, 設計師, Vue, 開源, 作品集"
   }
 }
 ```
@@ -531,11 +528,11 @@ This is the **most important** section containing your basic info.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| `name` | Your name or brand name | `"Emma Woolcraft"` |
-| `role` | Your profession/title | `"Fiber Artist"` |
-| `profession` | Profession code (determines website style) ⭐ | `"knitter"` |
-| `email` | Contact email | `"hello@example.com"` |
-| `bio` | Short bio | `"Weaving warmth and stories with my hands"` |
+| `name` | Your name or brand name | `"Night Cat Coding"` |
+| `role` | Your profession/title | `"Creative Developer & Open Source Contributor"` |
+| `profession` | Profession code (determines website style) ⭐ | `"designer"` |
+| `email` | Contact email | `"hello@nightcatcoding.com"` |
+| `bio` | Short bio | `"Weaving creativity with code, giving every project a cat's soul"` |
 | `avatar` | Avatar image path | `"/images/avatar.jpg"` |
 
 ### ⭐ Profession Codes
@@ -593,34 +590,31 @@ Add your social URLs in the `social` object. Leave empty or omit if not needed:
 
 ```json
 "social": {
-  "instagram": "https://instagram.com/yourname",
-  "pinterest": "https://pinterest.com/yourname",
-  "etsy": "https://yourshop.etsy.com",
-  "youtube": "https://youtube.com/@yourname",
-  "tiktok": "https://tiktok.com/@yourname",
-  "twitter": "",
-  "linkedin": "",
+  "github": "https://github.com/night-cat-coding",
+  "twitter": "https://twitter.com/nightcatcoding",
+  "instagram": "https://instagram.com/nightcatcoding",
+  "youtube": "https://youtube.com/@nightcatcoding",
   "behance": "",
   "dribbble": ""
 }
 ```
 
-**Supported platforms**: Instagram, Pinterest, Etsy, YouTube, TikTok, Twitter/X, LinkedIn, Behance, Dribbble
+**Supported platforms**: GitHub, Twitter/X, Instagram, Pinterest, Etsy, YouTube, TikTok, LinkedIn, Behance, Dribbble
 
 ### Complete Example
 
 ```json
 "profile": {
-  "name": "Emma Woolcraft",
-  "role": "Fiber Artist & Knitting Designer",
-  "profession": "knitter",
-  "email": "hello@emmawoolcraft.com",
-  "bio": "Weaving warmth and stories with every stitch.",
+  "name": "Night Cat Coding",
+  "role": "Creative Developer & Open Source Contributor",
+  "profession": "designer",
+  "email": "hello@nightcatcoding.com",
+  "bio": "Weaving creativity with code, giving every project a cat's soul 🐱",
   "avatar": "/images/avatar.jpg",
   "social": {
-    "instagram": "https://instagram.com/emmawoolcraft",
-    "etsy": "https://emmawoolcraft.etsy.com",
-    "pinterest": "https://pinterest.com/emmawoolcraft"
+    "github": "https://github.com/night-cat-coding",
+    "twitter": "https://twitter.com/nightcatcoding",
+    "instagram": "https://instagram.com/nightcatcoding"
   }
 }
 ```
@@ -656,15 +650,15 @@ Fonts are loaded from [Google Fonts](https://fonts.google.com).
 
 ### Color Scheme Examples
 
-#### 🌿 Earthy Warm
+#### 🌙 Night Tech Style (Night Cat Style)
 
 ```json
 "theme": {
-  "primaryColor": "#8B4513",
-  "secondaryColor": "#A0522D",
-  "backgroundColor": "#FDF5E6",
-  "textColor": "#3D2914",
-  "mutedColor": "#8B7355"
+  "primaryColor": "#6366f1",
+  "secondaryColor": "#22d3ee",
+  "backgroundColor": "#0f0f23",
+  "textColor": "#e0e0e0",
+  "mutedColor": "#6b7280"
 }
 ```
 
@@ -763,11 +757,11 @@ Customize which sections appear and in what order:
 
 ```json
 "ui": {
-  "themePreset": "default",
+  "themePreset": "bold",
   "heroStyle": "split",
   "gridColumns": 3,
-  "thumbnailRatio": "4/3",
-  "navStyle": "default",
+  "thumbnailRatio": "16/9",
+  "navStyle": "minimal",
   "showFooter": true,
   "showSocialLinks": true,
   "showOtherWorks": true,
@@ -797,12 +791,12 @@ Customize all text on your site.
 
 ```json
 "content": {
-  "heroTitle": "Weaving Stories by Hand",
-  "heroSubtitle": "Every stitch is a love letter to life",
-  "heroButtonText": "Explore Works",
-  "worksTitle": "Featured Creations",
-  "otherWorksTitle": "More Works",
-  "footerText": "© 2024 Emma Woolcraft"
+  "heroTitle": "Weaving Creativity with Code",
+  "heroSubtitle": "Giving every project a cat's soul 🐱",
+  "heroButtonText": "Explore Projects",
+  "worksTitle": "Featured Works",
+  "otherWorksTitle": "More Projects",
+  "footerText": "© 2024 Night Cat Coding"
 }
 ```
 
@@ -823,9 +817,9 @@ Help search engines find your site.
 
 ```json
 "seo": {
-  "siteTitle": "Emma Woolcraft | Fiber Artist",
-  "siteDescription": "Portfolio of fiber artist Emma. Specializing in sustainable textile art, weaving warmth into life.",
-  "keywords": "knitting, fiber art, handmade, wool, sustainable fashion",
+  "siteTitle": "Night Cat Coding | Creative Developer",
+  "siteDescription": "Portfolio of Night Cat Coding. Specializing in open source projects and creative development.",
+  "keywords": "developer, designer, Vue, open source, portfolio, template",
   "ogImage": "/images/og-image.jpg"
 }
 ```
@@ -868,9 +862,9 @@ Help search engines find your site.
 
 This template has built-in "error tolerance" that auto-fixes common JSON errors:
 
-- ✅ Trailing commas: `{ "name": "Emma", }` → auto-removed
-- ✅ Single quotes: `{ 'name': 'Emma' }` → auto-converted to double quotes
-- ✅ Unquoted keys: `{ name: "Emma" }` → auto-quoted
+- ✅ Trailing commas: `{ "name": "NightCat", }` → auto-removed
+- ✅ Single quotes: `{ 'name': 'NightCat' }` → auto-converted to double quotes
+- ✅ Unquoted keys: `{ name: "NightCat" }` → auto-quoted
 
 ### Manual Validation
 
@@ -888,7 +882,7 @@ Online validation:
 ### Colors Not Changing?
 
 - Make sure colors start with `#`
-- Use 6-digit hex: `#8B4513` (not `#8B4`)
+- Use 6-digit hex: `#6366f1` (not `#636`)
 
 ### Fonts Not Loading?
 
@@ -915,37 +909,37 @@ Online validation:
 ```json
 {
   "profile": {
-    "name": "Emma Woolcraft",
-    "role": "Fiber Artist & Knitting Designer",
-    "profession": "knitter",
-    "email": "hello@emmawoolcraft.com",
-    "bio": "Weaving warmth and stories with every stitch.",
+    "name": "Night Cat Coding",
+    "role": "Creative Developer & Open Source Contributor",
+    "profession": "designer",
+    "email": "hello@nightcatcoding.com",
+    "bio": "Weaving creativity with code, giving every project a cat's soul 🐱",
     "avatar": "/images/avatar.jpg",
     "social": {
-      "instagram": "https://instagram.com/emmawoolcraft",
-      "etsy": "https://emmawoolcraft.etsy.com",
-      "pinterest": "https://pinterest.com/emmawoolcraft"
+      "github": "https://github.com/night-cat-coding",
+      "twitter": "https://twitter.com/nightcatcoding",
+      "instagram": "https://instagram.com/nightcatcoding"
     }
   },
   "theme": {
-    "primaryColor": "#a0785a",
-    "backgroundColor": "#fdf6ec"
+    "primaryColor": "#6366f1",
+    "backgroundColor": "#0f0f23"
   },
   "ui": {
     "heroStyle": "split",
     "gridColumns": 3,
-    "thumbnailRatio": "4/3",
+    "thumbnailRatio": "16/9",
     "showOtherWorks": true
   },
   "content": {
-    "heroTitle": "Weaving Stories by Hand",
-    "heroSubtitle": "Every stitch is a love letter to life",
-    "heroButtonText": "Explore Works"
+    "heroTitle": "Weaving Creativity with Code",
+    "heroSubtitle": "Giving every project a cat's soul 🐱",
+    "heroButtonText": "Explore Projects"
   },
   "seo": {
-    "siteTitle": "Emma Woolcraft | Fiber Artist",
-    "siteDescription": "Portfolio of fiber artist Emma Woolcraft.",
-    "keywords": "knitting, fiber art, handmade, wool"
+    "siteTitle": "Night Cat Coding | Creative Developer",
+    "siteDescription": "Portfolio of Night Cat Coding.",
+    "keywords": "developer, designer, Vue, open source, portfolio"
   }
 }
 ```

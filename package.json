@@ -3,7 +3,17 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "🧶 專為手作人設計的作品集網站模板 - 零代碼恐懼、極致容錯、即時反饋",
+  "description": "🧶 專為手作人設計的作品集網站模板 - 零代碼恐懼、極致容錯、即時反饋 | 夜喵酷叮出品",
+  "author": {
+    "name": "夜喵酷叮 | Night Cat Coding",
+    "url": "https://github.com/night-cat-coding"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/yfp86274/independent_website_template",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yfp86274/independent_website_template.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "node scripts/fix-config.js && node scripts/validate-config.js && vite build",

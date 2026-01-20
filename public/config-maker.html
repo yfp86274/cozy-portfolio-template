@@ -236,7 +236,7 @@
                             名字 / 品牌名
                         </label>
                         <input type="text" id="inputName"
-                               placeholder="例如：Emma、小美手作坊"
+                               placeholder="例如：夜喵酷叮、Night Cat Coding"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
                     </div>
@@ -832,5 +832,66 @@
         }
     }
 </script>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 頁尾 - 作者信息與打賞 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<footer class="mt-16 py-12 bg-gradient-to-b from-transparent to-stone-100 border-t border-stone-200">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <!-- 作者信息 -->
+        <div class="mb-8">
+            <p class="text-lg font-medium text-stone-700 mb-2">
+                🐱 Made with ❤️ by <span class="font-bold text-stone-900">夜喵酷叮</span> | <span class="text-stone-600">Night Cat Coding</span>
+            </p>
+            <p class="text-sm text-stone-500">
+                讓每個創作者都能輕鬆擁有專業的作品集網站
+            </p>
+        </div>
+
+        <!-- 打賞區塊 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 max-w-lg mx-auto">
+            <h3 class="text-xl font-bold text-stone-800 mb-2">☕ 支持作者</h3>
+            <p class="text-stone-500 text-sm mb-6">如果這個工具對你有幫助，歡迎請我喝杯咖啡！</p>
+
+            <div class="flex justify-center gap-8 flex-wrap">
+                <!-- 微信讚賞 -->
+                <div class="text-center">
+                    <p class="text-sm font-medium text-stone-600 mb-3">微信讚賞</p>
+                    <img src="https://imgur.com/a9SbNBB.png"
+                         alt="微信讚賞碼"
+                         class="w-32 h-32 rounded-lg shadow-md hover:shadow-lg transition-shadow mx-auto">
+                </div>
+
+                <!-- PayPal -->
+                <div class="text-center">
+                    <p class="text-sm font-medium text-stone-600 mb-3">PayPal</p>
+                    <img src="https://imgur.com/zQN3TCe.png"
+                         alt="PayPal 收款碼"
+                         class="w-32 h-32 rounded-lg shadow-md hover:shadow-lg transition-shadow mx-auto">
+                </div>
+            </div>
+
+            <p class="text-xs text-stone-400 mt-6">感謝你的支持！你的鼓勵是我持續更新的動力 💪</p>
+        </div>
+
+        <!-- 版權 -->
+        <div class="mt-8 text-sm text-stone-400">
+            <p>MIT License © 2024 夜喵酷叮 | Night Cat Coding</p>
+            <p class="mt-1">
+                <a href="https://github.com/night-cat-coding"
+                   target="_blank"
+                   class="hover:text-stone-600 transition-colors">
+                    GitHub
+                </a>
+                <span class="mx-2">·</span>
+                <a href="../../README.md"
+                   class="hover:text-stone-600 transition-colors">
+                    說明文件
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
