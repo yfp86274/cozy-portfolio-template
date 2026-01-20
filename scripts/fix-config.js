@@ -1,21 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * 🪄 JSON 自動修復器 (The Auto-Fixer)
+ * JSON 自動修復器 (The Auto-Fixer)
  *
- * 設計理念：
- * 「用戶不應該因為少了一個逗號就看到紅字錯誤」
+ * 設計理念：用戶不應該因為少了一個逗號就看到紅字錯誤
  *
- * 這個腳本會在建置前自動執行，用 json5 寬鬆解析用戶的設定檔，
+ * 這個腳本會在建置前自動執行，用寬鬆方式解析用戶的設定檔，
  * 然後重新寫入標準的 JSON 格式。
  *
- * ✨ 自動修復的問題：
- * - 尾隨逗號 { "name": "小美", } → { "name": "小美" }
- * - 單引號 { 'name': '小美' } → { "name": "小美" }
- * - 無引號的 Key { name: "小美" } → { "name": "小美" }
- * - 多行字串和註解
- *
- * 🎯 目標：讓「我不小心多打了一個逗號」永遠不會導致部署失敗
+ * 自動修復的問題：
+ * - 尾隨逗號
+ * - 單引號字串
+ * - 無引號的物件 Key
+ * - 單行和多行註解
+ * - 十六進位數字
  */
 
 import fs from 'fs'
@@ -43,17 +41,7 @@ function print(message, color = 'reset') {
 
 /**
  * 寬鬆的 JSON5 解析器（內建實現，無需額外依賴）
- *
- * 支援：
- * - 尾隨逗號
- * - 單引號字串
- * - 無引號的物件 Key
- * - 單行註解 // 和多行註解 /* */
-*
--十六進位數字
-* -多行字串（使用反斜線）
-*/
-
+ */
 function parseJSON5(input) {
     let pos = 0
     const length = input.length
@@ -69,7 +57,7 @@ function parseJSON5(input) {
                 continue
             }
 
-            // 單行註解 //
+            // 單行註解
             if (char === '/' && input[pos + 1] === '/') {
                 pos += 2
                 while (pos < length && input[pos] !== '\n') {
@@ -78,7 +66,7 @@ function parseJSON5(input) {
                 continue
             }
 
-            // 多行註解 /* */
+            // 多行註解
             if (char === '/' && input[pos + 1] === '*') {
                 pos += 2
                 while (pos < length && !(input[pos] === '*' && input[pos + 1] === '/')) {
@@ -147,7 +135,7 @@ function parseJSON5(input) {
                         pos += 4
                         break
                     case '\n':
-                        // 多行字串（反斜線後接換行）
+                        // 多行字串
                         break
                     default:
                         result += escaped
@@ -162,10 +150,9 @@ function parseJSON5(input) {
         throw new Error('Unterminated string')
     }
 
-    // 解析無引號的識別符（用於物件 Key）
+    // 解析無引號的識別符
     function parseIdentifier() {
         const start = pos
-        // 識別符可以包含字母、數字、底線、美元符號，也支援中文
         while (pos < length && /[a-zA-Z0-9_$\u4e00-\u9fff]/.test(input[pos])) {
             pos++
         }
@@ -242,7 +229,7 @@ function parseJSON5(input) {
             return parseString()
         }
 
-        // 數字（包含負數）
+        // 數字
         if (char === '-' || char === '+' || /[0-9]/.test(char)) {
             return parseNumber()
         }
@@ -261,7 +248,7 @@ function parseJSON5(input) {
             return null
         }
 
-        // Infinity 和 NaN（JSON5 支援）
+        // Infinity 和 NaN
         if (input.substring(pos, pos + 8) === 'Infinity') {
             pos += 8
             return Infinity
@@ -298,7 +285,7 @@ function parseJSON5(input) {
         while (pos < length) {
             skipWhitespaceAndComments()
 
-            // 解析 Key（支援引號字串或無引號識別符）
+            // 解析 Key
             let key
             if (input[pos] === '"' || input[pos] === "'") {
                 key = parseString()
@@ -448,7 +435,7 @@ async function main() {
         return
     }
 
-    // 將修復後的內容寫回（標準 JSON 格式）
+    // 將修復後的內容寫回
     try {
         const fixedContent = JSON.stringify(config, null, 2)
         fs.writeFileSync(configPath, fixedContent, 'utf-8')
