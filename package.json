@@ -1,5 +1,5 @@
 {
-  "name": "independent_website_template",
+  "name": "cozy-portfolio-template",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,10 +9,10 @@
     "url": "https://github.com/night-cat-coding"
   },
   "license": "MIT",
-  "homepage": "https://github.com/yfp86274/independent_website_template",
+  "homepage": "https://github.com/yfp86274/cozy-portfolio-template",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yfp86274/independent_website_template.git"
+    "url": "https://github.com/yfp86274/cozy-portfolio-template.git"
   },
   "scripts": {
     "dev": "vite",
