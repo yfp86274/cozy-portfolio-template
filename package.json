@@ -6,7 +6,8 @@
   "description": "🧶 專為手作人設計的作品集網站模板 - 零代碼恐懼、極致容錯、即時反饋",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/validate-config.js && vite build",
+    "build": "node scripts/fix-config.js && node scripts/validate-config.js && vite build",
+    "fix": "node scripts/fix-config.js",
     "preview": "vite preview",
     "validate": "node scripts/validate-config.js",
     "analyze-error": "node scripts/friendly-error-reporter.js",
