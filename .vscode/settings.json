@@ -1,0 +1,53 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "json.schemaDownload.enable": true,
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "site.config.json"
+      ],
+      "url": "./public/schema.json"
+    }
+  ],
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.colorDecorators": true,
+  "files.associations": {
+    "site.config.json": "json"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "editor.wordWrap": "on",
+  "editor.tabSize": 2,
+  "css.validate": true,
+  "tailwindCSS.emmetCompletions": true,
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning"
+  ],
+  "errorLens.messageTemplate": "$message",
+  "files.exclude": {
+    "node_modules": true,
+    ".git": true
+  },
+  "task.allowAutomaticTasks": "on",
+  "workbench.tips.enabled": false,
+  "workbench.startupEditor": "readme",
+  "explorer.confirmDelete": true,
+  "explorer.confirmDragAndDrop": true,
+  "terminal.integrated.tabs.title": "${process}",
+  "terminal.integrated.tabs.description": "",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "json.format.enable": true,
+  "json.validate.enable": true
+}
+

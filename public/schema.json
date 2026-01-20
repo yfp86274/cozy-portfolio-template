@@ -1,0 +1,415 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/site.config.schema.json",
+  "title": "網站配置",
+  "description": "🧶 手作人作品集網站的配置檔案。極簡設計：只需填寫 profile 和 seo，其他都會根據職業自動設定！",
+  "type": "object",
+  "required": [
+    "profile"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "📌 這是讓編輯器能幫您檢查設定的魔法連結，請不要修改這行"
+    },
+    "profile": {
+      "type": "object",
+      "title": "👤 個人資料（必填）",
+      "description": "這裡填寫您的基本資訊，訪客會在網站上看到這些內容",
+      "required": [
+        "name",
+        "role",
+        "profession"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "您的名字 ⭐",
+          "description": "📝 填寫您希望在網站上顯示的名字",
+          "minLength": 1,
+          "examples": [
+            "小美手作",
+            "Emma Woolcraft",
+            "張大廚"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "title": "您的職業/頭銜 ⭐",
+          "description": "📝 您是做什麼的？例如：「編織藝術家」、「私廚料理人」",
+          "examples": [
+            "編織藝術家",
+            "私廚料理人",
+            "手工皂創作者"
+          ]
+        },
+        "profession": {
+          "type": "string",
+          "title": "🪄 職業代碼 ⭐（自動套用風格的關鍵！）",
+          "description": "✨ 這是魔法欄位！選擇您的職業，網站就會自動套用最適合的顏色、字體和版面。\n\n🍳 餐飲類：chef、baker、barista\n🧶 手作類：knitter、potter、jeweler、leatherworker、woodworker\n🎨 藝術類：artist、illustrator、photographer、designer\n🌸 自然類：florist、gardener\n💚 療癒類：therapist、yoga、writer、teacher\n🏛️ 空間類：architect、interior、musician",
+          "enum": [
+            "chef",
+            "baker",
+            "barista",
+            "knitter",
+            "potter",
+            "jeweler",
+            "leatherworker",
+            "woodworker",
+            "artist",
+            "illustrator",
+            "photographer",
+            "designer",
+            "florist",
+            "gardener",
+            "therapist",
+            "yoga",
+            "architect",
+            "interior",
+            "musician",
+            "writer",
+            "teacher"
+          ],
+          "enumDescriptions": [
+            "🍳 廚師/料理人 - 極簡黑白專業風格",
+            "🧁 烘焙師/甜點師 - 柔和奶油溫暖風格",
+            "☕ 咖啡師 - 極簡咖啡色調風格",
+            "🧶 編織創作者 - 溫暖大地色自然風格",
+            "🏺 陶藝家 - 質樸陶土色溫暖風格",
+            "💍 珠寶/飾品設計師 - 優雅金色點綴風格",
+            "👜 皮革工藝師 - 復古皮革色溫暖風格",
+            "🪵 木工/木藝師 - 自然木質色溫暖風格",
+            "🎨 藝術家 - 大膽黑白強烈對比風格",
+            "✏️ 插畫家 - 活潑繽紛創意風格",
+            "📷 攝影師 - 極簡純淨專業風格",
+            "🎯 設計師 - 現代科技感設計風格",
+            "🌸 花藝師 - 柔和玫瑰粉浪漫風格",
+            "🌿 園藝師 - 清新森林綠自然風格",
+            "💚 治療師/諮商師 - 平靜療癒綠色風格",
+            "🧘 瑜伽老師 - 寧靜冥想柔和風格",
+            "🏛️ 建築師 - 銳利專業黑白灰風格",
+            "🛋️ 室內設計師 - 優雅中性色調風格",
+            "🎵 音樂人 - 動感高對比個性風格",
+            "📝 作家/文字工作者 - 文藝書卷米白風格",
+            "📚 老師/講師 - 專業學院藍紫風格"
+          ]
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "title": "聯絡信箱",
+          "description": "📧 客戶可以透過這個信箱聯繫您",
+          "examples": [
+            "hello@example.com"
+          ]
+        },
+        "bio": {
+          "type": "string",
+          "title": "自我介紹",
+          "description": "📝 用一兩句話介紹自己",
+          "examples": [
+            "用雙手編織溫暖，每一針都是對生活的熱愛"
+          ]
+        },
+        "avatar": {
+          "type": "string",
+          "title": "大頭照路徑",
+          "description": "🖼️ 您的照片檔案路徑（放在 public/images/ 資料夾）",
+          "default": "/images/avatar.jpg"
+        },
+        "social": {
+          "type": "object",
+          "title": "社群連結",
+          "description": "🔗 填寫您的社群帳號網址，不用的留空即可",
+          "properties": {
+            "instagram": {
+              "type": "string",
+              "title": "Instagram",
+              "examples": [
+                "https://instagram.com/yourname"
+              ]
+            },
+            "pinterest": {
+              "type": "string",
+              "title": "Pinterest",
+              "examples": [
+                "https://pinterest.com/yourname"
+              ]
+            },
+            "etsy": {
+              "type": "string",
+              "title": "Etsy 商店",
+              "examples": [
+                "https://yourshop.etsy.com"
+              ]
+            },
+            "twitter": {
+              "type": "string",
+              "title": "Twitter / X"
+            },
+            "linkedin": {
+              "type": "string",
+              "title": "LinkedIn"
+            },
+            "youtube": {
+              "type": "string",
+              "title": "YouTube"
+            },
+            "tiktok": {
+              "type": "string",
+              "title": "TikTok"
+            },
+            "behance": {
+              "type": "string",
+              "title": "Behance"
+            },
+            "dribbble": {
+              "type": "string",
+              "title": "Dribbble"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "title": "🔍 搜尋引擎設定（建議填寫）",
+      "description": "這些設定會影響您的網站在 Google 搜尋結果中的顯示方式",
+      "properties": {
+        "siteTitle": {
+          "type": "string",
+          "title": "網站標題",
+          "description": "🏷️ 顯示在瀏覽器分頁和搜尋結果的標題",
+          "examples": [
+            "小美手作 | 編織藝術家"
+          ]
+        },
+        "siteDescription": {
+          "type": "string",
+          "title": "網站描述",
+          "description": "📄 搜尋結果中顯示的網站簡介（建議 50-160 字元）",
+          "maxLength": 160
+        },
+        "keywords": {
+          "type": "string",
+          "title": "關鍵字",
+          "description": "🔑 用逗號分隔的關鍵字"
+        },
+        "ogImage": {
+          "type": "string",
+          "title": "社群分享預覽圖",
+          "description": "🖼️ 社群分享時顯示的圖片",
+          "default": "/images/og-image.jpg"
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "title": "🎨 外觀主題（可選 - 進階用戶）",
+      "description": "💡 通常不需要填寫！系統會根據您的職業自動設定。只有想要覆蓋預設值時才需要填寫這裡。",
+      "properties": {
+        "primaryColor": {
+          "type": "string",
+          "format": "color",
+          "title": "主要顏色",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        },
+        "secondaryColor": {
+          "type": "string",
+          "format": "color",
+          "title": "次要顏色",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "format": "color",
+          "title": "背景顏色",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        },
+        "textColor": {
+          "type": "string",
+          "format": "color",
+          "title": "文字顏色",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        },
+        "mutedColor": {
+          "type": "string",
+          "format": "color",
+          "title": "淡化文字顏色",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        },
+        "fontFamily": {
+          "type": "string",
+          "title": "主要字體"
+        },
+        "headingFont": {
+          "type": "string",
+          "title": "標題字體"
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "title": "🖥️ 介面設定（可選 - 進階用戶）",
+      "description": "💡 通常不需要填寫！系統會根據您的職業自動設定。",
+      "properties": {
+        "layout": {
+          "type": "array",
+          "title": "首頁區塊順序",
+          "description": "可用區塊：Hero, Works, OtherWorks, About, Contact",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Hero",
+              "Works",
+              "OtherWorks",
+              "About",
+              "Contact",
+              "Gallery",
+              "Testimonials"
+            ]
+          }
+        },
+        "themePreset": {
+          "type": "string",
+          "title": "風格預設",
+          "enum": [
+            "default",
+            "minimal",
+            "soft",
+            "bold"
+          ]
+        },
+        "heroStyle": {
+          "type": "string",
+          "title": "首頁版型",
+          "enum": [
+            "split",
+            "centered",
+            "minimal"
+          ]
+        },
+        "showFooter": {
+          "type": "boolean",
+          "title": "顯示頁尾",
+          "default": true
+        },
+        "showSocialLinks": {
+          "type": "boolean",
+          "title": "顯示社群連結",
+          "default": true
+        },
+        "showOtherWorks": {
+          "type": "boolean",
+          "title": "顯示其他作品區",
+          "default": true
+        },
+        "navStyle": {
+          "type": "string",
+          "title": "導覽列樣式",
+          "enum": [
+            "default",
+            "minimal"
+          ]
+        },
+        "gridColumns": {
+          "type": "integer",
+          "title": "作品欄位數",
+          "enum": [
+            2,
+            3,
+            4
+          ]
+        },
+        "thumbnailRatio": {
+          "type": "string",
+          "title": "作品縮圖比例",
+          "enum": [
+            "4/3",
+            "3/2",
+            "16/9",
+            "1/1",
+            "4/5"
+          ]
+        },
+        "smoothScroll": {
+          "type": "boolean",
+          "title": "平滑捲動",
+          "default": true
+        },
+        "showBackToTop": {
+          "type": "boolean",
+          "title": "顯示回頂部按鈕",
+          "default": true
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "title": "📝 文案內容（可選）",
+      "description": "自訂網站各區塊顯示的文字",
+      "properties": {
+        "heroTitle": {
+          "type": "string",
+          "title": "首頁大標題"
+        },
+        "heroSubtitle": {
+          "type": "string",
+          "title": "首頁副標題"
+        },
+        "heroButtonText": {
+          "type": "string",
+          "title": "首頁按鈕文字",
+          "default": "瀏覽作品"
+        },
+        "aboutTitle": {
+          "type": "string",
+          "title": "關於我標題",
+          "default": "關於我"
+        },
+        "aboutContent": {
+          "type": "string",
+          "title": "關於我內容"
+        },
+        "worksTitle": {
+          "type": "string",
+          "title": "作品區標題",
+          "default": "作品集"
+        },
+        "otherWorksTitle": {
+          "type": "string",
+          "title": "其他作品區標題",
+          "default": "更多作品"
+        },
+        "contactTitle": {
+          "type": "string",
+          "title": "聯絡區標題",
+          "default": "聯絡我"
+        },
+        "contactMessage": {
+          "type": "string",
+          "title": "聯絡區說明"
+        },
+        "footerText": {
+          "type": "string",
+          "title": "頁尾文字"
+        },
+        "notFoundTitle": {
+          "type": "string",
+          "title": "404頁面標題"
+        },
+        "notFoundMessage": {
+          "type": "string",
+          "title": "404頁面訊息"
+        },
+        "notFoundButtonText": {
+          "type": "string",
+          "title": "404頁面按鈕",
+          "default": "回首頁"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

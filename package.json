@@ -1,13 +1,27 @@
 {
   "name": "independent_website_template",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "🧶 專為手作人設計的作品集網站模板 - 零代碼恐懼、極致容錯、即時反饋",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "node scripts/fix-config.js && node scripts/validate-config.js && vite build",
+    "fix": "node scripts/fix-config.js",
+    "preview": "vite preview",
+    "validate": "node scripts/validate-config.js",
+    "analyze-error": "node scripts/friendly-error-reporter.js",
+    "start": "npm run dev"
   },
+  "keywords": [
+    "portfolio",
+    "handmade",
+    "crafts",
+    "vue3",
+    "vite",
+    "tailwindcss",
+    "no-code"
+  ],
   "dependencies": {
     "vue": "^3.5.24",
     "vue-router": "^4.5.0"
@@ -16,7 +30,10 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.4",
+    "sharp": "^0.33.5",
+    "svgo": "^3.3.2",
     "tailwindcss": "^3.4.17",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-image-optimizer": "^1.1.8"
   }
 }

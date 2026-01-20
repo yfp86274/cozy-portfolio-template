@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CSS VARIABLES - These are set dynamically from site.config.js
+   CSS VARIABLES - These are set dynamically from site.config.json and presets
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
     /* Default fallback colors (will be overridden by theme.js) */
@@ -22,6 +22,52 @@
     /* Fonts (fallbacks) */
     --font-body: 'Inter', system-ui, sans-serif;
     --font-heading: 'Inter', system-ui, sans-serif;
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       PRESET VARIABLES - Set by presets.js, can be customized
+       ═══════════════════════════════════════════════════════════════════════ */
+
+    /* Border radius - controlled by preset */
+    --radius-none: 0px;
+    --radius-sm: 4px;
+    --radius-base: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* Shadows - controlled by preset */
+    --shadow-sm: 0 1px 2px rgb(var(--color-text) / 0.04);
+    --shadow-base: 0 4px 12px rgb(var(--color-text) / 0.06);
+    --shadow-md: 0 8px 24px rgb(var(--color-text) / 0.08);
+    --shadow-lg: 0 12px 40px rgb(var(--color-text) / 0.10);
+    --shadow-card: 0 10px 40px rgb(var(--color-text) / 0.05);
+
+    /* Borders - controlled by preset */
+    --border-width: 0px;
+    --border-color: transparent;
+
+    /* Spacing scale */
+    --spacing-scale: 1;
+
+    /* Typography adjustments */
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0.01em;
+    --letter-spacing-wide: 0.15em;
+
+    /* Transitions */
+    --transition-fast: 150ms;
+    --transition-base: 300ms;
+    --transition-slow: 500ms;
+
+    /* Card specific */
+    --card-padding: 1rem;
+    --card-gap: 1.5rem;
+
+    /* Button specific */
+    --button-radius: 4px;
+    --button-padding-x: 2rem;
+    --button-padding-y: 1rem;
 
     /* Animation timing */
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -127,6 +173,60 @@
    COMPONENT STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
 @layer components {
+    /* ═══════════════════════════════════════════════════════════════════════
+       THEME-AWARE UTILITIES - Use CSS variables from presets
+       ═══════════════════════════════════════════════════════════════════════ */
+    /* Rounded corners using preset variable */
+    .rounded-theme {
+        border-radius: var(--radius-base);
+    }
+
+    .rounded-theme-sm {
+        border-radius: var(--radius-sm);
+    }
+
+    .rounded-theme-md {
+        border-radius: var(--radius-md);
+    }
+
+    .rounded-theme-lg {
+        border-radius: var(--radius-lg);
+    }
+
+    .rounded-theme-xl {
+        border-radius: var(--radius-xl);
+    }
+
+    /* Card shadow using preset variable */
+    .card-shadow {
+        box-shadow: var(--shadow-card);
+    }
+
+    .shadow-theme {
+        box-shadow: var(--shadow-base);
+    }
+
+    .shadow-theme-sm {
+        box-shadow: var(--shadow-sm);
+    }
+
+    .shadow-theme-md {
+        box-shadow: var(--shadow-md);
+    }
+
+    .shadow-theme-lg {
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Border using preset variable */
+    .border-theme {
+        border-width: var(--border-width);
+        border-color: var(--border-color);
+        border-style: solid;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════ */
+
     /* Navigation link style */
     .nav-link {
         @apply relative text-xs tracking-[0.15em] uppercase text-muted
@@ -150,32 +250,30 @@
         @apply text-primary;
     }
 
-    /* Primary button style - uses theme colors */
+    /* Primary button style - uses theme colors and preset variables */
     .btn-primary {
         @apply inline-flex items-center justify-center
-        px-6 py-3 md:px-8 md:py-4
         text-xs tracking-[0.2em] uppercase font-medium
         bg-primary text-background border-2 border-primary
         hover:bg-transparent hover:text-primary
         active:scale-[0.98]
-        transition-all duration-300
-        min-h-[48px] min-w-[120px]
-        rounded-sm;
-        transition-timing-function: var(--ease-out-expo);
+        min-h-[48px] min-w-[120px];
+        padding: var(--button-padding-y) var(--button-padding-x);
+        border-radius: var(--button-radius);
+        transition: all var(--transition-base) var(--ease-out-expo);
     }
 
     /* Secondary button style */
     .btn-secondary {
         @apply inline-flex items-center justify-center
-        px-6 py-3 md:px-8 md:py-4
         text-xs tracking-[0.2em] uppercase font-medium
         bg-transparent text-primary border-2 border-primary
         hover:bg-primary hover:text-background
         active:scale-[0.98]
-        transition-all duration-300
-        min-h-[48px] min-w-[120px]
-        rounded-sm;
-        transition-timing-function: var(--ease-out-expo);
+        min-h-[48px] min-w-[120px];
+        padding: var(--button-padding-y) var(--button-padding-x);
+        border-radius: var(--button-radius);
+        transition: all var(--transition-base) var(--ease-out-expo);
     }
 
     /* Work card hover effect */
@@ -234,10 +332,9 @@
         @apply relative min-h-[44px] min-w-[44px] flex items-center justify-center;
     }
 
-    /* Card with subtle shadow */
+    /* Card with subtle shadow - uses preset shadow */
     .card-elevated {
-        box-shadow: 0 1px 3px rgb(var(--color-text) / 0.05),
-        0 10px 40px rgb(var(--color-text) / 0.05);
+        box-shadow: var(--shadow-card);
     }
 }
 

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪄 網站設定精靈 | Config Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;600&family=Amatic+SC:wght@700&family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        /* 預覽區字體 */
+        .preview-font-chef {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .preview-font-knitter {
+            font-family: 'Amatic SC', cursive;
+        }
+
+        .preview-font-potter {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .preview-font-photographer {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 動畫效果 */
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 選項卡片 */
+        .profession-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .profession-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .profession-card.selected {
+            ring: 2px;
+            ring-offset: 2px;
+        }
+
+        /* 輸入框聚焦效果 */
+        .input-elegant {
+            transition: all 0.2s ease;
+        }
+
+        .input-elegant:focus {
+            box-shadow: 0 0 0 3px rgba(139, 92, 42, 0.15);
+        }
+
+        /* 預覽區塊 */
+        .preview-hero {
+            transition: all 0.5s ease;
+        }
+
+        /* Toast */
+        .toast-success {
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        /* 流程指引箭頭 */
+        .flow-arrow {
+            width: 0;
+            height: 0;
+            border-left: 20px solid currentColor;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        /* 程式碼區塊 */
+        .code-block {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-stone-50 via-amber-50/30 to-orange-50/50 min-h-screen">
+
+<!-- 頂部流程指引 -->
+<header class="bg-white/90 backdrop-blur-md border-b border-amber-100 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+        <!-- 主標題 -->
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🪄</span>
+                <div>
+                    <h1 class="text-xl font-bold text-stone-800">網站設定精靈</h1>
+                    <p class="text-sm text-stone-500">三分鐘完成你的作品集網站</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 流程步驟 - 超大顯眼版 -->
+        <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 rounded-2xl p-1">
+            <div class="bg-white rounded-xl p-4">
+                <div class="grid grid-cols-4 gap-2 items-center">
+                    <!-- 步驟 1 -->
+                    <div class="flex items-center gap-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                            1
+                        </div>
+                        <div class="hidden sm:block">
+                            <p class="font-semibold text-stone-800">填寫表單</p>
+                            <p class="text-xs text-stone-500">選職業、填名字</p>
+                        </div>
+                    </div>
+
+                    <!-- 箭頭 -->
+                    <div class="flex justify-center">
+                        <svg class="w-8 h-8 text-amber-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/>
+                        </svg>
+                    </div>
+
+                    <!-- 步驟 2 -->
+                    <div class="flex items-center gap-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                            2
+                        </div>
+                        <div class="hidden sm:block">
+                            <p class="font-semibold text-stone-800">複製代碼</p>
+                            <p class="text-xs text-stone-500">點「複製」按鈕</p>
+                        </div>
+                    </div>
+
+                    <!-- 步驟 3 -->
+                    <div class="flex items-center gap-3 bg-rose-50 rounded-xl p-2 -m-2">
+                        <div class="flex-shrink-0 w-10 h-10 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                            3
+                        </div>
+                        <div class="hidden sm:block">
+                            <p class="font-semibold text-stone-800">貼到 GitHub</p>
+                            <p class="text-xs text-rose-600 font-medium">按 <kbd
+                                    class="bg-rose-200 px-1.5 py-0.5 rounded text-rose-700">.</kbd> 開編輯器</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid lg:grid-cols-2 gap-8">
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!-- 左側：表單區 -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <div class="space-y-6">
+
+            <!-- 🎭 身份選擇 - 最重要的區塊 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden">
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-6 border-b border-amber-100">
+                    <h2 class="text-xl font-bold text-stone-800 flex items-center gap-2">
+                        <span class="text-2xl">🎭</span>
+                        第一步：你是誰？
+                    </h2>
+                    <p class="text-stone-600 mt-1">選擇你的身份，網站會自動套用最適合的風格和配色</p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- 職業分類 -->
+                    <div id="professionGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <!-- 由 JavaScript 動態生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 👤 基本資料 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
+                <h3 class="text-lg font-semibold text-stone-800 mb-4 flex items-center gap-2">
+                    <span class="text-xl">👤</span> 你的資料
+                </h3>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            名字 / 品牌名
+                        </label>
+                        <input type="text" id="inputName"
+                               placeholder="例如：Emma、小美手作坊"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            你做什麼（頭銜）
+                        </label>
+                        <input type="text" id="inputRole"
+                               placeholder="例如：編織藝術家、手作甜點師"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            Email（選填）
+                        </label>
+                        <input type="email" id="inputEmail"
+                               placeholder="hello@example.com"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            自我介紹（選填）
+                        </label>
+                        <textarea id="inputBio" rows="3"
+                                  placeholder="簡單介紹你自己和你的創作理念..."
+                                  class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400 resize-none"
+                                  oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🔗 社群連結 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
+                <h3 class="text-lg font-semibold text-stone-800 mb-2 flex items-center gap-2">
+                    <span class="text-xl">🔗</span> 社群連結
+                </h3>
+                <p class="text-sm text-stone-500 mb-4">填入完整網址，留空的不會顯示</p>
+
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 text-center text-lg">📸</span>
+                        <input type="url" id="inputInstagram"
+                               placeholder="Instagram 網址"
+                               class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 text-center text-lg">🛒</span>
+                        <input type="url" id="inputEtsy"
+                               placeholder="Etsy 商店網址"
+                               class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 text-center text-lg">📌</span>
+                        <input type="url" id="inputPinterest"
+                               placeholder="Pinterest 網址"
+                               class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 text-center text-lg">🎬</span>
+                        <input type="url" id="inputYoutube"
+                               placeholder="YouTube 網址"
+                               class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
+                               oninput="updatePreview()">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🔍 SEO 設定（折疊） -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden">
+                <button onclick="toggleSEO()"
+                        class="w-full p-6 flex items-center justify-between hover:bg-stone-50 transition-colors">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🔍</span>
+                        <span class="font-semibold text-stone-800">SEO 設定（進階）</span>
+                    </div>
+                    <svg id="seoArrow" class="w-5 h-5 text-stone-400 transition-transform" fill="none"
+                         stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div id="seoContent" class="hidden px-6 pb-6 space-y-4 fade-in">
+                    <p class="text-sm text-stone-500">這些設定會影響 Google 搜尋結果的顯示（留空會自動生成）</p>
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">網站標題</label>
+                        <input type="text" id="inputSiteTitle"
+                               placeholder="會自動根據你的名字生成"
+                               class="input-elegant w-full px-4 py-2.5 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">網站描述</label>
+                        <textarea id="inputSiteDescription" rows="2"
+                                  placeholder="簡短描述你的網站"
+                                  class="input-elegant w-full px-4 py-2.5 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400 resize-none"
+                                  oninput="updatePreview()"></textarea>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!-- 右側：即時預覽 + 輸出區 -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <div class="space-y-6 lg:sticky lg:top-32 lg:self-start">
+
+            <!-- 🎨 即時預覽 -->
+            <section class="bg-white rounded-3xl shadow-lg border border-stone-200 overflow-hidden">
+                <div class="bg-stone-800 px-4 py-2 flex items-center gap-2">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                    <span class="text-stone-400 text-xs ml-2">即時預覽</span>
+                </div>
+
+                <!-- 預覽畫面 -->
+                <div id="previewHero"
+                     class="preview-hero p-8 min-h-[280px] flex flex-col justify-center items-center text-center transition-all duration-500"
+                     style="background-color: #fdf6ec;">
+                    <h2 id="previewName" class="text-3xl font-bold mb-2 transition-all duration-300"
+                        style="color: #5c4033;">
+                        你的名字
+                    </h2>
+                    <p id="previewRole" class="text-lg mb-4 transition-all duration-300" style="color: #8b7355;">
+                        你的職業
+                    </p>
+                    <div id="previewBio" class="text-sm max-w-md opacity-70 transition-all duration-300"
+                         style="color: #5c4033;">
+                        在這裡介紹你自己...
+                    </div>
+
+                    <!-- 風格標籤 -->
+                    <div id="previewStyleTag"
+                         class="mt-6 px-4 py-2 rounded-full text-xs font-medium transition-all duration-300"
+                         style="background-color: rgba(92, 64, 51, 0.1); color: #5c4033;">
+                        🧶 編織風格 - 溫暖有機
+                    </div>
+                </div>
+            </section>
+
+            <!-- 📋 JSON 輸出 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
+                <div class="flex items-center justify-between p-4 bg-stone-50 border-b border-stone-200">
+                    <span class="font-medium text-stone-700">📋 設定代碼</span>
+                    <button onclick="copyConfig()"
+                            class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all active:scale-95">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        複製設定代碼
+                    </button>
+                </div>
+                <div class="bg-stone-900 p-4 max-h-[300px] overflow-auto">
+                    <pre id="configOutput" class="code-block text-emerald-400 whitespace-pre-wrap text-sm"></pre>
+                </div>
+            </section>
+
+            <!-- 📖 下一步提示 -->
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-5">
+                <div class="flex gap-4">
+                    <span class="text-3xl">📖</span>
+                    <div>
+                        <h4 class="font-bold text-blue-900 mb-2">複製後怎麼做？</h4>
+                        <ol class="text-sm text-blue-800 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                <span>打開你的 GitHub 倉庫頁面</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                <span>按鍵盤上的 <kbd
+                                        class="bg-blue-200 px-2 py-0.5 rounded font-mono font-bold">.</kbd> 鍵（開啟網頁編輯器）</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                <span>找到 <code
+                                        class="bg-blue-100 px-1.5 rounded">site.config.json</code> 並打開</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+                                <span>全選（Ctrl+A）→ 貼上（Ctrl+V）→ 儲存</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Toast 通知 -->
+<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div class="toast-success bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span class="font-medium">已複製！現在去 GitHub 貼上吧 ✨</span>
+    </div>
+</div>
+
+<script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 職業數據（與 professionMap.js 同步）
+    // ════════════════════════════════════════════════════════════════════════
+
+    const professions = [
+        // 餐飲類
+        {
+            id: 'chef',
+            emoji: '🍳',
+            label: '廚師',
+            category: 'food',
+            colors: {bg: '#fafafa', text: '#0a0a0a', muted: '#757575', accent: '#c9a87c'},
+            fontClass: 'preview-font-chef',
+            styleLabel: '米其林風格 - 極簡高對比'
+        },
+        {
+            id: 'baker',
+            emoji: '🧁',
+            label: '烘焙師',
+            category: 'food',
+            colors: {bg: '#fefae0', text: '#6c584c', muted: '#a98467', accent: '#d4a373'},
+            fontClass: '',
+            styleLabel: '甜點風格 - 奶油溫暖'
+        },
+        {
+            id: 'barista',
+            emoji: '☕',
+            label: '咖啡師',
+            category: 'food',
+            colors: {bg: '#f5f1eb', text: '#2c1810', muted: '#6b5344', accent: '#8b5a2b'},
+            fontClass: '',
+            styleLabel: '咖啡風格 - 沉穩專業'
+        },
+
+        // 手作類
+        {
+            id: 'knitter',
+            emoji: '🧶',
+            label: '編織',
+            category: 'craft',
+            colors: {bg: '#fdf6ec', text: '#5c4033', muted: '#8b7355', accent: '#a0785a'},
+            fontClass: 'preview-font-knitter',
+            styleLabel: '編織風格 - 溫暖有機'
+        },
+        {
+            id: 'potter',
+            emoji: '🏺',
+            label: '陶藝',
+            category: 'craft',
+            colors: {bg: '#efebe9', text: '#4e342e', muted: '#8d6e63', accent: '#8d6e63'},
+            fontClass: 'preview-font-potter',
+            styleLabel: '陶藝風格 - 大地質感'
+        },
+        {
+            id: 'jeweler',
+            emoji: '💍',
+            label: '珠寶',
+            category: 'craft',
+            colors: {bg: '#fafafa', text: '#1a1a2e', muted: '#6c6c6c', accent: '#c9b037'},
+            fontClass: '',
+            styleLabel: '珠寶風格 - 奢華精緻'
+        },
+        {
+            id: 'leatherworker',
+            emoji: '👜',
+            label: '皮革',
+            category: 'craft',
+            colors: {bg: '#f5f0e8', text: '#2d1f12', muted: '#7a6552', accent: '#3d2914'},
+            fontClass: '',
+            styleLabel: '皮革風格 - 職人手感'
+        },
+        {
+            id: 'woodworker',
+            emoji: '🪵',
+            label: '木工',
+            category: 'craft',
+            colors: {bg: '#faf8f5', text: '#3e2723', muted: '#8d6e63', accent: '#5d4037'},
+            fontClass: '',
+            styleLabel: '木工風格 - 自然溫潤'
+        },
+
+        // 藝術類
+        {
+            id: 'artist',
+            emoji: '🎨',
+            label: '藝術家',
+            category: 'art',
+            colors: {bg: '#ffffff', text: '#000000', muted: '#757575', accent: '#ff3d00'},
+            fontClass: '',
+            styleLabel: '藝術風格 - 大膽前衛'
+        },
+        {
+            id: 'illustrator',
+            emoji: '✏️',
+            label: '插畫',
+            category: 'art',
+            colors: {bg: '#fafafa', text: '#37474f', muted: '#78909c', accent: '#5c6bc0'},
+            fontClass: '',
+            styleLabel: '插畫風格 - 活潑可愛'
+        },
+        {
+            id: 'photographer',
+            emoji: '📷',
+            label: '攝影',
+            category: 'art',
+            colors: {bg: '#fafafa', text: '#212121', muted: '#9e9e9e', accent: '#424242'},
+            fontClass: 'preview-font-photographer',
+            styleLabel: '攝影風格 - 純粹俐落'
+        },
+        {
+            id: 'designer',
+            emoji: '🎯',
+            label: '設計師',
+            category: 'art',
+            colors: {bg: '#f0f4f8', text: '#1a202c', muted: '#718096', accent: '#0066ff'},
+            fontClass: '',
+            styleLabel: '設計風格 - 現代科技'
+        },
+
+        // 自然類
+        {
+            id: 'florist',
+            emoji: '🌸',
+            label: '花藝',
+            category: 'nature',
+            colors: {bg: '#fdf8f5', text: '#5d4e60', muted: '#9a8f97', accent: '#c48b9f'},
+            fontClass: '',
+            styleLabel: '花藝風格 - 柔美浪漫'
+        },
+        {
+            id: 'gardener',
+            emoji: '🌿',
+            label: '園藝',
+            category: 'nature',
+            colors: {bg: '#f1faee', text: '#1b4332', muted: '#52796f', accent: '#2d6a4f'},
+            fontClass: '',
+            styleLabel: '園藝風格 - 自然清新'
+        },
+
+        // 療癒類
+        {
+            id: 'therapist',
+            emoji: '💚',
+            label: '治療師',
+            category: 'wellness',
+            colors: {bg: '#f5f7f4', text: '#3d4a3f', muted: '#7d8a7e', accent: '#5f7161'},
+            fontClass: '',
+            styleLabel: '療癒風格 - 平靜放鬆'
+        },
+        {
+            id: 'yoga',
+            emoji: '🧘',
+            label: '瑜伽',
+            category: 'wellness',
+            colors: {bg: '#f8f4f0', text: '#4a4a4a', muted: '#8a857e', accent: '#9d8189'},
+            fontClass: '',
+            styleLabel: '瑜伽風格 - 寧靜冥想'
+        },
+        {
+            id: 'teacher',
+            emoji: '📚',
+            label: '老師',
+            category: 'education',
+            colors: {bg: '#f5f7ff', text: '#1a237e', muted: '#7986cb', accent: '#3949ab'},
+            fontClass: '',
+            styleLabel: '教育風格 - 知性專業'
+        },
+        {
+            id: 'writer',
+            emoji: '📝',
+            label: '作家',
+            category: 'writing',
+            colors: {bg: '#fffef8', text: '#2d2d2d', muted: '#6b6b6b', accent: '#3d3d3d'},
+            fontClass: '',
+            styleLabel: '文字風格 - 書卷優雅'
+        },
+
+        // 空間類
+        {
+            id: 'architect',
+            emoji: '🏛️',
+            label: '建築',
+            category: 'space',
+            colors: {bg: '#ffffff', text: '#1a1a1a', muted: '#666666', accent: '#1a1a1a'},
+            fontClass: '',
+            styleLabel: '建築風格 - 銳利結構'
+        },
+        {
+            id: 'interior',
+            emoji: '🛋️',
+            label: '室內',
+            category: 'space',
+            colors: {bg: '#f8f6f3', text: '#2d2d2d', muted: '#8a8a8a', accent: '#4a4a4a'},
+            fontClass: '',
+            styleLabel: '室內風格 - 簡約生活'
+        },
+
+        // 音樂類
+        {
+            id: 'musician',
+            emoji: '🎵',
+            label: '音樂',
+            category: 'music',
+            colors: {bg: '#fafafa', text: '#1a1a1a', muted: '#757575', accent: '#ff1744'},
+            fontClass: '',
+            styleLabel: '音樂風格 - 動感活力'
+        },
+    ];
+
+    // 當前選中的職業
+    let selectedProfession = 'knitter';
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 初始化
+    // ════════════════════════════════════════════════════════════════════════
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderProfessionGrid();
+        updatePreview();
+    });
+
+    // 渲染職業選擇網格
+    function renderProfessionGrid() {
+        const grid = document.getElementById('professionGrid');
+
+        grid.innerHTML = professions.map(p => `
+            <div onclick="selectProfession('${p.id}')"
+                 id="card-${p.id}"
+                 class="profession-card p-4 rounded-2xl border-2 transition-all ${p.id === selectedProfession ? 'border-amber-400 bg-amber-50' : 'border-stone-100 bg-white hover:border-stone-200'}">
+                <div class="text-2xl mb-1">${p.emoji}</div>
+                <div class="font-medium text-stone-800 text-sm">${p.label}</div>
+            </div>
+        `).join('');
+    }
+
+    // 選擇職業
+    function selectProfession(id) {
+        selectedProfession = id;
+        renderProfessionGrid();
+        updatePreview();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 更新預覽
+    // ════════════════════════════════════════════════════════════════════════
+
+    function updatePreview() {
+        const name = document.getElementById('inputName').value.trim() || '你的名字';
+        const role = document.getElementById('inputRole').value.trim() || '你的職業';
+        const bio = document.getElementById('inputBio').value.trim() || '在這裡介紹你自己...';
+
+        const profession = professions.find(p => p.id === selectedProfession);
+
+        // 更新預覽區
+        const hero = document.getElementById('previewHero');
+        const previewName = document.getElementById('previewName');
+        const previewRole = document.getElementById('previewRole');
+        const previewBio = document.getElementById('previewBio');
+        const styleTag = document.getElementById('previewStyleTag');
+
+        // 套用顏色
+        hero.style.backgroundColor = profession.colors.bg;
+        previewName.style.color = profession.colors.text;
+        previewRole.style.color = profession.colors.muted;
+        previewBio.style.color = profession.colors.text;
+        styleTag.style.backgroundColor = profession.colors.accent + '20';
+        styleTag.style.color = profession.colors.accent;
+
+        // 套用字體類別
+        previewName.className = `text-3xl font-bold mb-2 transition-all duration-300 ${profession.fontClass}`;
+
+        // 更新文字
+        previewName.textContent = name;
+        previewRole.textContent = role;
+        previewBio.textContent = bio;
+        styleTag.innerHTML = `${profession.emoji} ${profession.styleLabel}`;
+
+        // 更新 JSON 輸出
+        updateConfigOutput();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 生成配置
+    // ════════════════════════════════════════════════════════════════════════
+
+    function generateConfig() {
+        const name = document.getElementById('inputName').value.trim();
+        const role = document.getElementById('inputRole').value.trim();
+        const email = document.getElementById('inputEmail').value.trim();
+        const bio = document.getElementById('inputBio').value.trim();
+
+        const instagram = document.getElementById('inputInstagram').value.trim();
+        const etsy = document.getElementById('inputEtsy').value.trim();
+        const pinterest = document.getElementById('inputPinterest').value.trim();
+        const youtube = document.getElementById('inputYoutube').value.trim();
+
+        const siteTitle = document.getElementById('inputSiteTitle').value.trim();
+        const siteDescription = document.getElementById('inputSiteDescription').value.trim();
+
+        // 建構精簡配置
+        const config = {
+            profile: {
+                name: name || '我的名字',
+                role: role || '創作者',
+                profession: selectedProfession
+            },
+            seo: {}
+        };
+
+        // 只加入有值的欄位
+        if (email) config.profile.email = email;
+        if (bio) config.profile.bio = bio;
+
+        // 社群連結
+        const social = {};
+        if (instagram) social.instagram = instagram;
+        if (etsy) social.etsy = etsy;
+        if (pinterest) social.pinterest = pinterest;
+        if (youtube) social.youtube = youtube;
+
+        if (Object.keys(social).length > 0) {
+            config.profile.social = social;
+        }
+
+        // SEO
+        config.seo.siteTitle = siteTitle || `${name || '我的'} | 作品集`;
+        if (siteDescription) config.seo.siteDescription = siteDescription;
+
+        return config;
+    }
+
+    function updateConfigOutput() {
+        const config = generateConfig();
+        document.getElementById('configOutput').textContent = JSON.stringify(config, null, 2);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // 複製功能
+    // ════════════════════════════════════════════════════════════════════════
+
+    async function copyConfig() {
+        const config = generateConfig();
+        const jsonString = JSON.stringify(config, null, 2);
+
+        try {
+            await navigator.clipboard.writeText(jsonString);
+            showToast();
+        } catch (err) {
+            // 舊瀏覽器的備用方案
+            const textarea = document.createElement('textarea');
+            textarea.value = jsonString;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast();
+        }
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    // SEO 區塊折疊
+    // ════════════════════════════════════════════════════════════════════════
+
+    function toggleSEO() {
+        const content = document.getElementById('seoContent');
+        const arrow = document.getElementById('seoArrow');
+
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            content.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+</script>
+</body>
+</html>

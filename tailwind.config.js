@@ -43,17 +43,47 @@ export default {
                     900: '#171717',
                 }
             },
+            // ═══════════════════════════════════════════════════════════════════
+            // PRESET-AWARE CONFIGURATIONS
+            // These use CSS variables that are set by the preset system
+            // ═══════════════════════════════════════════════════════════════════
+            borderRadius: {
+                'theme-none': 'var(--radius-none)',
+                'theme-sm': 'var(--radius-sm)',
+                'theme': 'var(--radius-base)',
+                'theme-md': 'var(--radius-md)',
+                'theme-lg': 'var(--radius-lg)',
+                'theme-xl': 'var(--radius-xl)',
+                'theme-full': 'var(--radius-full)',
+            },
+            boxShadow: {
+                'theme-sm': 'var(--shadow-sm)',
+                'theme': 'var(--shadow-base)',
+                'theme-md': 'var(--shadow-md)',
+                'theme-lg': 'var(--shadow-lg)',
+                'theme-card': 'var(--shadow-card)',
+            },
+            borderWidth: {
+                'theme': 'var(--border-width)',
+            },
             transitionDuration: {
+                'theme-fast': 'var(--transition-fast)',
+                'theme': 'var(--transition-base)',
+                'theme-slow': 'var(--transition-slow)',
                 '400': '400ms',
                 '600': '600ms',
                 '700': '700ms',
             },
-            transitionTimingFunction: {
-                'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
-            },
             letterSpacing: {
+                'theme-tight': 'var(--letter-spacing-tight)',
+                'theme-normal': 'var(--letter-spacing-normal)',
+                'theme-wide': 'var(--letter-spacing-wide)',
                 'widest': '0.2em',
                 'wider': '0.1em',
+            },
+            // ═══════════════════════════════════════════════════════════════════
+            transitionTimingFunction: {
+                'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
             },
             animation: {
                 'fade-in': 'fadeIn 0.5s ease-out forwards',

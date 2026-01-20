@@ -12,16 +12,46 @@ const {theme, content} = useConfig()
 // Page load state
 const isLoaded = ref(false)
 
-// Get current work data
-const currentWork = computed(() => getWorkBySlug(route.params.slug))
-const workImages = computed(() => getWorkImages(route.params.slug))
-const otherWorks = computed(() => getOtherWorks(route.params.slug, 3))
+// Get current work data with safe access (防止 undefined 錯誤)
+const currentWork = computed(() => {
+  try {
+    return getWorkBySlug(route.params.slug) || null
+  } catch (e) {
+    console.warn('Error loading work:', e)
+    return null
+  }
+})
+
+// Safe computed properties that check for currentWork existence
+const workImages = computed(() => {
+  if (!currentWork.value) return []
+  try {
+    return getWorkImages(route.params.slug) || []
+  } catch (e) {
+    return []
+  }
+})
+
+const otherWorks = computed(() => {
+  if (!currentWork.value) return []
+  try {
+    return getOtherWorks(route.params.slug, 3) || []
+  } catch (e) {
+    return []
+  }
+})
+
+// 🆕 Check if current work has a description (from readme.md or description.txt)
+const hasDescription = computed(() => {
+  return currentWork.value?.description && currentWork.value.description.trim().length > 0
+})
 
 // Generate placeholder for missing images
 const placeholderBg = computed(() => getPlaceholderImage(theme.backgroundColor, 400, 300))
 
-// Navigation between works
+// Navigation between works (with safe access)
 const currentIndex = computed(() => {
+  if (!route.params.slug) return -1
   return navItems.value.findIndex(item => item.slug === route.params.slug)
 })
 
@@ -33,7 +63,7 @@ const prevWork = computed(() => {
 })
 
 const nextWork = computed(() => {
-  if (currentIndex.value < navItems.value.length - 1) {
+  if (currentIndex.value >= 0 && currentIndex.value < navItems.value.length - 1) {
     return navItems.value[currentIndex.value + 1]
   }
   return null
@@ -91,6 +121,18 @@ onMounted(() => {
             >
               {{ currentWork.name }}
             </h1>
+
+            <!-- 🆕 Description Section (from readme.md or description.txt) -->
+            <div
+                v-if="hasDescription"
+                class="mt-6 md:mt-8"
+                :class="{ 'animate-slide-up-delay-2': isLoaded }"
+            >
+              <p
+                  class="text-muted text-sm md:text-base leading-relaxed whitespace-pre-wrap"
+                  style="max-width: 65ch;"
+              >{{ currentWork.description }}</p>
+            </div>
           </div>
         </div>
       </section>

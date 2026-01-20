@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import DetailView from '@/views/DetailView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const router = createRouter({
     // 使用 import.meta.env.BASE_URL 來自動獲取 vite.config.js 中設置的 base
@@ -17,10 +18,11 @@ const router = createRouter({
             component: DetailView,
             props: true
         },
-        // 404 頁面重定向到首頁
+        // 404 頁面 - 情感化的找不到頁面
         {
             path: '/:pathMatch(.*)*',
-            redirect: '/'
+            name: 'not-found',
+            component: NotFoundView
         }
     ],
     scrollBehavior(to, from, savedPosition) {

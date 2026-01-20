@@ -1,0 +1,19 @@
+{
+  "profile": {
+    "name": "Emma Woolcraft",
+    "role": "Fiber Artist & Knitting Designer",
+    "profession": "knitter",
+    "email": "hello@emmawoolcraft.com",
+    "bio": "Creating warmth through handcrafted knits and sustainable fiber art.",
+    "social": {
+      "instagram": "https://instagram.com/emmawoolcraft",
+      "pinterest": "https://pinterest.com/emmawoolcraft",
+      "etsy": "https://emmawoolcraft.etsy.com"
+    }
+  },
+  "seo": {
+    "siteTitle": "Emma Woolcraft | Fiber Artist",
+    "siteDescription": "Handcrafted knitting designs and sustainable fiber art by Emma Woolcraft.",
+    "keywords": "knitting, fiber art, sustainable fashion, handmade, wool"
+  }
+}

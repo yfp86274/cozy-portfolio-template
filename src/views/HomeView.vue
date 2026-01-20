@@ -1,316 +1,194 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue'
-import {RouterLink} from 'vue-router'
-import {usePortfolio} from '@/composables/usePortfolio'
+/**
+ * HomeView - 首頁
+ *
+ * 使用動態佈局系統，根據 ui.layout 配置渲染不同的區塊組件。
+ * 支援自訂區塊順序，讓用戶可以依需求調整頁面結構。
+ *
+ * 預設佈局：['Hero', 'Works', 'OtherWorks']
+ *
+ * 可用區塊：
+ * - Hero: 主視覺區塊（標題、副標題、CTA）
+ * - Works: 作品展示格線
+ * - OtherWorks: 其他作品區塊
+ * - About: 關於我（詳細自介）
+ * - Contact: 聯絡資訊
+ *
+ * 使用方式：
+ * 在 site.config.json 的 ui.layout 設定區塊順序：
+ * "layout": ["Hero", "About", "Works", "Contact"]
+ */
+
+import {computed, defineAsyncComponent, markRaw} from 'vue'
 import {useConfig} from '@/composables/useConfig'
-import {getPlaceholderImage} from '@/utils/theme'
 
-const {worksWithCovers, getOtherWorks} = usePortfolio()
-const {ui, content, profile, theme, getGridClass, getAspectClass, isEnabled} = useConfig()
+// ═══════════════════════════════════════════════════════════════════════════
+// 動態載入區塊組件
+// 使用 defineAsyncComponent 進行懶載入，優化初始載入效能
+// ═══════════════════════════════════════════════════════════════════════════
 
-// Hero image handling with fallback
-const heroImageError = ref(false)
-const isLoaded = ref(false)
-const heroImageModules = import.meta.glob('@/assets/hero.{png,jpg,jpeg,webp}', {eager: true, import: 'default'})
-const heroImageUrl = Object.values(heroImageModules)[0] || null
+const sectionComponentMap = {
+  Hero: markRaw(
+      defineAsyncComponent(() => import('@/components/sections/SectionHero.vue'))
+  ),
+  Works: markRaw(
+      defineAsyncComponent(() => import('@/components/sections/SectionWorks.vue'))
+  ),
+  OtherWorks: markRaw(
+      defineAsyncComponent(() =>
+          import('@/components/sections/SectionOtherWorks.vue')
+      )
+  ),
+  About: markRaw(
+      defineAsyncComponent(() => import('@/components/sections/SectionAbout.vue'))
+  ),
+  Contact: markRaw(
+      defineAsyncComponent(() =>
+          import('@/components/sections/SectionContact.vue')
+      )
+  ),
+  // 預留未來擴展
+  // Gallery: markRaw(
+  //   defineAsyncComponent(() => import('@/components/sections/SectionGallery.vue'))
+  // ),
+  // Testimonials: markRaw(
+  //   defineAsyncComponent(() => import('@/components/sections/SectionTestimonials.vue'))
+  // ),
+}
 
-// Get other works for the "Other Works" section
-const otherWorks = computed(() => getOtherWorks('', 2))
+// 所有可用的區塊名稱
+const AVAILABLE_SECTIONS = Object.keys(sectionComponentMap)
 
-// Get grid and aspect classes
-const gridClass = getGridClass()
-const aspectClass = getAspectClass()
+// 預設佈局（當用戶沒有設定 layout 時使用）
+const DEFAULT_LAYOUT = ['Hero', 'Works', 'OtherWorks']
 
-// Generate placeholder for missing images
-const placeholderBg = computed(() => getPlaceholderImage(theme.backgroundColor, 400, 300))
+// ═══════════════════════════════════════════════════════════════════════════
+// Composables
+// ═══════════════════════════════════════════════════════════════════════════
+const {getLayout, currentProfession, hasProfession} = useConfig()
 
-// Hero image with fallback to placeholder
-const heroImage = computed(() => {
-  if (heroImageError.value || !heroImageUrl) {
-    return placeholderBg.value
+// ═══════════════════════════════════════════════════════════════════════════
+// 動態佈局計算
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 取得有效的佈局配置
+ * 過濾掉不存在的區塊，並確保至少有一個區塊
+ */
+const validatedLayout = computed(() => {
+  const layout = getLayout()
+
+  // 如果沒有設定或為空陣列，使用預設佈局
+  if (!layout || !Array.isArray(layout) || layout.length === 0) {
+    return DEFAULT_LAYOUT
   }
-  return heroImageUrl
-})
 
-// Smooth scroll to works section
-const scrollToWorks = () => {
-  const worksSection = document.getElementById('works')
-  if (worksSection) {
-    worksSection.scrollIntoView({behavior: 'smooth'})
-  }
-}
-
-// Handle image error - use placeholder
-const handleImageError = (event) => {
-  event.target.src = placeholderBg.value
-  event.target.classList.add('placeholder-image')
-}
-
-// Handle hero image error
-const handleHeroError = () => {
-  heroImageError.value = true
-}
-
-// Trigger load animation
-onMounted(() => {
-  requestAnimationFrame(() => {
-    isLoaded.value = true
+  // 過濾掉不支援的區塊
+  const validLayout = layout.filter((sectionName) => {
+    const isValid = AVAILABLE_SECTIONS.includes(sectionName)
+    if (!isValid && import.meta.env.DEV) {
+      console.warn(
+          `[HomeView] 未知的區塊名稱: "${sectionName}"，已略過。可用的區塊: ${AVAILABLE_SECTIONS.join(', ')}`
+      )
+    }
+    return isValid
   })
+
+  // 如果過濾後為空，返回預設佈局
+  return validLayout.length > 0 ? validLayout : DEFAULT_LAYOUT
 })
+
+/**
+ * 根據配置生成要渲染的區塊列表
+ * 每個區塊包含：
+ * - key: 唯一識別碼（用於 Vue 的 key）
+ * - name: 區塊名稱
+ * - component: Vue 組件
+ */
+const layoutSections = computed(() => {
+  return validatedLayout.value
+      .map((sectionName, index) => {
+        const component = sectionComponentMap[sectionName]
+
+        if (!component) {
+          // 這理論上不應該發生（因為 validatedLayout 已經過濾過）
+          return null
+        }
+
+        return {
+          key: `${sectionName}-${index}`,
+          name: sectionName,
+          component,
+        }
+      })
+      .filter(Boolean)
+})
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 開發模式調試資訊
+// ═══════════════════════════════════════════════════════════════════════════
+if (import.meta.env.DEV) {
+  console.log('🏠 HomeView 初始化')
+  console.log('📐 Layout:', validatedLayout.value)
+  console.log('🧩 可用區塊:', AVAILABLE_SECTIONS)
+
+  if (hasProfession()) {
+    console.log('👤 職業:', currentProfession.value.label)
+    console.log('🎨 職業預設:', currentProfession.value.config?.preset)
+  }
+}
 </script>
 
 <template>
   <main>
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         HERO SECTION - Split Layout (heroStyle: 'split')
-         ═══════════════════════════════════════════════════════════════════════ -->
-    <section
-        v-if="ui.heroStyle === 'split'"
-        class="relative min-h-[100svh] flex items-center pt-20 md:pt-0"
-    >
-      <div class="content-container w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <!-- Text Content -->
-          <div class="order-2 lg:order-1 py-6 md:py-8 lg:py-16">
-            <span
-                class="text-[11px] md:text-xs tracking-[0.25em] uppercase text-muted block mb-3 md:mb-4"
-                :class="{ 'animate-slide-up': isLoaded }"
-            >
-              {{ profile.role }}
-            </span>
-            <h1
-                class="font-heading text-primary mb-4 md:mb-6 text-balance"
-                :class="{ 'animate-slide-up-delay-1': isLoaded }"
-            >
-              {{ content.heroTitle }}
-            </h1>
-            <p
-                class="text-muted text-base md:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg text-pretty"
-                :class="{ 'animate-slide-up-delay-2': isLoaded }"
-            >
-              {{ content.heroSubtitle }}
-            </p>
-            <div :class="{ 'animate-slide-up-delay-2': isLoaded }">
-              <button
-                  @click="scrollToWorks"
-                  class="btn-primary"
-              >
-                {{ content.heroButtonText }}
-              </button>
-            </div>
-          </div>
+    <!--
+      動態佈局渲染
+      根據 ui.layout 配置的順序渲染區塊組件
+      使用 Suspense 處理非同步組件的載入狀態
+    -->
+    <Suspense>
+      <template #default>
+        <template v-for="section in layoutSections" :key="section.key">
+          <component :is="section.component"/>
+        </template>
+      </template>
 
-          <!-- Hero Image -->
-          <div class="order-1 lg:order-2">
-            <div
-                class="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-square bg-background-alt overflow-hidden rounded-lg"
-                :class="{ 'card-appear': isLoaded }"
-            >
-              <img
-                  :src="heroImage"
-                  alt="Portfolio Hero"
-                  class="w-full h-full object-cover"
-                  @error="handleImageError"
-              />
+      <template #fallback>
+        <div class="min-h-screen flex items-center justify-center">
+          <div class="text-center text-muted">
+            <div class="animate-pulse">
+              <div class="w-8 h-8 mx-auto mb-4 rounded-full bg-primary/20"></div>
+              <p class="text-sm">載入中...</p>
             </div>
           </div>
         </div>
-      </div>
+      </template>
+    </Suspense>
 
-      <!-- Scroll indicator (mobile only) -->
-      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 lg:hidden">
-        <button
-            @click="scrollToWorks"
-            class="flex flex-col items-center gap-2 text-muted/50 animate-pulse-soft"
-            aria-label="Scroll to works"
-        >
-          <span class="text-[10px] tracking-[0.2em] uppercase">Scroll</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         HERO SECTION - Centered Layout (heroStyle: 'centered')
-         ═══════════════════════════════════════════════════════════════════════ -->
-    <section
-        v-else-if="ui.heroStyle === 'centered'"
-        class="relative min-h-[100svh] flex items-center justify-center pt-20 md:pt-24 pb-8"
+    <!--
+      如果沒有任何區塊（極端情況），顯示提示
+      這通常只在配置完全錯誤時才會出現
+    -->
+    <div
+        v-if="layoutSections.length === 0"
+        class="min-h-screen flex items-center justify-center"
     >
-      <div class="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-12">
-        <div
-            class="relative w-full bg-background-alt flex items-center justify-center rounded-lg overflow-hidden"
-            :class="{ 'card-appear': isLoaded }"
-        >
-          <!-- Hero Image -->
-          <img
-              :src="heroImage"
-              alt="Portfolio Hero"
-              class="w-full h-auto max-h-[calc(100svh-8rem)] object-contain"
-              @error="handleImageError"
-          />
-
-          <!-- Overlay Gradient for Text Readability - Enhanced for mobile -->
-          <div class="absolute inset-0 hero-overlay pointer-events-none"></div>
-
-          <!-- Text Overlay -->
-          <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-12">
-            <span
-                class="text-[10px] md:text-xs tracking-[0.25em] uppercase text-muted block mb-2"
-                :class="{ 'animate-slide-up': isLoaded }"
-            >
-              {{ profile.role }}
-            </span>
-            <h1
-                class="font-heading text-primary text-xl sm:text-2xl md:text-4xl lg:text-5xl mb-4 text-balance"
-                :class="{ 'animate-slide-up-delay-1': isLoaded }"
-            >
-              {{ content.heroTitle }}
-            </h1>
-          </div>
-
-          <!-- View Portfolio Button -->
-          <div :class="{ 'animate-slide-up-delay-2': isLoaded }">
-            <button
-                @click="scrollToWorks"
-                class="absolute bottom-4 right-4 md:bottom-8 md:right-8 btn-primary text-[10px] md:text-xs"
-            >
-              {{ content.heroButtonText }}
-            </button>
-          </div>
+      <div class="text-center text-muted max-w-md px-6">
+        <div class="text-4xl mb-4">🏗️</div>
+        <h2 class="text-lg font-medium mb-2">尚未設定頁面佈局</h2>
+        <p class="text-sm mb-4">
+          請在 site.config.json 的 ui.layout 中設定要顯示的區塊
+        </p>
+        <div class="text-left bg-background-alt rounded-lg p-4 text-xs font-mono">
+          <p class="text-muted mb-2">// 範例設定：</p>
+          <p>"ui": {</p>
+          <p class="pl-4">"layout": ["Hero", "Works", "OtherWorks"]</p>
+          <p>}</p>
         </div>
+        <p class="text-xs mt-4 text-muted">
+          可用區塊：{{ AVAILABLE_SECTIONS.join('、') }}
+        </p>
       </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         HERO SECTION - Minimal Layout (heroStyle: 'minimal')
-         ═══════════════════════════════════════════════════════════════════════ -->
-    <section
-        v-else
-        class="pt-28 sm:pt-32 md:pt-40 pb-12 md:pb-16 lg:pb-24"
-    >
-      <div class="content-container">
-        <div class="max-w-3xl">
-          <span
-              class="text-[11px] md:text-xs tracking-[0.25em] uppercase text-muted block mb-3 md:mb-4"
-              :class="{ 'animate-slide-up': isLoaded }"
-          >
-            {{ profile.role }}
-          </span>
-          <h1
-              class="font-heading text-primary mb-4 md:mb-6 text-balance"
-              :class="{ 'animate-slide-up-delay-1': isLoaded }"
-          >
-            {{ content.heroTitle }}
-          </h1>
-          <p
-              class="text-muted text-base md:text-lg leading-relaxed text-pretty"
-              :class="{ 'animate-slide-up-delay-2': isLoaded }"
-          >
-            {{ content.heroSubtitle }}
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         WORKS GRID SECTION
-         ═══════════════════════════════════════════════════════════════════════ -->
-    <section id="works" class="py-12 md:py-20 lg:py-28">
-      <div class="content-container">
-        <!-- Section Title -->
-        <h2 class="text-[11px] md:text-xs tracking-[0.25em] uppercase text-muted mb-8 md:mb-12 lg:mb-16">
-          {{ content.worksTitle }}
-        </h2>
-
-        <!-- Works Grid with TransitionGroup for smooth loading -->
-        <TransitionGroup
-            tag="div"
-            :class="['grid grid-cols-1 gap-6 md:gap-8 lg:gap-10', gridClass]"
-            enter-active-class="transition-all duration-500"
-            enter-from-class="opacity-0 translate-y-6"
-            enter-to-class="opacity-100 translate-y-0"
-            move-class="transition-transform duration-500"
-        >
-          <RouterLink
-              v-for="(work, index) in worksWithCovers"
-              :key="work.slug"
-              :to="`/work/${work.slug}`"
-              class="work-card group block"
-              :style="{
-              transitionDelay: `${index * 0.08}s`,
-              transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
-            }"
-          >
-            <!-- Cover Image Container -->
-            <div :class="['relative bg-background-alt overflow-hidden mb-3 md:mb-4 rounded-lg', aspectClass]">
-              <img
-                  :src="work.coverBg ? work.coverBg : work.cover"
-                  :alt="work.name"
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  @error="handleImageError"
-              />
-            </div>
-
-            <!-- Work Info -->
-            <div class="space-y-0.5 md:space-y-1">
-              <span class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase">
-                {{ work.order }}
-              </span>
-              <h3 class="text-[15px] md:text-base lg:text-lg font-normal text-primary
-                         group-hover:text-primary/70 transition-colors duration-300">
-                {{ work.name }}
-              </h3>
-            </div>
-          </RouterLink>
-        </TransitionGroup>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         OTHER WORKS SECTION
-         ═══════════════════════════════════════════════════════════════════════ -->
-    <section
-        v-if="isEnabled('showOtherWorks') && otherWorks.length > 0"
-        class="py-12 md:py-20 lg:py-28 bg-background-alt"
-    >
-      <div class="content-container">
-        <h2 class="text-[11px] md:text-xs tracking-[0.25em] uppercase text-muted mb-8 md:mb-12 lg:mb-16">
-          {{ content.otherWorksTitle }}
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
-          <RouterLink
-              v-for="work in otherWorks"
-              :key="work.slug"
-              :to="`/work/${work.slug}`"
-              class="work-card group block"
-          >
-            <div class="relative aspect-[16/9] bg-background overflow-hidden mb-3 md:mb-4 rounded-lg">
-              <img
-                  :src="work.cover"
-                  :alt="work.name"
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  @error="handleImageError"
-              />
-            </div>
-
-            <div class="space-y-0.5 md:space-y-1">
-              <span class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase">
-                {{ work.order }}
-              </span>
-              <h3 class="text-[15px] md:text-base lg:text-lg font-normal text-primary
-                         group-hover:text-primary/70 transition-colors duration-300">
-                {{ work.name }}
-              </h3>
-            </div>
-          </RouterLink>
-        </div>
-      </div>
-    </section>
+    </div>
   </main>
 </template>
