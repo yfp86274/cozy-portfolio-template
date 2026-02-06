@@ -40,15 +40,15 @@
 
 ---
 
-## 🚀 四步驟建立你的網站
+## 🚀 三步驟建立你的網站
 
 ```
-┌─────────────┐      ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│             │      │             │      │             │      │             │
-│   1. Fork   │  ──▶ │   2. 設定   │ ──▶ │   3. 傳圖   │  ──▶ │  4. 完成！  │
-│   複製專案   │      │   填表單    │      │   拖拉上傳   │      │   等1分鐘    │
-│             │      │             │      │             │      │             │
-└─────────────┘      └─────────────┘      └─────────────┘      └─────────────┘
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│             │      │             │      │             │
+│   1. Fork   │ ──▶ │   2. 設定    │ ──▶ │  3. 完成！   │
+│   複製專案   │      │  改幾個字    │      │   傳照片    │
+│             │      │             │      │             │
+└─────────────┘      └─────────────┘      └─────────────┘
 ```
 
 ---
@@ -71,56 +71,69 @@
 
 ---
 
-### 步驟 2️⃣ 用「設定精靈」生成你的設定
+### 步驟 2️⃣ 修改你的網站設定
 
-**這是最簡單的方式！完全不需要懂代碼。**
+**只需要改幾個字，就能讓網站變成你自己的！**
 
-1. 網站部署完成後，打開：
-   ```
-   https://你的用戶名.github.io/你的倉庫名/config-maker.html
-   ```
+1. 在你的 GitHub 倉庫頁面，**按鍵盤上的 `.` 鍵**（就是句點）
+2. 等幾秒，會打開一個網頁版編輯器
+3. 在左側文件列表找到 `site.config.json` 並點開
+4. **全選**（`Ctrl+A` 或 Mac 的 `Cmd+A`）
+5. **貼上**下面的模板（`Ctrl+V` 或 Mac 的 `Cmd+V`），然後填入你自己的資料：
 
-2. 在設定精靈中：
-   - 🎭 **選擇你的身份**（廚師、編織、陶藝等），網站會自動套用最適合的風格
-   - 👤 **填入你的資料**（名字、頭銜、Email、自我介紹）
-   - 🔗 **填入社群連結**（Instagram、Etsy 等，不用的留空）
-   - 🔍 **SEO 設定**（可選，會自動生成）
+```json
+{
+   "profile": {
+      "name": "你的名字",
+      "role": "你的職業頭銜，例如：編織藝術家",
+      "profession": "knitter",
+      "email": "你的email@example.com",
+      "bio": "簡單介紹你自己，例如：用雙手編織溫暖，用色彩點綴生活",
+      "social": {
+         "instagram": "",
+         "etsy": ""
+      }
+   },
+   "seo": {
+      "siteTitle": "你的名字 | 作品集"
+   }
+}
+```
 
-3. 點擊「**複製設定代碼**」按鈕
+6. 把上面 `"你的名字"`、`"你的職業頭銜"` 等內容改成你自己的資料
+7. 把 `"profession"` 的值改成下面表格中最適合你的代碼（重要！這決定了網站風格）
+8. 社群連結不用的留空 `""`，用的填完整網址
+9. **儲存**（`Ctrl+S` 或 Mac 的 `Cmd+S`）
+10. 左側會出現變更標記，點擊「Source Control」圖示（分支圖案）
+11. 輸入提交訊息（例如：「更新設定」）然後點擊打勾 ✓
 
-> 💡 **小提示**：設定精靈有即時預覽功能，你可以看到選擇不同職業時，網站風格會如何變化！
+#### 🎭 選擇你的 profession 代碼（複製對應的英文代碼）：
+
+| 🍳 餐飲         | 🧶 手作              | 🎨 藝術             | 🌸 其他           |
+|---------------|--------------------|-------------------|-----------------|
+| `chef` 廚師     | `knitter` 編織       | `artist` 藝術家      | `florist` 花藝    |
+| `baker` 烘焙師   | `potter` 陶藝        | `illustrator` 插畫  | `gardener` 園藝   |
+| `barista` 咖啡師 | `jeweler` 珠寶       | `photographer` 攝影 | `therapist` 治療師 |
+|               | `leatherworker` 皮革 | `designer` 設計師    | `yoga` 瑜伽老師     |
+|               | `woodworker` 木工    | `architect` 建築師   | `teacher` 老師    |
+|               |                    | `interior` 室內設計   | `writer` 作家     |
+|               |                    | `musician` 音樂人    |                 |
+
+> 💡 **不知道怎麼改？** 最簡單的方式：只改 `name`（你的名字）和 `profession`（職業代碼），其他留著不動也完全沒問題！
+
+#### 📝 備用方法：直接在 GitHub 編輯（不用按 `.` 鍵）
+
+1. 在倉庫中找到 `site.config.json`，點擊它
+2. 點擊右上角鉛筆圖示 ✏️ 進入編輯
+3. 全選並貼上上面的模板，改成你的資料
+4. 點擊綠色的「Commit changes」按鈕儲存
+
+> 🪄 **進階提示**：網站上線後，你還可以使用「設定精靈」做更細緻的調整。打開 `https://你的用戶名.github.io/你的倉庫名/config-maker.html`
+> ，用表單方式生成設定，不用手動打字！
 
 ---
 
-### 步驟 3️⃣ 把設定貼到 GitHub
-
-#### 🪄 推薦方法：使用 GitHub 網頁編輯器（按 `.` 鍵）
-
-1. 回到你的 GitHub 倉庫頁面
-2. **按鍵盤上的 `.` 鍵**（就是句點，在 `/` 鍵旁邊）
-3. 等幾秒，會打開一個網頁版的 VS Code 編輯器
-4. 在左側文件列表找到 `site.config.json` 並點開
-5. **全選**（`Ctrl+A` 或 Mac 的 `Cmd+A`）
-6. **貼上**（`Ctrl+V` 或 Mac 的 `Cmd+V`）
-7. **儲存**（`Ctrl+S` 或 Mac 的 `Cmd+S`）
-8. 左側會出現變更標記，點擊「Source Control」圖示（分支圖案）
-9. 輸入提交訊息（例如：「更新設定」）然後點擊打勾
-
-> ⚡ **為什麼推薦網頁編輯器？**
-> - 可以直接拖拉上傳圖片！
-> - 有語法高亮和錯誤提示
-> - 不需要安裝任何軟體
-
-#### 📝 備用方法：直接在 GitHub 編輯
-
-1. 在倉庫中找到 `site.config.json`
-2. 點擊鉛筆圖示 ✏️ 編輯
-3. 全選並貼上新設定
-4. 點擊「Commit changes」儲存
-
----
-
-### 步驟 4️⃣ 上傳你的照片
+### 步驟 3️⃣ 上傳你的照片
 
 按 `.` 鍵打開網頁編輯器後，你可以拖拉上傳照片。
 
@@ -272,7 +285,7 @@ src/assets/works/
 ### 🔄 Fork 之後網站沒有馬上出現？
 
 這是正常的！GitHub Actions 需要一次「觸發」才會開始工作。
-當你完成 **步驟 3 (修改設定並提交)** 後，GitHub 就會檢測到變更，並開始自動幫你建立網站。請去 Actions 頁面查看進度。
+當你完成 **步驟 2（修改設定並提交）** 後，GitHub 就會檢測到變更，並開始自動幫你建立網站。請去 Actions 頁面查看進度。
 
 ### ❌ JSON 格式錯誤？
 
@@ -284,7 +297,7 @@ src/assets/works/
 - ✅ 單引號：`{ 'name': '夜喵' }` → 自動轉換成雙引號
 - ✅ 沒有引號的 Key：`{ name: "夜喵" }` → 自動加上引號
 
-如果還是有問題，使用設定精靈重新生成一份就好！
+如果還是有問題，可以等網站上線後使用設定精靈重新生成一份！
 
 ### 🖼️ 圖片沒有顯示？
 
@@ -384,15 +397,15 @@ src/assets/works/
 
 ---
 
-## 🚀 Four Steps to Build Your Website
+## 🚀 Three Steps to Build Your Website
 
 ```
-┌─────────────┐      ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│             │      │             │      │             │      │             │
-│   1. Fork   │  ──▶ │  2. Config  │  ──▶ │  3. Upload  │  ──▶ │   4. Done!  │
-│   Copy Repo │      │  Fill Form  │      │  Drag & Drop │      │  Wait 1 min │
-│             │      │             │      │             │      │             │
-└─────────────┘      └─────────────┘      └─────────────┘      └─────────────┘
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│             │      │             │      │             │
+│   1. Fork   │ ──▶ │  2. Config   │ ──▶ │   3. Done!  │
+│   Copy Repo │      │ Change a few│      │ Upload pics │
+│             │      │   words     │      │             │
+└─────────────┘      └─────────────┘      └─────────────┘
 ```
 
 ---
@@ -415,56 +428,71 @@ src/assets/works/
 
 ---
 
-### Step 2️⃣ Use the "Config Wizard" to Generate Settings
+### Step 2️⃣ Edit Your Website Settings
 
-**The easiest way! No coding required.**
+**Just change a few words to make the website yours!**
 
-1. After deployment, open:
-   ```
-   https://yourusername.github.io/repo-name/config-maker.html
-   ```
+1. On your GitHub repository page, **press the `.` key** on your keyboard
+2. Wait a few seconds for the web-based editor to open
+3. Find `site.config.json` in the left file list and click to open
+4. **Select All** (`Ctrl+A` or `Cmd+A` on Mac)
+5. **Paste** the template below (`Ctrl+V` or `Cmd+V` on Mac), then fill in your info:
 
-2. In the Config Wizard:
-   - 🎭 **Select your identity** (chef, knitter, potter, etc.) - the website will auto-apply the best style
-   - 👤 **Fill in your info** (name, title, email, bio)
-   - 🔗 **Add social links** (Instagram, Etsy, etc. - leave empty if not needed)
-   - 🔍 **SEO settings** (optional, auto-generated)
+```json
+{
+   "profile": {
+      "name": "Your Name",
+      "role": "Your Title, e.g., Fiber Artist",
+      "profession": "knitter",
+      "email": "your@email.com",
+      "bio": "A short intro about yourself",
+      "social": {
+         "instagram": "",
+         "etsy": ""
+      }
+   },
+   "seo": {
+      "siteTitle": "Your Name | Portfolio"
+   }
+}
+```
 
-3. Click the "**Copy Config Code**" button
+6. Replace `"Your Name"`, `"Your Title"` etc. with your own information
+7. Change the `"profession"` value to the code that best matches you from the table below (important! this determines
+   your website's style)
+8. Leave unused social links as empty `""`, fill in full URLs for ones you use
+9. **Save** (`Ctrl+S` or `Cmd+S` on Mac)
+10. Click the "Source Control" icon (branch symbol) on the left
+11. Enter a commit message (e.g., "Update config") and click the checkmark ✓
 
-> 💡 **Tip**: The Config Wizard has a live preview - you can see how different professions change the website style!
+#### 🎭 Choose Your Profession Code (copy the English code):
+
+| 🍳 Food           | 🧶 Handcraft            | 🎨 Art                      | 🌸 Others             |
+|-------------------|-------------------------|-----------------------------|-----------------------|
+| `chef` Chef       | `knitter` Knitter       | `artist` Artist             | `florist` Florist     |
+| `baker` Baker     | `potter` Potter         | `illustrator` Illustrator   | `gardener` Gardener   |
+| `barista` Barista | `jeweler` Jeweler       | `photographer` Photographer | `therapist` Therapist |
+|                   | `leatherworker` Leather | `designer` Designer         | `yoga` Yoga           |
+|                   | `woodworker` Woodwork   | `architect` Architect       | `teacher` Teacher     |
+|                   |                         | `interior` Interior         | `writer` Writer       |
+|                   |                         | `musician` Musician         |                       |
+
+> 💡 **Not sure what to change?** The simplest way: just change `name` (your name) and `profession` (profession code).
+> Leave everything else as-is and it works perfectly!
+
+#### 📝 Alternative: Edit Directly on GitHub (no `.` key needed)
+
+1. Find `site.config.json` in the repository and click it
+2. Click the pencil icon ✏️ at the top right to edit
+3. Select all and paste the template above, then fill in your info
+4. Click the green "Commit changes" button to save
+
+> 🪄 **Advanced Tip**: After your site is live, you can also use the "Config Wizard" for finer adjustments. Open
+`https://yourusername.github.io/repo-name/config-maker.html` to generate settings with a form — no manual typing needed!
 
 ---
 
-### Step 3️⃣ Paste Settings to GitHub
-
-#### 🪄 Recommended: Use GitHub Web Editor (Press `.` Key)
-
-1. Go to your GitHub repository page
-2. **Press the `.` key** on your keyboard
-3. Wait a few seconds for the web-based VS Code editor to open
-4. Find `site.config.json` in the left file list and click to open
-5. **Select All** (`Ctrl+A` or `Cmd+A` on Mac)
-6. **Paste** (`Ctrl+V` or `Cmd+V` on Mac)
-7. **Save** (`Ctrl+S` or `Cmd+S` on Mac)
-8. Click the "Source Control" icon (branch symbol) on the left
-9. Enter a commit message (e.g., "Update config") and click the checkmark
-
-> ⚡ **Why use the web editor?**
-> - You can drag & drop images directly!
-> - Syntax highlighting and error detection
-> - No software installation needed
-
-#### 📝 Alternative: Edit Directly on GitHub
-
-1. Find `site.config.json` in the repository
-2. Click the pencil icon ✏️ to edit
-3. Select all and paste your new config
-4. Click "Commit changes" to save
-
----
-
-### Step 4️⃣ Upload Your Photos
+### Step 3️⃣ Upload Your Photos
 
 While in the web editor (press `.`):
 
@@ -614,7 +642,7 @@ Choose your profession, and the website auto-applies the best colors, fonts, and
 
 ### 🔄 Site didn't appear after Forking?
 
-Normal! GitHub Actions needs a "push" event to start. Once you complete **Step 3 (Commit Config)**, the build will start
+Normal! GitHub Actions needs a "push" event to start. Once you complete **Step 2 (Commit Config)**, the build will start
 automatically.
 
 ### ❌ JSON Format Errors?
@@ -627,7 +655,7 @@ Common errors are automatically corrected:
 - ✅ Single quotes: `{ 'name': 'NightCat' }` → auto-converted to double quotes
 - ✅ Unquoted keys: `{ name: "NightCat" }` → auto-quoted
 
-If issues persist, just regenerate with the Config Wizard!
+If issues persist, after your site is live, use the Config Wizard to regenerate!
 
 ### 🖼️ Images Not Showing?
 
@@ -705,7 +733,7 @@ If this template helped you, consider buying me a coffee!
 
 ## 📜 License
 
-MIT License © 2024 [夜喵酷叮 | Night Cat Coding](https://github.com/night-cat-coding)
+MIT License © 2026 [夜喵酷叮 | Night Cat Coding](https://github.com/NightCatCoding)
 
 Made with ❤️ for creative professionals who don't code
 

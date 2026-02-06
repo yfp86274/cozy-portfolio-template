@@ -18,7 +18,8 @@
 
 你需要編輯的唯一文件是根目錄下的 `site.config.json`。
 
-> **💡 小提示**：大多數情況下，使用 [設定精靈](./public/config-maker.html) 就足夠了！
+> **💡 小提示**：大多數情況下，直接在 `site.config.json` 中修改 `profile` 和 `seo` 就足夠了！
+> 網站上線後，你也可以使用「設定精靈」（`https://你的用戶名.github.io/你的倉庫名/config-maker.html`）用表單方式生成更完整的設定。
 > 這份指南是給想要進階自訂的用戶。
 
 ---
@@ -548,7 +549,9 @@ Welcome! This guide will help you fully customize your portfolio website.
 
 The only file you need to edit is `site.config.json` in the root directory.
 
-> **💡 Tip**: For most users, the [Config Wizard](./public/config-maker.html) is sufficient!
+> **💡 Tip**: For most users, editing `profile` and `seo` in `site.config.json` is sufficient!
+> After your site is live, you can also use the Config Wizard (
+`https://yourusername.github.io/repo-name/config-maker.html`) to generate settings with a form.
 > This guide is for advanced customization.
 
 ---
@@ -1097,7 +1100,7 @@ If this template helped you, consider buying me a coffee!
 
 ## 📜 License
 
-MIT License © 2026 [夜喵酷叮 | Night Cat Coding](https://github.com/yfp86274)
+MIT License © 2026 [夜喵酷叮 | Night Cat Coding](https://github.com/NightCatCoding)
 
 Happy customizing! 🎉
 
