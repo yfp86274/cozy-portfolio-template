@@ -114,8 +114,8 @@
         "avatar": {
           "type": "string",
           "title": "大頭照路徑",
-          "description": "🖼️ 您的照片檔案路徑（放在 public/images/ 資料夾）",
-          "default": "/images/avatar.jpg"
+          "description": "🖼️ 您的照片檔案路徑（放在 public/images/ 資料夾，填寫如 images/avatar.jpg）或網路圖片網址",
+          "default": "images/avatar.jpg"
         },
         "social": {
           "type": "object",
@@ -199,8 +199,8 @@
         "ogImage": {
           "type": "string",
           "title": "社群分享預覽圖",
-          "description": "🖼️ 社群分享時顯示的圖片",
-          "default": "/images/og-image.jpg"
+          "description": "🖼️ 社群分享時顯示的圖片（放在 public/images/ 資料夾，填寫如 images/og-image.jpg）",
+          "default": "images/og-image.jpg"
         }
       }
     },

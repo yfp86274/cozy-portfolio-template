@@ -14,6 +14,7 @@ import TheHeader from '@/components/TheHeader.vue'
 import TheFooter from '@/components/TheFooter.vue'
 import {mergedConfig, useConfig} from '@/composables/useConfig'
 import {initializeTheme} from '@/utils/theme'
+import {resolveAssetPath} from '@/utils/assetPath'
 
 // 取得配置（用於條件渲染）
 const {ui, currentProfession} = useConfig()
@@ -24,7 +25,7 @@ onMounted(() => {
   // mergedConfig 已經包含職業預設和用戶設定的合併結果
   initializeTheme(mergedConfig)
 
-  // 設定 OG Image
+  // 設定 OG Image（自動處理 base URL）
   if (mergedConfig.seo?.ogImage) {
     let ogImage = document.querySelector('meta[property="og:image"]')
     if (!ogImage) {
@@ -32,7 +33,15 @@ onMounted(() => {
       ogImage.setAttribute('property', 'og:image')
       document.head.appendChild(ogImage)
     }
-    ogImage.content = mergedConfig.seo.ogImage
+    // 使用 resolveAssetPath 處理路徑，支援本地圖片和網路 URL
+    const resolvedPath = resolveAssetPath(mergedConfig.seo.ogImage)
+    // 對於 OG Image，需要完整的 URL
+    if (resolvedPath && !resolvedPath.startsWith('http')) {
+      // 本地路徑需要加上當前網域
+      ogImage.content = window.location.origin + resolvedPath
+    } else {
+      ogImage.content = resolvedPath || ''
+    }
   }
 
   // 設定 OG Title

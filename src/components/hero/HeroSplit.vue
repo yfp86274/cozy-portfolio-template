@@ -22,6 +22,10 @@ defineProps({
   isLoaded: {
     type: Boolean,
     default: false
+  },
+  showTitleOnImage: {
+    type: Boolean,
+    default: true
   }
 })
 

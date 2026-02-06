@@ -74,9 +74,10 @@ const aspectClass = getAspectClass()
           <!-- Work Info -->
           <div class="space-y-0.5 md:space-y-1">
             <span
+                v-if="work.displayOrder"
                 class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase"
             >
-              {{ work.order }}
+              {{ work.displayOrder }}
             </span>
             <h3
                 class="text-[15px] md:text-base lg:text-lg font-normal text-primary group-hover:text-primary/70 transition-colors duration-300"

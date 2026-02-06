@@ -27,7 +27,10 @@ const heroComponentMap = {
 // ═══════════════════════════════════════════════════════════════════════════
 // Composables & Config
 // ═══════════════════════════════════════════════════════════════════════════
-const {theme, getHeroStyle} = useConfig()
+const {theme, getHeroStyle, getHeroShowTitleOnImage} = useConfig()
+
+// 是否在圖片上顯示標題
+const showTitleOnImage = getHeroShowTitleOnImage()
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Hero Image Handling
@@ -93,6 +96,7 @@ onMounted(() => {
       :is="currentHeroComponent"
       :hero-image="heroImage"
       :is-loaded="isLoaded"
+      :show-title-on-image="showTitleOnImage"
       @scroll-to-works="scrollToWorks"
       @image-error="handleHeroError"
   />

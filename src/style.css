@@ -257,7 +257,7 @@
         bg-primary text-background border-2 border-primary
         hover:bg-transparent hover:text-primary
         active:scale-[0.98]
-        min-h-[48px] min-w-[120px];
+        min-h-[48px] whitespace-nowrap;
         padding: var(--button-padding-y) var(--button-padding-x);
         border-radius: var(--button-radius);
         transition: all var(--transition-base) var(--ease-out-expo);

@@ -110,10 +110,11 @@ onMounted(() => {
         <div class="content-container">
           <div class="max-w-3xl">
             <span
+                v-if="currentWork.displayOrder"
                 class="text-[10px] md:text-xs tracking-[0.25em] text-muted uppercase block mb-2 md:mb-3"
                 :class="{ 'animate-slide-up': isLoaded }"
             >
-              {{ currentWork.order }}
+              {{ currentWork.displayOrder }}
             </span>
             <h1
                 class="font-heading text-primary leading-tight text-balance"
@@ -123,15 +124,16 @@ onMounted(() => {
             </h1>
 
             <!-- 🆕 Description Section (from readme.md or description.txt) -->
+            <!-- 使用 prose 樣式讓描述與 readme 格式一致，支援 Markdown -->
             <div
                 v-if="hasDescription"
                 class="mt-6 md:mt-8"
                 :class="{ 'animate-slide-up-delay-2': isLoaded }"
             >
-              <p
-                  class="text-muted text-sm md:text-base leading-relaxed whitespace-pre-wrap"
-                  style="max-width: 65ch;"
-              >{{ currentWork.description }}</p>
+              <div class="prose prose-stone max-w-none">
+                <p class="text-muted text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                  {{ currentWork.description }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -309,8 +311,11 @@ onMounted(() => {
               </div>
 
               <div class="space-y-0.5 md:space-y-1">
-                <span class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase">
-                  {{ work.order }}
+                <span
+                    v-if="work.displayOrder"
+                    class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase"
+                >
+                  {{ work.displayOrder }}
                 </span>
                 <h3 class="text-[15px] md:text-base lg:text-lg font-normal text-primary
                            group-hover:text-primary/70 transition-colors duration-300">

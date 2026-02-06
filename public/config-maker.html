@@ -142,9 +142,19 @@
             <div class="flex items-center gap-3">
                 <span class="text-3xl">🪄</span>
                 <div>
-                    <h1 class="text-xl font-bold text-stone-800">網站設定精靈</h1>
-                    <p class="text-sm text-stone-500">三分鐘完成你的作品集網站</p>
+                    <h1 class="text-xl font-bold text-stone-800" data-i18n="pageTitle">網站設定精靈</h1>
+                    <p class="text-sm text-stone-500" data-i18n="pageSubtitle">三分鐘完成你的作品集網站</p>
                 </div>
+            </div>
+            <!-- 語言切換 -->
+            <div class="flex items-center gap-2">
+                <button onclick="setLanguage('zh')" id="langZh"
+                        class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-amber-100 text-amber-700">中文
+                </button>
+                <button onclick="setLanguage('en')" id="langEn"
+                        class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200">
+                    EN
+                </button>
             </div>
         </div>
 
@@ -158,8 +168,8 @@
                             1
                         </div>
                         <div class="hidden sm:block">
-                            <p class="font-semibold text-stone-800">填寫表單</p>
-                            <p class="text-xs text-stone-500">選職業、填名字</p>
+                            <p class="font-semibold text-stone-800" data-i18n="step1Title">填寫表單</p>
+                            <p class="text-xs text-stone-500" data-i18n="step1Desc">選職業、填名字</p>
                         </div>
                     </div>
 
@@ -176,8 +186,8 @@
                             2
                         </div>
                         <div class="hidden sm:block">
-                            <p class="font-semibold text-stone-800">複製代碼</p>
-                            <p class="text-xs text-stone-500">點「複製」按鈕</p>
+                            <p class="font-semibold text-stone-800" data-i18n="step2Title">複製代碼</p>
+                            <p class="text-xs text-stone-500" data-i18n="step2Desc">點「複製」按鈕</p>
                         </div>
                     </div>
 
@@ -187,9 +197,10 @@
                             3
                         </div>
                         <div class="hidden sm:block">
-                            <p class="font-semibold text-stone-800">貼到 GitHub</p>
-                            <p class="text-xs text-rose-600 font-medium">按 <kbd
-                                    class="bg-rose-200 px-1.5 py-0.5 rounded text-rose-700">.</kbd> 開編輯器</p>
+                            <p class="font-semibold text-stone-800" data-i18n="step3Title">貼到 GitHub</p>
+                            <p class="text-xs text-rose-600 font-medium"><span data-i18n="step3Desc">按</span> <kbd
+                                    class="bg-rose-200 px-1.5 py-0.5 rounded text-rose-700">.</kbd> <span
+                                    data-i18n="step3Desc2">開編輯器</span></p>
                         </div>
                     </div>
                 </div>
@@ -211,9 +222,10 @@
                 <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-6 border-b border-amber-100">
                     <h2 class="text-xl font-bold text-stone-800 flex items-center gap-2">
                         <span class="text-2xl">🎭</span>
-                        第一步：你是誰？
+                        <span data-i18n="identityTitle">第一步：你是誰？</span>
                     </h2>
-                    <p class="text-stone-600 mt-1">選擇你的身份，網站會自動套用最適合的風格和配色</p>
+                    <p class="text-stone-600 mt-1" data-i18n="identityDesc">
+                        選擇你的身份，網站會自動套用最適合的風格和配色</p>
                 </div>
 
                 <div class="p-6 space-y-4">
@@ -227,25 +239,27 @@
             <!-- 👤 基本資料 -->
             <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
                 <h3 class="text-lg font-semibold text-stone-800 mb-4 flex items-center gap-2">
-                    <span class="text-xl">👤</span> 你的資料
+                    <span class="text-xl">👤</span> <span data-i18n="profileTitle">你的資料</span>
                 </h3>
 
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5" data-i18n="labelName">
                             名字 / 品牌名
                         </label>
                         <input type="text" id="inputName"
+                               data-i18n-placeholder="placeholderName"
                                placeholder="例如：夜喵酷叮、Night Cat Coding"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5" data-i18n="labelRole">
                             你做什麼（頭銜）
                         </label>
                         <input type="text" id="inputRole"
+                               data-i18n-placeholder="placeholderRole"
                                placeholder="例如：編織藝術家、手作甜點師"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
@@ -253,7 +267,34 @@
 
                     <div>
                         <label class="block text-sm font-medium text-stone-700 mb-1.5">
-                            Email（選填）
+                            <span data-i18n="labelAvatar">頭像圖片</span>
+                            <span class="text-stone-400 font-normal"
+                                  data-i18n="labelAvatarHint">（支援網址或本地路徑）</span>
+                        </label>
+                        <div class="flex gap-3">
+                            <div class="flex-1">
+                                <input type="text" id="inputAvatar"
+                                       data-i18n-placeholder="placeholderAvatar"
+                                       placeholder="https://example.com/avatar.jpg 或 images/avatar.jpg"
+                                       class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                                       oninput="updateAvatarPreview()">
+                                <p class="text-xs text-stone-400 mt-1" data-i18n="avatarTip">💡 建議使用網路圖片網址（如
+                                    Imgur），或放在 public/images/ 後填寫 <code class="bg-stone-100 px-1 rounded">images/檔名.jpg</code>
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div id="avatarPreview"
+                                     class="w-16 h-16 rounded-xl bg-stone-100 border-2 border-dashed border-stone-300 flex items-center justify-center overflow-hidden">
+                                    <span class="text-stone-400 text-2xl">👤</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            <span data-i18n="labelEmail">Email</span><span class="text-stone-400 font-normal"
+                                                                           data-i18n="optional">（選填）</span>
                         </label>
                         <input type="email" id="inputEmail"
                                placeholder="hello@example.com"
@@ -263,9 +304,11 @@
 
                     <div>
                         <label class="block text-sm font-medium text-stone-700 mb-1.5">
-                            自我介紹（選填）
+                            <span data-i18n="labelBio">自我介紹</span><span class="text-stone-400 font-normal"
+                                                                            data-i18n="optional">（選填）</span>
                         </label>
                         <textarea id="inputBio" rows="3"
+                                  data-i18n-placeholder="placeholderBio"
                                   placeholder="簡單介紹你自己和你的創作理念..."
                                   class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400 resize-none"
                                   oninput="updatePreview()"></textarea>
@@ -276,14 +319,15 @@
             <!-- 🔗 社群連結 -->
             <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
                 <h3 class="text-lg font-semibold text-stone-800 mb-2 flex items-center gap-2">
-                    <span class="text-xl">🔗</span> 社群連結
+                    <span class="text-xl">🔗</span> <span data-i18n="socialTitle">社群連結</span>
                 </h3>
-                <p class="text-sm text-stone-500 mb-4">填入完整網址，留空的不會顯示</p>
+                <p class="text-sm text-stone-500 mb-4" data-i18n="socialDesc">填入完整網址，留空的不會顯示</p>
 
                 <div class="grid sm:grid-cols-2 gap-3">
                     <div class="flex items-center gap-2">
                         <span class="w-8 text-center text-lg">📸</span>
                         <input type="url" id="inputInstagram"
+                               data-i18n-placeholder="placeholderInstagram"
                                placeholder="Instagram 網址"
                                class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
                                oninput="updatePreview()">
@@ -291,6 +335,7 @@
                     <div class="flex items-center gap-2">
                         <span class="w-8 text-center text-lg">🛒</span>
                         <input type="url" id="inputEtsy"
+                               data-i18n-placeholder="placeholderEtsy"
                                placeholder="Etsy 商店網址"
                                class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
                                oninput="updatePreview()">
@@ -298,6 +343,7 @@
                     <div class="flex items-center gap-2">
                         <span class="w-8 text-center text-lg">📌</span>
                         <input type="url" id="inputPinterest"
+                               data-i18n-placeholder="placeholderPinterest"
                                placeholder="Pinterest 網址"
                                class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
                                oninput="updatePreview()">
@@ -305,6 +351,7 @@
                     <div class="flex items-center gap-2">
                         <span class="w-8 text-center text-lg">🎬</span>
                         <input type="url" id="inputYoutube"
+                               data-i18n-placeholder="placeholderYoutube"
                                placeholder="YouTube 網址"
                                class="input-elegant flex-1 px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:border-amber-400 text-sm"
                                oninput="updatePreview()">
@@ -312,20 +359,72 @@
                 </div>
             </section>
 
-            <!-- 🏠 首頁內容設定 -->
+            <!-- 📞 聯絡我設定 -->
             <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
                 <h3 class="text-lg font-semibold text-stone-800 mb-2 flex items-center gap-2">
-                    <span class="text-xl">🏠</span> 首頁內容
+                    <span class="text-xl">📞</span> <span data-i18n="contactSectionTitle">聯絡我頁面</span>
                 </h3>
-                <p class="text-sm text-stone-500 mb-4">自訂首頁顯示的文字（留空會使用智能預設值）</p>
+                <p class="text-sm text-stone-500 mb-4" data-i18n="contactSectionDesc">設定聯絡頁面的內容和二維碼</p>
 
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-stone-700 mb-1.5">
-                            首頁大標題
-                            <span class="text-stone-400 font-normal">（預設：歡迎來到 [你的名字] 的創作世界）</span>
+                            <span data-i18n="labelContactTitle">聯絡頁標題</span>
+                            <span class="text-stone-400 font-normal"
+                                  data-i18n="defaultContactTitle">（預設：聯絡我）</span>
+                        </label>
+                        <input type="text" id="inputContactTitle"
+                               data-i18n-placeholder="placeholderContactTitle"
+                               placeholder="例如：與我聯繫"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            <span data-i18n="labelContactMessage">聯絡說明文字</span>
+                            <span class="text-stone-400 font-normal" data-i18n="defaultContactMessage">（預設：有任何問題或合作提案，歡迎與我聯繫！）</span>
+                        </label>
+                        <input type="text" id="inputContactMessage"
+                               data-i18n-placeholder="placeholderContactMessage"
+                               placeholder="例如：歡迎來信洽談合作！"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            <span data-i18n="labelContactQrCode">二維碼圖片路徑</span>
+                            <span class="text-stone-400 font-normal"
+                                  data-i18n="qrCodeOptional">（可選，留空則不顯示）</span>
+                        </label>
+                        <input type="text" id="inputContactQrCode"
+                               placeholder="images/qrcode.png"
+                               class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
+                               oninput="updatePreview()">
+                        <p class="text-xs text-stone-400 mt-1" data-i18n="qrCodeTip">💡 把二維碼圖片放在 public/images/
+                            資料夾，填寫 <code class="bg-stone-100 px-1 rounded">images/你的圖片名.png</code>，建議
+                            200x200 像素</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🏠 首頁內容設定 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-stone-100 p-6">
+                <h3 class="text-lg font-semibold text-stone-800 mb-2 flex items-center gap-2">
+                    <span class="text-xl">🏠</span> <span data-i18n="homeContentTitle">首頁內容</span>
+                </h3>
+                <p class="text-sm text-stone-500 mb-4" data-i18n="homeContentDesc">
+                    自訂首頁顯示的文字（留空會使用智能預設值）</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                            <span data-i18n="labelHeroTitle">首頁大標題</span>
+                            <span class="text-stone-400 font-normal" data-i18n="defaultHeroTitle">（預設：歡迎來到 [你的名字] 的創作世界）</span>
                         </label>
                         <input type="text" id="inputHeroTitle"
+                               data-i18n-placeholder="placeholderHeroTitle"
                                placeholder="例如：用心編織，溫暖每一刻"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
@@ -333,10 +432,12 @@
 
                     <div>
                         <label class="block text-sm font-medium text-stone-700 mb-1.5">
-                            首頁副標題
-                            <span class="text-stone-400 font-normal">（留空會自動使用「自我介紹」）</span>
+                            <span data-i18n="labelHeroSubtitle">首頁副標題</span>
+                            <span class="text-stone-400 font-normal"
+                                  data-i18n="defaultHeroSubtitle">（留空會自動使用「自我介紹」）</span>
                         </label>
                         <input type="text" id="inputHeroSubtitle"
+                               data-i18n-placeholder="placeholderHeroSubtitle"
                                placeholder="例如：探索手作的溫度與美好"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
@@ -344,13 +445,30 @@
 
                     <div>
                         <label class="block text-sm font-medium text-stone-700 mb-1.5">
-                            按鈕文字
-                            <span class="text-stone-400 font-normal">（預設：瀏覽作品）</span>
+                            <span data-i18n="labelButtonText">按鈕文字</span>
+                            <span class="text-stone-400 font-normal"
+                                  data-i18n="defaultButtonText">（預設：瀏覽作品）</span>
                         </label>
                         <input type="text" id="inputHeroButtonText"
+                               data-i18n-placeholder="placeholderButtonText"
                                placeholder="例如：看看我的作品"
                                class="input-elegant w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
+                    </div>
+
+                    <!-- 標題是否顯示在圖片上 -->
+                    <div class="p-4 bg-stone-50 rounded-xl">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="inputHeroShowTitleOnImage"
+                                   checked
+                                   class="w-5 h-5 rounded text-amber-500 focus:ring-amber-400"
+                                   onchange="updatePreview()">
+                            <div>
+                                <span class="text-sm font-medium text-stone-700" data-i18n="labelShowTitleOnImage">標題顯示在大圖上</span>
+                                <p class="text-xs text-stone-400 mt-0.5" data-i18n="showTitleOnImageDesc">
+                                    取消勾選後，標題會顯示在圖片下方，不遮擋圖片</p>
+                            </div>
+                        </label>
                     </div>
                 </div>
             </section>
@@ -361,7 +479,7 @@
                         class="w-full p-6 flex items-center justify-between hover:bg-stone-50 transition-colors">
                     <div class="flex items-center gap-2">
                         <span class="text-xl">🔍</span>
-                        <span class="font-semibold text-stone-800">SEO 設定（進階）</span>
+                        <span class="font-semibold text-stone-800" data-i18n="seoTitle">SEO 設定（進階）</span>
                     </div>
                     <svg id="seoArrow" class="w-5 h-5 text-stone-400 transition-transform" fill="none"
                          stroke="currentColor" viewBox="0 0 24 24">
@@ -369,17 +487,22 @@
                     </svg>
                 </button>
                 <div id="seoContent" class="hidden px-6 pb-6 space-y-4 fade-in">
-                    <p class="text-sm text-stone-500">這些設定會影響 Google 搜尋結果的顯示（留空會自動生成）</p>
+                    <p class="text-sm text-stone-500" data-i18n="seoDesc">這些設定會影響 Google
+                        搜尋結果的顯示（留空會自動生成）</p>
                     <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1">網站標題</label>
+                        <label class="block text-sm font-medium text-stone-700 mb-1"
+                               data-i18n="labelSiteTitle">網站標題</label>
                         <input type="text" id="inputSiteTitle"
+                               data-i18n-placeholder="placeholderSiteTitle"
                                placeholder="會自動根據你的名字生成"
                                class="input-elegant w-full px-4 py-2.5 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400"
                                oninput="updatePreview()">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1">網站描述</label>
+                        <label class="block text-sm font-medium text-stone-700 mb-1"
+                               data-i18n="labelSiteDesc">網站描述</label>
                         <textarea id="inputSiteDescription" rows="2"
+                                  data-i18n-placeholder="placeholderSiteDesc"
                                   placeholder="簡短描述你的網站"
                                   class="input-elegant w-full px-4 py-2.5 border border-stone-200 rounded-xl focus:outline-none focus:border-amber-400 resize-none"
                                   oninput="updatePreview()"></textarea>
@@ -401,7 +524,7 @@
                         <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
                         <div class="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
-                    <span class="text-stone-400 text-xs ml-2">即時預覽</span>
+                    <span class="text-stone-400 text-xs ml-2" data-i18n="previewLabel">即時預覽</span>
                 </div>
 
                 <!-- 預覽畫面 -->
@@ -452,14 +575,14 @@
             <!-- 📋 JSON 輸出 -->
             <section class="bg-white rounded-3xl shadow-sm border border-stone-200 overflow-hidden">
                 <div class="flex items-center justify-between p-4 bg-stone-50 border-b border-stone-200">
-                    <span class="font-medium text-stone-700">📋 設定代碼</span>
+                    <span class="font-medium text-stone-700" data-i18n="configCodeLabel">📋 設定代碼</span>
                     <button onclick="copyConfig()"
                             class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-semibold shadow-md hover:shadow-lg transition-all active:scale-95">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                         </svg>
-                        複製設定代碼
+                        <span data-i18n="copyButton">複製設定代碼</span>
                     </button>
                 </div>
                 <div class="bg-stone-900 p-4 max-h-[300px] overflow-auto">
@@ -472,25 +595,27 @@
                 <div class="flex gap-4">
                     <span class="text-3xl">📖</span>
                     <div>
-                        <h4 class="font-bold text-blue-900 mb-2">複製後怎麼做？</h4>
+                        <h4 class="font-bold text-blue-900 mb-2" data-i18n="nextStepTitle">複製後怎麼做？</h4>
                         <ol class="text-sm text-blue-800 space-y-2">
                             <li class="flex items-start gap-2">
                                 <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
-                                <span>打開你的 GitHub 倉庫頁面</span>
+                                <span data-i18n="nextStep1">打開你的 GitHub 倉庫頁面</span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
-                                <span>按鍵盤上的 <kbd
-                                        class="bg-blue-200 px-2 py-0.5 rounded font-mono font-bold">.</kbd> 鍵（開啟網頁編輯器）</span>
+                                <span><span data-i18n="nextStep2">按鍵盤上的</span> <kbd
+                                        class="bg-blue-200 px-2 py-0.5 rounded font-mono font-bold">.</kbd> <span
+                                        data-i18n="nextStep2b">鍵（開啟網頁編輯器）</span></span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
-                                <span>找到 <code
-                                        class="bg-blue-100 px-1.5 rounded">site.config.json</code> 並打開</span>
+                                <span><span data-i18n="nextStep3">找到</span> <code
+                                        class="bg-blue-100 px-1.5 rounded">site.config.json</code> <span
+                                        data-i18n="nextStep3b">並打開</span></span>
                             </li>
                             <li class="flex items-start gap-2">
                                 <span class="flex-shrink-0 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
-                                <span>全選（Ctrl+A）→ 貼上（Ctrl+V）→ 儲存</span>
+                                <span data-i18n="nextStep4">全選（Ctrl+A）→ 貼上（Ctrl+V）→ 儲存</span>
                             </li>
                         </ol>
                     </div>
@@ -506,11 +631,233 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
-        <span class="font-medium">已複製！現在去 GitHub 貼上吧 ✨</span>
+        <span class="font-medium" data-i18n="toastMessage">已複製！現在去 GitHub 貼上吧 ✨</span>
     </div>
 </div>
 
 <script>
+    // ════════════════════════════════════════════════════════════════════════
+    // 多語言支援
+    // ════════════════════════════════════════════════════════════════════════
+
+    const i18n = {
+        zh: {
+            pageTitle: '網站設定精靈',
+            pageSubtitle: '三分鐘完成你的作品集網站',
+            step1Title: '填寫表單',
+            step1Desc: '選職業、填名字',
+            step2Title: '複製代碼',
+            step2Desc: '點「複製」按鈕',
+            step3Title: '貼到 GitHub',
+            step3Desc: '按',
+            step3Desc2: '開編輯器',
+            identityTitle: '第一步：你是誰？',
+            identityDesc: '選擇你的身份，網站會自動套用最適合的風格和配色',
+            profileTitle: '你的資料',
+            labelName: '名字 / 品牌名',
+            placeholderName: '例如：夜喵酷叮、Night Cat Coding',
+            labelRole: '你做什麼（頭銜）',
+            placeholderRole: '例如：編織藝術家、手作甜點師',
+            labelAvatar: '頭像圖片',
+            labelAvatarHint: '（支援網址或本地路徑）',
+            placeholderAvatar: 'https://example.com/avatar.jpg 或 images/avatar.jpg',
+            avatarTip: '💡 建議使用網路圖片網址（如 Imgur），或放在 public/images/ 後填寫 images/檔名.jpg',
+            labelEmail: 'Email',
+            optional: '（選填）',
+            labelBio: '自我介紹',
+            placeholderBio: '簡單介紹你自己和你的創作理念...',
+            socialTitle: '社群連結',
+            socialDesc: '填入完整網址，留空的不會顯示',
+            placeholderInstagram: 'Instagram 網址',
+            placeholderEtsy: 'Etsy 商店網址',
+            placeholderPinterest: 'Pinterest 網址',
+            placeholderYoutube: 'YouTube 網址',
+            contactSectionTitle: '聯絡我頁面',
+            contactSectionDesc: '設定聯絡頁面的內容和二維碼',
+            labelContactTitle: '聯絡頁標題',
+            defaultContactTitle: '（預設：聯絡我）',
+            placeholderContactTitle: '例如：與我聯繫',
+            labelContactMessage: '聯絡說明文字',
+            defaultContactMessage: '（預設：有任何問題或合作提案，歡迎與我聯繫！）',
+            placeholderContactMessage: '例如：歡迎來信洽談合作！',
+            labelContactQrCode: '二維碼圖片路徑',
+            qrCodeOptional: '（可選，留空則不顯示）',
+            qrCodeTip: '💡 把二維碼圖片放在 public/images/ 資料夾，填寫 images/你的圖片名.png，建議 200x200 像素',
+            homeContentTitle: '首頁內容',
+            homeContentDesc: '自訂首頁顯示的文字（留空會使用智能預設值）',
+            labelHeroTitle: '首頁大標題',
+            defaultHeroTitle: '（預設：歡迎來到 [你的名字] 的創作世界）',
+            placeholderHeroTitle: '例如：用心編織，溫暖每一刻',
+            labelHeroSubtitle: '首頁副標題',
+            defaultHeroSubtitle: '（留空會自動使用「自我介紹」）',
+            placeholderHeroSubtitle: '例如：探索手作的溫度與美好',
+            labelButtonText: '按鈕文字',
+            defaultButtonText: '（預設：瀏覽作品）',
+            placeholderButtonText: '例如：看看我的作品',
+            labelShowTitleOnImage: '標題顯示在大圖上',
+            showTitleOnImageDesc: '取消勾選後，標題會顯示在圖片下方，不遮擋圖片',
+            seoTitle: 'SEO 設定（進階）',
+            seoDesc: '這些設定會影響 Google 搜尋結果的顯示（留空會自動生成）',
+            labelSiteTitle: '網站標題',
+            placeholderSiteTitle: '會自動根據你的名字生成',
+            labelSiteDesc: '網站描述',
+            placeholderSiteDesc: '簡短描述你的網站',
+            previewLabel: '即時預覽',
+            configCodeLabel: '📋 設定代碼',
+            copyButton: '複製設定代碼',
+            nextStepTitle: '複製後怎麼做？',
+            nextStep1: '打開你的 GitHub 倉庫頁面',
+            nextStep2: '按鍵盤上的',
+            nextStep2b: '鍵（開啟網頁編輯器）',
+            nextStep3: '找到',
+            nextStep3b: '並打開',
+            nextStep4: '全選（Ctrl+A）→ 貼上（Ctrl+V）→ 儲存',
+            toastMessage: '已複製！現在去 GitHub 貼上吧 ✨',
+            defaultPreviewTitle: '歡迎來到你的創作世界',
+            defaultPreviewSubtitle: '在這裡介紹你自己...',
+            defaultPreviewName: '你的名字',
+            defaultPreviewRole: '你的職業',
+            defaultButtonLabel: '瀏覽作品',
+            exploreWorld: '探索我的創作世界'
+        },
+        en: {
+            pageTitle: 'Config Wizard',
+            pageSubtitle: 'Build your portfolio in 3 minutes',
+            step1Title: 'Fill Form',
+            step1Desc: 'Pick profession, enter name',
+            step2Title: 'Copy Code',
+            step2Desc: 'Click "Copy" button',
+            step3Title: 'Paste to GitHub',
+            step3Desc: 'Press',
+            step3Desc2: 'to open editor',
+            identityTitle: 'Step 1: Who Are You?',
+            identityDesc: 'Choose your identity, the website will auto-apply the best style',
+            profileTitle: 'Your Profile',
+            labelName: 'Name / Brand',
+            placeholderName: 'e.g., Night Cat Coding',
+            labelRole: 'What You Do (Title)',
+            placeholderRole: 'e.g., Fiber Artist, Pastry Chef',
+            labelAvatar: 'Avatar Image',
+            labelAvatarHint: '(URL or local path)',
+            placeholderAvatar: 'https://example.com/avatar.jpg or images/avatar.jpg',
+            avatarTip: '💡 Use online image URL (like Imgur), or put in public/images/ and use images/filename.jpg',
+            labelEmail: 'Email',
+            optional: '(Optional)',
+            labelBio: 'Bio',
+            placeholderBio: 'Briefly introduce yourself and your creative philosophy...',
+            socialTitle: 'Social Links',
+            socialDesc: 'Enter full URLs, leave empty to hide',
+            placeholderInstagram: 'Instagram URL',
+            placeholderEtsy: 'Etsy Shop URL',
+            placeholderPinterest: 'Pinterest URL',
+            placeholderYoutube: 'YouTube URL',
+            contactSectionTitle: 'Contact Page',
+            contactSectionDesc: 'Set up contact page content and QR code',
+            labelContactTitle: 'Contact Page Title',
+            defaultContactTitle: '(Default: Contact Me)',
+            placeholderContactTitle: 'e.g., Get in Touch',
+            labelContactMessage: 'Contact Message',
+            defaultContactMessage: '(Default: Feel free to reach out!)',
+            placeholderContactMessage: 'e.g., Looking forward to hearing from you!',
+            labelContactQrCode: 'QR Code Image Path',
+            qrCodeOptional: '(Optional, leave empty to hide)',
+            qrCodeTip: '💡 Put QR code in public/images/, use images/yourimage.png, 200x200px recommended',
+            homeContentTitle: 'Homepage Content',
+            homeContentDesc: 'Customize homepage text (leave empty for smart defaults)',
+            labelHeroTitle: 'Main Heading',
+            defaultHeroTitle: "(Default: Welcome to [Your Name]'s World)",
+            placeholderHeroTitle: 'e.g., Crafted with Love',
+            labelHeroSubtitle: 'Subtitle',
+            defaultHeroSubtitle: '(Empty = uses your Bio)',
+            placeholderHeroSubtitle: 'e.g., Discover handmade warmth',
+            labelButtonText: 'Button Text',
+            defaultButtonText: '(Default: View Works)',
+            placeholderButtonText: 'e.g., Explore My Work',
+            labelShowTitleOnImage: 'Show title on hero image',
+            showTitleOnImageDesc: 'Uncheck to display title below image',
+            seoTitle: 'SEO Settings (Advanced)',
+            seoDesc: 'These affect Google search results (auto-generated if empty)',
+            labelSiteTitle: 'Site Title',
+            placeholderSiteTitle: 'Auto-generated from your name',
+            labelSiteDesc: 'Site Description',
+            placeholderSiteDesc: 'Briefly describe your website',
+            previewLabel: 'Live Preview',
+            configCodeLabel: '📋 Config Code',
+            copyButton: 'Copy Config Code',
+            nextStepTitle: 'What to do after copying?',
+            nextStep1: 'Open your GitHub repository page',
+            nextStep2: 'Press the',
+            nextStep2b: 'key (opens web editor)',
+            nextStep3: 'Find',
+            nextStep3b: 'and open it',
+            nextStep4: 'Select All (Ctrl+A) → Paste (Ctrl+V) → Save',
+            toastMessage: 'Copied! Now paste it to GitHub ✨',
+            defaultPreviewTitle: 'Welcome to Your Creative World',
+            defaultPreviewSubtitle: 'Introduce yourself here...',
+            defaultPreviewName: 'Your Name',
+            defaultPreviewRole: 'Your Profession',
+            defaultButtonLabel: 'View Works',
+            exploreWorld: 'Explore my creative world'
+        }
+    };
+
+    // 職業標籤的多語言
+    const professionLabels = {
+        zh: {
+            chef: '廚師', baker: '烘焙師', barista: '咖啡師',
+            knitter: '編織', potter: '陶藝', jeweler: '珠寶',
+            leatherworker: '皮革', woodworker: '木工',
+            artist: '藝術家', illustrator: '插畫', photographer: '攝影', designer: '設計師',
+            florist: '花藝', gardener: '園藝',
+            therapist: '治療師', yoga: '瑜伽', teacher: '老師', writer: '作家',
+            architect: '建築', interior: '室內', musician: '音樂'
+        },
+        en: {
+            chef: 'Chef', baker: 'Baker', barista: 'Barista',
+            knitter: 'Knitter', potter: 'Potter', jeweler: 'Jeweler',
+            leatherworker: 'Leather', woodworker: 'Woodwork',
+            artist: 'Artist', illustrator: 'Illustrator', photographer: 'Photographer', designer: 'Designer',
+            florist: 'Florist', gardener: 'Gardener',
+            therapist: 'Therapist', yoga: 'Yoga', teacher: 'Teacher', writer: 'Writer',
+            architect: 'Architect', interior: 'Interior', musician: 'Musician'
+        }
+    };
+
+    let currentLang = 'zh';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('configMakerLang', lang);
+
+        // 更新按鈕樣式
+        document.getElementById('langZh').className = lang === 'zh'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-amber-100 text-amber-700'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200';
+        document.getElementById('langEn').className = lang === 'en'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-amber-100 text-amber-700'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200';
+
+        // 更新所有帶 data-i18n 的元素
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (i18n[lang][key]) {
+                el.textContent = i18n[lang][key];
+            }
+        });
+
+        // 更新所有帶 data-i18n-placeholder 的元素
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (i18n[lang][key]) {
+                el.placeholder = i18n[lang][key];
+            }
+        });
+
+        // 重新渲染職業網格
+        renderProfessionGrid();
+        updatePreview();
+    }
+
     // ════════════════════════════════════════════════════════════════════════
     // 職業數據（與 professionMap.js 同步）
     // ════════════════════════════════════════════════════════════════════════
@@ -728,6 +1075,12 @@
     // ════════════════════════════════════════════════════════════════════════
 
     document.addEventListener('DOMContentLoaded', () => {
+        // 檢測保存的語言設置
+        const savedLang = localStorage.getItem('configMakerLang');
+        if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+            currentLang = savedLang;
+        }
+        setLanguage(currentLang);
         renderProfessionGrid();
         updatePreview();
     });
@@ -735,13 +1088,14 @@
     // 渲染職業選擇網格
     function renderProfessionGrid() {
         const grid = document.getElementById('professionGrid');
+        const labels = professionLabels[currentLang];
 
         grid.innerHTML = professions.map(p => `
             <div onclick="selectProfession('${p.id}')"
                  id="card-${p.id}"
                  class="profession-card p-4 rounded-2xl border-2 transition-all ${p.id === selectedProfession ? 'border-amber-400 bg-amber-50' : 'border-stone-100 bg-white hover:border-stone-200'}">
                 <div class="text-2xl mb-1">${p.emoji}</div>
-                <div class="font-medium text-stone-800 text-sm">${p.label}</div>
+                <div class="font-medium text-stone-800 text-sm">${labels[p.id] || p.label}</div>
             </div>
         `).join('');
     }
@@ -758,8 +1112,9 @@
     // ════════════════════════════════════════════════════════════════════════
 
     function updatePreview() {
-        const name = document.getElementById('inputName').value.trim() || '你的名字';
-        const role = document.getElementById('inputRole').value.trim() || '你的職業';
+        const t = i18n[currentLang];
+        const name = document.getElementById('inputName').value.trim() || t.defaultPreviewName;
+        const role = document.getElementById('inputRole').value.trim() || t.defaultPreviewRole;
         const bio = document.getElementById('inputBio').value.trim();
         const heroTitle = document.getElementById('inputHeroTitle').value.trim();
         const heroSubtitle = document.getElementById('inputHeroSubtitle').value.trim();
@@ -792,12 +1147,13 @@
         previewName.className = `text-xl font-semibold mb-1 transition-all duration-300 ${profession.fontClass}`;
 
         // 計算顯示的文字
-        // 首頁大標題：優先使用用戶輸入 > 自動生成
-        const displayHeroTitle = heroTitle || `歡迎來到 ${name} 的創作世界`;
-        // 首頁副標題：優先使用用戶輸入 > bio > 預設
-        const displayHeroSubtitle = heroSubtitle || bio || '探索我的創作世界';
-        // 按鈕文字
-        const displayButtonText = heroButtonText || '瀏覽作品';
+        const userName = document.getElementById('inputName').value.trim();
+        const welcomeText = currentLang === 'zh'
+            ? `歡迎來到 ${userName || '你'} 的創作世界`
+            : `Welcome to ${userName || 'Your'}'s Creative World`;
+        const displayHeroTitle = heroTitle || welcomeText;
+        const displayHeroSubtitle = heroSubtitle || bio || t.exploreWorld;
+        const displayButtonText = heroButtonText || t.defaultButtonLabel;
 
         // 更新文字
         previewHeroTitle.textContent = displayHeroTitle;
@@ -812,12 +1168,39 @@
     }
 
     // ════════════════════════════════════════════════════════════════════════
+    // 頭像預覽
+    // ════════════════════════════════════════════════════════════════════════
+
+    function updateAvatarPreview() {
+        const avatar = document.getElementById('inputAvatar').value.trim();
+        const preview = document.getElementById('avatarPreview');
+
+        if (avatar) {
+            // 嘗試載入圖片
+            const img = new Image();
+            img.onload = function () {
+                preview.innerHTML = `<img src="${avatar}" alt="Avatar" class="w-full h-full object-cover">`;
+            };
+            img.onerror = function () {
+                preview.innerHTML = `<span class="text-red-400 text-xl">❌</span>`;
+            };
+            img.src = avatar;
+        } else {
+            preview.innerHTML = `<span class="text-stone-400 text-2xl">👤</span>`;
+        }
+
+        updatePreview();
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
     // 生成配置
     // ════════════════════════════════════════════════════════════════════════
 
     function generateConfig() {
+        const t = i18n[currentLang];
         const name = document.getElementById('inputName').value.trim();
         const role = document.getElementById('inputRole').value.trim();
+        const avatar = document.getElementById('inputAvatar').value.trim();
         const email = document.getElementById('inputEmail').value.trim();
         const bio = document.getElementById('inputBio').value.trim();
 
@@ -829,21 +1212,35 @@
         const heroTitle = document.getElementById('inputHeroTitle').value.trim();
         const heroSubtitle = document.getElementById('inputHeroSubtitle').value.trim();
         const heroButtonText = document.getElementById('inputHeroButtonText').value.trim();
+        const heroShowTitleOnImage = document.getElementById('inputHeroShowTitleOnImage').checked;
+
+        const contactTitle = document.getElementById('inputContactTitle').value.trim();
+        const contactMessage = document.getElementById('inputContactMessage').value.trim();
+        const contactQrCode = document.getElementById('inputContactQrCode').value.trim();
 
         const siteTitle = document.getElementById('inputSiteTitle').value.trim();
         const siteDescription = document.getElementById('inputSiteDescription').value.trim();
 
         // 建構精簡配置
+        const defaultName = currentLang === 'zh' ? '我的名字' : 'My Name';
+        const defaultRole = currentLang === 'zh' ? '創作者' : 'Creator';
+        const defaultSiteTitle = currentLang === 'zh' ? '作品集' : 'Portfolio';
+
         const config = {
             profile: {
-                name: name || '我的名字',
-                role: role || '創作者',
+                name: name || defaultName,
+                role: role || defaultRole,
                 profession: selectedProfession
             },
             seo: {}
         };
 
-        // 只加入有值的欄位
+        // 頭像：始終寫入配置（允許空字串表示不使用頭像）
+        if (avatar) {
+            config.profile.avatar = avatar;
+        }
+
+        // 其他欄位
         if (email) config.profile.email = email;
         if (bio) config.profile.bio = bio;
 
@@ -858,18 +1255,27 @@
             config.profile.social = social;
         }
 
+        // UI 設定（只有不是預設值時才加入）
+        if (!heroShowTitleOnImage) {
+            config.ui = config.ui || {};
+            config.ui.heroShowTitleOnImage = false;
+        }
+
         // 首頁內容（content）- 只有用戶填寫了才加入
         const content = {};
         if (heroTitle) content.heroTitle = heroTitle;
         if (heroSubtitle) content.heroSubtitle = heroSubtitle;
         if (heroButtonText) content.heroButtonText = heroButtonText;
+        if (contactTitle) content.contactTitle = contactTitle;
+        if (contactMessage) content.contactMessage = contactMessage;
+        if (contactQrCode) content.contactQrCode = contactQrCode;
 
         if (Object.keys(content).length > 0) {
             config.content = content;
         }
 
         // SEO
-        config.seo.siteTitle = siteTitle || `${name || '我的'} | 作品集`;
+        config.seo.siteTitle = siteTitle || `${name || defaultName} | ${defaultSiteTitle}`;
         if (siteDescription) config.seo.siteDescription = siteDescription;
 
         return config;

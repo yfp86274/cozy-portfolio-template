@@ -53,14 +53,20 @@
 
 ### 基本欄位
 
-| 欄位           | 說明                             | 範例                           |
-|--------------|--------------------------------|------------------------------|
-| `name`       | 你的名字或品牌名                       | `"夜喵酷叮"`                     |
-| `role`       | 你的職業/頭銜                        | `"創意開發者 & 開源貢獻者"`            |
-| `profession` | 職業代碼（決定網站風格）⭐                  | `"designer"`                 |
-| `email`      | 聯絡 Email                       | `"hello@nightcatcoding.com"` |
-| `bio`        | 簡短自我介紹 ⭐ **會自動顯示在首頁副標題和關於我頁面** | `"用代碼編織創意，讓每個專案都有貓的靈魂"`      |
-| `avatar`     | 頭像圖片路徑                         | `"/images/avatar.jpg"`       |
+| 欄位           | 說明                             | 範例                                                      |
+|--------------|--------------------------------|---------------------------------------------------------|
+| `name`       | 你的名字或品牌名                       | `"夜喵酷叮"`                                                |
+| `role`       | 你的職業/頭銜                        | `"創意開發者 & 開源貢獻者"`                                       |
+| `profession` | 職業代碼（決定網站風格）⭐                  | `"designer"`                                            |
+| `email`      | 聯絡 Email                       | `"hello@nightcatcoding.com"`                            |
+| `bio`        | 簡短自我介紹 ⭐ **會自動顯示在首頁副標題和關於我頁面** | `"用代碼編織創意，讓每個專案都有貓的靈魂"`                                 |
+| `avatar`     | 頭像圖片（支援網址或本地路徑）                | `"https://i.imgur.com/xxx.jpg"` 或 `"images/avatar.jpg"` |
+
+> **💡 頭像設定提示**：
+> 1. **推薦使用網路圖片**：上傳到 [Imgur](https://imgur.com)、[ImgBB](https://imgbb.com) 等圖床，直接貼網址
+> 2. **本地圖片方式**：把圖片放在 `public/images/` 資料夾，路徑填 `images/你的圖片名.jpg`（不需要開頭的 `/`，系統會自動處理）
+> 3. 建議尺寸：400x400 像素，支援 jpg/png/webp 格式
+> 4. 如果圖片載入失敗，會顯示預設的頭像圖示
 
 > **💡 重要提示**：`bio` 欄位非常重要！如果你沒有設定 `content.heroSubtitle`，系統會自動將 `bio`
 > 顯示在首頁副標題位置。這樣你只需要寫一次自我介紹，網站各處都會自動使用。
@@ -140,7 +146,7 @@
   "profession": "designer",
   "email": "hello@nightcatcoding.com",
   "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
-  "avatar": "/images/avatar.jpg",
+"avatar": "images/avatar.jpg",
   "social": {
     "github": "https://github.com/night-cat-coding",
     "twitter": "https://twitter.com/nightcatcoding",
@@ -248,6 +254,15 @@
 "heroStyle": "minimal"  // 極簡只有作品格
 ```
 
+### 標題是否顯示在圖片上
+
+```json
+"heroShowTitleOnImage": true   // 預設：標題覆蓋在首頁大圖上
+"heroShowTitleOnImage": false  // 標題顯示在圖片下方，不遮擋圖片
+```
+
+> **💡 適用情境**：如果你的首頁大圖是精心設計的作品或攝影，不想被文字遮擋，可以設為 `false`。
+
 ### 顯示/隱藏區塊
 
 | 欄位 | 說明 | 預設 |
@@ -328,10 +343,33 @@
 | `otherWorksTitle`    | 其他作品區標題  | `"更多作品"`           |
 | `aboutTitle`         | 關於我區標題   | `"關於我"`            |
 | `aboutContent`       | 關於我內容    | 自動使用 `profile.bio` |
+| `contactTitle`       | 聯絡我區標題   | `"聯絡我"`            |
+| `contactMessage`     | 聯絡我說明文字  | `"有任何問題或合作提案..."`  |
+| `contactQrCode`      | 聯絡二維碼圖片  | 留空不顯示              |
 | `footerText`         | 頁尾文字     | 自動生成               |
 | `notFoundTitle`      | 404 頁面標題 | 根據職業自動生成（有趣的）      |
 | `notFoundMessage`    | 404 頁面訊息 | 根據職業自動生成           |
 | `notFoundButtonText` | 404 頁面按鈕 | `"回到首頁"`           |
+
+### 聯絡我頁面設定
+
+聯絡我頁面會自動顯示你在 `profile.email` 設定的 Email。你還可以添加：
+
+1. **自訂說明文字**：設定 `contactMessage`
+2. **二維碼圖片**：設定 `contactQrCode`（如微信、Line 等）
+
+```json
+"content": {
+"contactTitle": "與我聯繫",
+"contactMessage": "歡迎透過以下方式與我聯繫，我會盡快回覆！",
+"contactQrCode": "images/wechat-qrcode.png"
+}
+```
+
+> **💡 二維碼設定步驟**：
+> 1. 準備你的二維碼圖片（建議 200x200 像素）
+> 2. 把圖片放在 `public/images/` 資料夾
+> 3. 在 `contactQrCode` 填入 `images/你的圖片名.png`（不需要開頭的 `/`）
 
 ### 範例
 
@@ -366,7 +404,7 @@
   "siteTitle": "夜喵酷叮 | 創意開發者",
   "siteDescription": "夜喵酷叮的作品集。專注於開源專案、創意開發，讓代碼也能有溫度。",
   "keywords": "開發者, 設計師, Vue, 開源, 作品集, 模板",
-  "ogImage": "/images/og-image.jpg"
+"ogImage": "images/og-image.jpg"
 }
 ```
 
@@ -377,11 +415,11 @@
 ### 路徑規則
 
 1. 圖片放在 `public/images/` 資料夾
-2. 路徑從 `/images/` 開始
+2. 路徑填寫 `images/` 開頭（不需要開頭的 `/`，系統會自動處理部署路徑）
 
 ```json
-"avatar": "/images/avatar.jpg",
-"ogImage": "/images/og-image.jpg"
+"avatar": "images/avatar.jpg",
+"ogImage": "images/og-image.jpg"
 ```
 
 ### 支援格式
@@ -460,7 +498,7 @@
     "profession": "designer",
     "email": "hello@nightcatcoding.com",
     "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
-    "avatar": "/images/avatar.jpg",
+    "avatar": "images/avatar.jpg",
     "social": {
       "github": "https://github.com/night-cat-coding",
       "twitter": "https://twitter.com/nightcatcoding",
@@ -552,7 +590,15 @@ This is the **most important** section containing your basic info.
 | `profession` | Profession code (determines website style) ⭐                      | `"designer"`                                                        |
 | `email`      | Contact email                                                     | `"hello@nightcatcoding.com"`                                        |
 | `bio`        | Short bio ⭐ **Auto-displays on homepage subtitle and About page** | `"Weaving creativity with code, giving every project a cat's soul"` |
-| `avatar`     | Avatar image path                                                 | `"/images/avatar.jpg"`                                              |
+| `avatar`     | Avatar image (URL or local path)                                  | `"https://i.imgur.com/xxx.jpg"` or `"images/avatar.jpg"`            |
+
+> **💡 Avatar Setup Tips**:
+> 1. **Recommended: Use online images** - Upload to [Imgur](https://imgur.com), [ImgBB](https://imgbb.com), then paste
+     the URL
+> 2. **Local images**: Put image in `public/images/` folder, use path `images/yourimage.jpg` (no leading `/` needed,
+     system handles it automatically)
+> 3. Recommended size: 400x400 pixels, supports jpg/png/webp
+> 4. If image fails to load, a default avatar icon will be shown
 
 > **💡 Important**: The `bio` field is very important! If you don't set `content.heroSubtitle`, the system will
 > automatically display your `bio` in the homepage subtitle. This way you only need to write your intro once, and the site
@@ -633,7 +679,7 @@ Add your social URLs in the `social` object. Leave empty or omit if not needed:
   "profession": "designer",
   "email": "hello@nightcatcoding.com",
   "bio": "Weaving creativity with code, giving every project a cat's soul 🐱",
-  "avatar": "/images/avatar.jpg",
+"avatar": "images/avatar.jpg",
   "social": {
     "github": "https://github.com/night-cat-coding",
     "twitter": "https://twitter.com/nightcatcoding",
@@ -741,6 +787,16 @@ Changes overall "visual personality" - corners, shadows, borders.
 "heroStyle": "minimal"  // Just the works grid
 ```
 
+### Show Title on Hero Image
+
+```json
+"heroShowTitleOnImage": true   // Default: title overlays the hero image
+"heroShowTitleOnImage": false  // Title displays below the image, not covering it
+```
+
+> **💡 Use Case**: If your hero image is a carefully designed work or photo that you don't want covered by text, set this
+> to `false`.
+
 ### Show/Hide Sections
 
 | Field | Description | Default |
@@ -813,19 +869,42 @@ Customize all text on your site.
 
 ### All Fields
 
-| Field                | Location                  | Default                              |
-|----------------------|---------------------------|--------------------------------------|
-| `heroTitle`          | Homepage main heading     | `Welcome to [Name]'s Creative World` |
-| `heroSubtitle`       | Homepage subtitle         | Auto-uses `profile.bio`              |
-| `heroButtonText`     | Homepage button           | `"View Works"`                       |
-| `worksTitle`         | Works section title       | `"My Works"`                         |
-| `otherWorksTitle`    | Other works section title | `"More Works"`                       |
-| `aboutTitle`         | About section title       | `"About Me"`                         |
-| `aboutContent`       | About section content     | Auto-uses `profile.bio`              |
-| `footerText`         | Footer text               | Auto-generated                       |
-| `notFoundTitle`      | 404 page heading          | Auto-generated (fun!)                |
-| `notFoundMessage`    | 404 page message          | Auto-generated                       |
-| `notFoundButtonText` | 404 page button           | `"Back to Home"`                     |
+| Field                | Location                  | Default                               |
+|----------------------|---------------------------|---------------------------------------|
+| `heroTitle`          | Homepage main heading     | `Welcome to [Name]'s Creative World`  |
+| `heroSubtitle`       | Homepage subtitle         | Auto-uses `profile.bio`               |
+| `heroButtonText`     | Homepage button           | `"View Works"`                        |
+| `worksTitle`         | Works section title       | `"My Works"`                          |
+| `otherWorksTitle`    | Other works section title | `"More Works"`                        |
+| `aboutTitle`         | About section title       | `"About Me"`                          |
+| `aboutContent`       | About section content     | Auto-uses `profile.bio`               |
+| `contactTitle`       | Contact section title     | `"Contact Me"`                        |
+| `contactMessage`     | Contact page message      | `"Any questions or collaboration..."` |
+| `contactQrCode`      | Contact QR code image     | Leave empty to hide                   |
+| `footerText`         | Footer text               | Auto-generated                        |
+| `notFoundTitle`      | 404 page heading          | Auto-generated (fun!)                 |
+| `notFoundMessage`    | 404 page message          | Auto-generated                        |
+| `notFoundButtonText` | 404 page button           | `"Back to Home"`                      |
+
+### Contact Page Settings
+
+The Contact page automatically displays the email from `profile.email`. You can also add:
+
+1. **Custom message text**: Set `contactMessage`
+2. **QR code image**: Set `contactQrCode` (for WeChat, Line, etc.)
+
+```json
+"content": {
+"contactTitle": "Get in Touch",
+"contactMessage": "Feel free to reach out through the following channels!",
+"contactQrCode": "images/wechat-qrcode.png"
+}
+```
+
+> **💡 QR Code Setup Steps**:
+> 1. Prepare your QR code image (200x200 pixels recommended)
+> 2. Put the image in `public/images/` folder
+> 3. Set `contactQrCode` to `images/yourimage.png` (no leading `/` needed)
 
 ### Example
 
@@ -860,7 +939,7 @@ Help search engines find your site.
   "siteTitle": "Night Cat Coding | Creative Developer",
   "siteDescription": "Portfolio of Night Cat Coding. Specializing in open source projects and creative development.",
   "keywords": "developer, designer, Vue, open source, portfolio, template",
-  "ogImage": "/images/og-image.jpg"
+"ogImage": "images/og-image.jpg"
 }
 ```
 
@@ -871,11 +950,11 @@ Help search engines find your site.
 ### Path Rules
 
 1. Place images in `public/images/` folder
-2. Reference with paths starting from `/images/`
+2. Reference with paths starting from `images/` (no leading `/` needed, system handles deployment paths automatically)
 
 ```json
-"avatar": "/images/avatar.jpg",
-"ogImage": "/images/og-image.jpg"
+"avatar": "images/avatar.jpg",
+"ogImage": "images/og-image.jpg"
 ```
 
 ### Supported Formats
@@ -954,7 +1033,7 @@ Online validation:
     "profession": "designer",
     "email": "hello@nightcatcoding.com",
     "bio": "Weaving creativity with code, giving every project a cat's soul 🐱",
-    "avatar": "/images/avatar.jpg",
+    "avatar": "images/avatar.jpg",
     "social": {
       "github": "https://github.com/night-cat-coding",
       "twitter": "https://twitter.com/nightcatcoding",

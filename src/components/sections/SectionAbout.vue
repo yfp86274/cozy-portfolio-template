@@ -6,13 +6,30 @@
  * 可以包含大頭照和社群連結
  */
 
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
 import {useConfig} from '@/composables/useConfig'
+import {resolveAssetPath} from '@/utils/assetPath'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Composables & Config
 // ═══════════════════════════════════════════════════════════════════════════
 const {profile, content, isEnabled, getSocialLinks} = useConfig()
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Avatar handling
+// ═══════════════════════════════════════════════════════════════════════════
+const avatarError = ref(false)
+
+// 處理頭像路徑（支援網路 URL 和本地路徑）
+// 自動處理 GitHub Pages 等部署環境的 base URL
+const avatarSrc = computed(() => {
+  return resolveAssetPath(profile.avatar)
+})
+
+// 頭像載入失敗時的處理
+const handleAvatarError = () => {
+  avatarError.value = true
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Computed
@@ -60,13 +77,23 @@ const socialIcons = {
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16">
         <!-- 左側：大頭照 -->
         <div class="lg:col-span-1">
-          <div class="aspect-square rounded-theme overflow-hidden card-shadow">
+          <div class="aspect-square rounded-theme overflow-hidden card-shadow bg-background">
+            <!-- 有頭像且未載入失敗 -->
             <img
-                :src="profile.avatar || '/images/avatar.jpg'"
+                v-if="avatarSrc && !avatarError"
+                :src="avatarSrc"
                 :alt="profile.name"
                 class="w-full h-full object-cover"
                 loading="lazy"
+                @error="handleAvatarError"
             />
+            <!-- 無頭像或載入失敗時的回退顯示 -->
+            <div
+                v-else
+                class="w-full h-full flex items-center justify-center bg-primary/5"
+            >
+              <span class="text-6xl">👤</span>
+            </div>
           </div>
 
           <!-- 社群連結 -->

@@ -5,7 +5,7 @@
     "profession": "designer",
     "email": "hello@nightcatcoding.com",
     "bio": "用代碼編織創意，讓每個專案都有貓的靈魂 🐱",
-    "avatar": "/images/avatar.jpg",
+    "avatar": "https://i.imgur.com/example.jpg",
     "social": {
       "github": "https://github.com/night-cat-coding",
       "twitter": "https://twitter.com/nightcatcoding",

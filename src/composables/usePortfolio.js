@@ -146,6 +146,7 @@ function parseFolderName(folderName, fallbackOrder = 999) {
             : folderName
         return {
             order: paddedOrder,
+            displayOrder: paddedOrder, // 對外顯示的序號
             name: name || folderName,
             hasNumber: true
         }
@@ -155,7 +156,8 @@ function parseFolderName(folderName, fallbackOrder = 999) {
     // 然後按字母順序排序
     const displayName = folderName.replace(/[_\-]+/g, ' ').trim()
     return {
-        order: `zzz_${displayName.toLowerCase()}`, // zzz 前綴確保排在數字之後
+        order: `zzz_${displayName.toLowerCase()}`, // zzz 前綴確保排在數字之後（僅用於內部排序，不顯示）
+        displayOrder: '', // 對外顯示的序號為空（無數字的作品不顯示序號）
         name: displayName || folderName,
         hasNumber: false
     }
@@ -263,12 +265,13 @@ function parseWorks() {
 
         // 初始化作品資料
         if (!works[folderName]) {
-            const {order, name, hasNumber} = parseFolderName(folderName)
+            const {order, displayOrder, name, hasNumber} = parseFolderName(folderName)
             const description = findDescription(folderName)
 
             works[folderName] = {
                 slug: folderName,
                 order: order,
+                displayOrder: displayOrder || '', // 對外顯示的序號（無數字作品為空字串）
                 name: name,
                 hasNumber: hasNumber,
                 description: description,

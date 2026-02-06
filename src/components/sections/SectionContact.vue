@@ -3,11 +3,12 @@
  * SectionContact - 聯絡資訊區塊
  *
  * 展示聯絡方式，引導訪客與創作者聯繫
- * 包含 Email 連結和社群媒體
+ * 包含 Email 連結、社群媒體和可選的二維碼圖片
  */
 
 import {computed} from 'vue'
 import {useConfig} from '@/composables/useConfig'
+import {resolveAssetPath} from '@/utils/assetPath'
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Composables & Config
@@ -29,6 +30,16 @@ const socialLinks = computed(() => getSocialLinks())
 // Email 連結
 const emailLink = computed(() => {
   return profile.email ? `mailto:${profile.email}` : null
+})
+
+// 二維碼圖片路徑（自動處理 base URL）
+const qrCodeSrc = computed(() => {
+  return resolveAssetPath(content.contactQrCode)
+})
+
+// 是否有二維碼圖片
+const hasQrCode = computed(() => {
+  return !!qrCodeSrc.value
 })
 
 // 社群圖標映射
@@ -98,6 +109,18 @@ const socialLabels = {
           </svg>
           {{ profile.email }}
         </a>
+
+        <!-- 二維碼圖片（如果有設定） -->
+        <div v-if="hasQrCode" class="mt-10 md:mt-12">
+          <p class="text-muted text-sm mb-4">掃描二維碼聯繫我</p>
+          <div class="inline-block p-4 bg-white rounded-theme card-shadow">
+            <img
+                :src="qrCodeSrc"
+                alt="聯繫二維碼"
+                class="w-40 h-40 md:w-48 md:h-48 object-contain"
+            />
+          </div>
+        </div>
 
         <!-- 社群連結 -->
         <div v-if="showSocial" class="mt-12">

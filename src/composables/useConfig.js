@@ -56,7 +56,7 @@ const SYSTEM_DEFAULTS = {
         role: '創作者',
         email: '',
         bio: '歡迎來到我的作品集網站！',
-        avatar: '/images/avatar.jpg',
+        avatar: '', // 頭像路徑（支援網路 URL 或本地路徑如 /images/avatar.jpg）
         profession: '',
         social: {
             instagram: '',
@@ -78,6 +78,7 @@ const SYSTEM_DEFAULTS = {
     ui: {
         themePreset: 'default',
         heroStyle: 'split',
+        heroShowTitleOnImage: true, // 是否在首頁大圖上顯示標題（false 則標題顯示在圖片外）
         showFooter: true,
         showSocialLinks: true,
         showOtherWorks: true,
@@ -100,6 +101,7 @@ const SYSTEM_DEFAULTS = {
         aboutContent: '',
         contactTitle: '聯絡我',
         contactMessage: '有任何問題或合作提案，歡迎與我聯繫！',
+        contactQrCode: '', // 聯繫二維碼圖片路徑（如：/images/qrcode.png）
         footerText: '',
         notFoundTitle: '找不到頁面',
         notFoundMessage: '您要找的頁面似乎不存在',
@@ -699,6 +701,15 @@ export function useConfig() {
     const getHeroStyle = () => config.ui?.heroStyle || 'split'
 
     /**
+     * 檢查是否在首頁大圖上顯示標題
+     * @returns {boolean}
+     */
+    const getHeroShowTitleOnImage = () => {
+        const value = config.ui?.heroShowTitleOnImage
+        return value !== false // 預設為 true
+    }
+
+    /**
      * 獲取頁面佈局
      * @returns {Array<string>}
      */
@@ -831,6 +842,7 @@ export function useConfig() {
         getGridClass,
         getAspectClass,
         getHeroStyle,
+        getHeroShowTitleOnImage,
         getThemePreset,
         getNavStyle,
         getUiThumbnailRatio,

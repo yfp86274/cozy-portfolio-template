@@ -168,6 +168,11 @@ src/assets/works/
 | `10_新專案`                | 新專案                | 第 10 位    |
 | `Side_Project`          | Side Project       | 按字母排在數字後面 |
 
+> **💡 作品序號顯示說明**：
+> - 有數字前綴的作品（如 `01_作品名`）會在網站上顯示序號「001」
+> - 沒有數字前綴的作品（如 `Side_Project`）不會顯示序號，只顯示作品名稱
+> - 系統會自動將有序號的作品排在前面，沒有序號的按字母順序排在後面
+
 #### 📷 支援的圖片格式：
 - ✅ `.jpg` / `.jpeg`
 - ✅ `.png`
@@ -497,6 +502,20 @@ src/assets/works/
     └── photo.jpg
 ```
 
+#### 📝 Naming Tips:
+
+| You Name It Like This   | Website Shows      | Sort Position                |
+|-------------------------|--------------------|------------------------------|
+| `01_Portfolio_Template` | Portfolio Template | Position 1                   |
+| `02_Handmade_Website`   | Handmade Website   | Position 2                   |
+| `10_New_Project`        | New Project        | Position 10                  |
+| `Side_Project`          | Side Project       | Alphabetically after numbers |
+
+> **💡 Work Number Display Note**:
+> - Works with number prefix (like `01_WorkName`) will show sequence number "001" on the website
+> - Works without number prefix (like `Side_Project`) won't show sequence number, only the work name
+> - System automatically sorts numbered works first, non-numbered works alphabetically after
+
 #### 📷 Supported Image Formats:
 - ✅ `.jpg` / `.jpeg`
 - ✅ `.png`
@@ -634,6 +653,17 @@ The Config Wizard auto-selects colors based on profession, but you can override 
   }
 }
 ```
+
+### 📱 How to View on Mobile?
+
+Just open your website URL in your phone's browser! The site automatically adapts to mobile screens.
+
+### 🔒 How to Bind Your Own Domain?
+
+1. Purchase a domain (from Namecheap, GoDaddy, etc.)
+2. Go to your GitHub repo → **Settings** → **Pages** → **Custom domain**
+3. Enter your domain
+4. Configure DNS at your domain registrar to point to GitHub
 
 ---
 
