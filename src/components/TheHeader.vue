@@ -9,10 +9,10 @@ const {navItems} = usePortfolio()
 const {profile} = useConfig()
 
 const isScrolled = ref(false)
-const isMobileMenuOpen = ref(false)
-const menuRef = ref(null)
+const isSidebarOpen = ref(false)
+const sidebarRef = ref(null)
 
-// Throttled scroll handler for better performance
+// Throttled scroll handler
 let scrollTimeout = null
 const handleScroll = () => {
   if (scrollTimeout) return
@@ -22,43 +22,39 @@ const handleScroll = () => {
   }, 10)
 }
 
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-
-  // Prevent body scroll when menu is open
-  if (isMobileMenuOpen.value) {
-    document.body.style.overflow = 'hidden'
-    document.body.style.touchAction = 'none'
-    // Focus trap - focus first menu item after animation
-    nextTick(() => {
-      const firstLink = menuRef.value?.querySelector('a')
-      if (firstLink) firstLink.focus()
-    })
-  } else {
-    document.body.style.overflow = ''
-    document.body.style.touchAction = ''
-  }
+const openSidebar = () => {
+  isSidebarOpen.value = true
+  document.body.style.overflow = 'hidden'
+  document.body.style.touchAction = 'none'
+  nextTick(() => {
+    const firstLink = sidebarRef.value?.querySelector('a')
+    if (firstLink) firstLink.focus()
+  })
 }
 
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false
+const closeSidebar = () => {
+  isSidebarOpen.value = false
   document.body.style.overflow = ''
   document.body.style.touchAction = ''
 }
 
-// Close menu on route change
+const toggleSidebar = () => {
+  isSidebarOpen.value ? closeSidebar() : openSidebar()
+}
+
+// Close sidebar on route change
 watch(() => route.path, () => {
-  closeMobileMenu()
+  closeSidebar()
 })
 
-// Close menu on escape key
+// Close on escape key
 const handleKeydown = (e) => {
-  if (e.key === 'Escape' && isMobileMenuOpen.value) {
-    closeMobileMenu()
+  if (e.key === 'Escape' && isSidebarOpen.value) {
+    closeSidebar()
   }
 }
 
-// Get first name for mobile logo
+// Get first name for logo
 const firstName = computed(() => {
   const parts = profile.name.split(' ')
   return parts[0] || profile.name
@@ -81,7 +77,7 @@ onUnmounted(() => {
   <header
       class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 safe-area-inset"
       :class="[
-      isScrolled || isMobileMenuOpen
+      isScrolled
         ? 'bg-background/90 backdrop-blur-xl py-3 md:py-4 shadow-sm'
         : 'bg-transparent py-5 md:py-6 lg:py-8'
     ]"
@@ -93,52 +89,47 @@ onUnmounted(() => {
           class="text-sm tracking-[0.15em] uppercase font-medium text-primary
                hover:text-primary/70 transition-all duration-300
                min-h-[44px] flex items-center z-50 relative"
-          @click="closeMobileMenu"
+          @click="closeSidebar"
       >
         {{ firstName }}
       </RouterLink>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10">
+      <!-- Right side nav -->
+      <div class="flex items-center gap-4 lg:gap-6">
+        <!-- Home link (desktop only) -->
         <RouterLink
             to="/"
-            class="nav-link"
+            class="hidden md:flex nav-link"
             :class="{ 'active': route.path === '/' }"
         >
           Home
         </RouterLink>
 
-        <RouterLink
-            v-for="item in navItems"
-            :key="item.slug"
-            :to="`/work/${item.slug}`"
-            class="nav-link"
-            :class="{ 'active': route.params.slug === item.slug }"
+        <!-- Projects button — opens sidebar -->
+        <button
+            class="nav-link group cursor-pointer gap-2"
+            :class="{ 'active': isSidebarOpen }"
+            @click="toggleSidebar"
+            :aria-label="isSidebarOpen ? 'Close projects menu' : 'Open projects menu'"
+            :aria-expanded="isSidebarOpen"
+            aria-controls="projects-sidebar"
         >
-          {{ item.name }}
-        </RouterLink>
+          <span>Projects</span>
+          <svg
+              class="w-3.5 h-3.5 transition-transform duration-300"
+              :class="{ 'rotate-45': isSidebarOpen }"
+              style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);"
+              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+        </button>
       </div>
-
-      <!-- Mobile Menu Button with Hamburger Animation -->
-      <button
-          class="md:hidden relative w-12 h-12 flex items-center justify-center -mr-2
-               active:bg-primary/5 rounded-lg transition-colors duration-200
-               z-50"
-          :class="{ 'hamburger-active': isMobileMenuOpen }"
-          @click="toggleMobileMenu"
-          :aria-label="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
-          :aria-expanded="isMobileMenuOpen"
-          aria-controls="mobile-menu"
-      >
-        <div class="flex flex-col justify-center items-center gap-[6px]">
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-        </div>
-      </button>
     </nav>
+  </header>
 
-    <!-- Mobile Menu Overlay with Glassmorphism -->
+  <!-- Sidebar Overlay -->
+  <Teleport to="body">
     <Transition
         enter-active-class="transition-opacity duration-300 ease-out"
         enter-from-class="opacity-0"
@@ -148,106 +139,145 @@ onUnmounted(() => {
         leave-to-class="opacity-0"
     >
       <div
-          v-if="isMobileMenuOpen"
-          class="md:hidden fixed inset-0 top-0 z-40"
-          @click.self="closeMobileMenu"
+          v-if="isSidebarOpen"
+          class="fixed inset-0 z-[60]"
+          @click.self="closeSidebar"
       >
-        <!-- Backdrop with blur -->
+        <!-- Backdrop -->
         <div
-            class="absolute inset-0 bg-text/10"
-            style="backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);"
+            class="absolute inset-0 bg-text/8"
+            style="backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);"
+            @click="closeSidebar"
         ></div>
 
-        <!-- Menu Panel -->
+        <!-- Sidebar Panel (slides from right) -->
         <Transition
-            enter-active-class="transition-transform duration-400"
-            enter-from-class="-translate-y-full"
-            enter-to-class="translate-y-0"
-            leave-active-class="transition-transform duration-300"
-            leave-from-class="translate-y-0"
-            leave-to-class="-translate-y-full"
+            enter-active-class="sidebar-slide-enter-active"
+            enter-from-class="sidebar-slide-enter-from"
+            enter-to-class="sidebar-slide-enter-to"
+            leave-active-class="sidebar-slide-leave-active"
+            leave-from-class="sidebar-slide-leave-from"
+            leave-to-class="sidebar-slide-leave-to"
             appear
         >
-          <div
-              v-if="isMobileMenuOpen"
-              id="mobile-menu"
-              ref="menuRef"
-              class="relative glass-strong pt-20 pb-10 px-4 min-h-[55vh] safe-area-inset"
-              style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);"
+          <aside
+              v-if="isSidebarOpen"
+              id="projects-sidebar"
+              ref="sidebarRef"
+              class="absolute top-0 right-0 h-full w-[340px] max-w-[85vw]
+                     glass-strong border-l border-primary/[0.06]
+                     flex flex-col overflow-hidden"
+              @click.stop
           >
-            <!-- Subtle bottom edge shadow -->
-            <div
-                class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
-
-            <div class="content-container flex flex-col gap-1">
-              <!-- Home Link -->
-              <RouterLink
-                  to="/"
-                  class="menu-item-stagger group flex items-center py-4 px-3 -mx-3 rounded-xl
-                       active:bg-primary/10 transition-colors duration-200"
-                  @click="closeMobileMenu"
-              >
-                <span class="text-[17px] tracking-wide text-primary font-medium
-                             group-hover:translate-x-1 transition-transform duration-300"
-                      style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);">
-                  Home
-                </span>
-              </RouterLink>
-
-              <!-- Divider -->
-              <div class="h-px bg-primary/10 my-3"></div>
-
-              <!-- Section Label -->
-              <span class="menu-item-stagger text-[11px] tracking-[0.2em] uppercase text-muted/60 px-3 mb-2"
-                    style="animation-delay: 0.08s;">
+            <!-- Sidebar Header -->
+            <div class="flex items-center justify-between px-7 pt-7 pb-4">
+              <span class="text-[11px] tracking-[0.2em] uppercase text-muted/60 font-medium">
                 Portfolio
               </span>
+              <button
+                  class="w-9 h-9 rounded-full flex items-center justify-center
+                         text-muted/60 hover:text-primary hover:bg-primary/5
+                         transition-all duration-200 -mr-1"
+                  @click="closeSidebar"
+                  aria-label="Close menu"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
 
-              <!-- Work Links with Staggered Animation -->
+            <!-- Divider -->
+            <div class="h-px bg-primary/[0.06] mx-7"></div>
+
+            <!-- Scrollable Projects List -->
+            <div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-3 px-4">
+              <!-- Home Link (mobile) -->
+              <RouterLink
+                  to="/"
+                  class="sidebar-item md:hidden group flex items-center gap-3 py-3.5 px-3 rounded-xl
+                         transition-all duration-200 hover:bg-primary/[0.04]"
+                  :class="{ 'bg-primary/[0.06]': route.path === '/' }"
+                  @click="closeSidebar"
+              >
+                <div class="w-8 h-8 rounded-lg bg-primary/[0.06] flex items-center justify-center flex-shrink-0">
+                  <svg class="w-4 h-4 text-primary/60" fill="none" stroke="currentColor" stroke-width="1.5"
+                       viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>
+                  </svg>
+                </div>
+                <span class="text-[15px] tracking-wide text-primary font-medium">Home</span>
+              </RouterLink>
+
+              <!-- Mobile divider -->
+              <div class="md:hidden h-px bg-primary/[0.06] mx-3 my-2"></div>
+
+              <!-- Work Items -->
               <RouterLink
                   v-for="(item, index) in navItems"
                   :key="item.slug"
                   :to="`/work/${item.slug}`"
-                  class="menu-item-stagger group flex items-center justify-between py-4 px-3 -mx-3 rounded-xl
-                       active:bg-primary/10 transition-colors duration-200"
-                  :style="{ animationDelay: `${(index + 3) * 0.03}s` }"
-                  @click="closeMobileMenu"
+                  class="sidebar-item group flex items-center gap-3 py-3.5 px-3 rounded-xl
+                         transition-all duration-200 hover:bg-primary/[0.04]"
+                  :class="{ 'bg-primary/[0.06]': route.params.slug === item.slug }"
+                  :style="{ animationDelay: `${(index + 1) * 0.04}s` }"
+                  @click="closeSidebar"
               >
-                <span class="text-[17px] tracking-wide text-primary
-                             group-hover:translate-x-1 transition-transform duration-300"
+                <!-- Cover Thumbnail -->
+                <div class="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0
+                            ring-1 ring-primary/[0.08] group-hover:ring-primary/[0.15]
+                            transition-all duration-200">
+                  <img
+                      v-if="item.cover"
+                      :src="item.cover"
+                      :alt="item.name"
+                      class="w-full h-full transition-transform duration-300 group-hover:scale-110"
+                      :class="item.coverIsSvg ? 'object-contain p-1 bg-primary/[0.03]' : 'object-cover'"
+                      loading="lazy"
+                  />
+                  <div v-else class="w-full h-full bg-primary/[0.04] flex items-center justify-center">
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary/25"></span>
+                  </div>
+                </div>
+                <!-- Name -->
+                <span class="text-[15px] tracking-wide text-primary/80
+                             group-hover:text-primary group-hover:translate-x-0.5
+                             transition-all duration-300 truncate"
                       style="transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);">
                   {{ item.name }}
                 </span>
-                <span class="text-[11px] text-muted/50 tracking-widest font-medium">
-                  {{ item.order }}
-                </span>
+                <!-- Active indicator -->
+                <span
+                    v-if="route.params.slug === item.slug"
+                    class="ml-auto w-1.5 h-1.5 rounded-full bg-primary/40 flex-shrink-0"
+                ></span>
               </RouterLink>
-
-              <!-- Contact Section -->
-              <div class="mt-8 pt-6 border-t border-primary/10">
-                <a
-                    :href="`mailto:${profile.email}`"
-                    class="menu-item-stagger flex items-center gap-3 py-4 px-3 -mx-3 rounded-xl
-                         text-muted active:bg-primary/10 transition-colors duration-200"
-                    :style="{ animationDelay: '0.3s' }"
-                >
-                  <!-- Email Icon -->
-                  <div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-primary/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <span class="text-[11px] tracking-[0.15em] uppercase text-muted/50 block">Contact</span>
-                    <span class="text-sm text-primary">{{ profile.email }}</span>
-                  </div>
-                </a>
-              </div>
             </div>
-          </div>
+
+            <!-- Sidebar Footer — Contact -->
+            <div class="border-t border-primary/[0.06] px-7 py-5">
+              <a
+                  :href="`mailto:${profile.email}`"
+                  class="flex items-center gap-3 text-muted hover:text-primary
+                         transition-colors duration-200 group"
+              >
+                <div class="w-9 h-9 rounded-full bg-primary/[0.05] flex items-center justify-center
+                            group-hover:bg-primary/[0.1] transition-colors duration-200">
+                  <svg class="w-4 h-4 text-primary/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <span class="text-[10px] tracking-[0.15em] uppercase text-muted/50 block">Contact</span>
+                  <span class="text-sm text-primary truncate block">{{ profile.email }}</span>
+                </div>
+              </a>
+            </div>
+          </aside>
         </Transition>
       </div>
     </Transition>
-  </header>
+  </Teleport>
 </template>

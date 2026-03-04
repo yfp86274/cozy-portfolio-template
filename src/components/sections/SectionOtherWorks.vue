@@ -78,11 +78,6 @@ const handleImageError = (event) => {
           </div>
 
           <div class="space-y-0.5 md:space-y-1">
-            <span
-                class="text-[10px] md:text-xs tracking-[0.15em] text-muted uppercase"
-            >
-              {{ work.order }}
-            </span>
             <h3
                 class="text-[15px] md:text-base lg:text-lg font-normal text-primary group-hover:text-primary/70 transition-colors duration-300"
             >

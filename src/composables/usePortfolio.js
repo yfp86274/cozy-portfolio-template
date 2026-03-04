@@ -371,9 +371,11 @@ export function usePortfolio() {
      */
     const navItems = computed(() => {
         return worksWithCovers.value.map(work => ({
-            order: work.order,
+            order: work.displayOrder || '',
             slug: work.slug,
-            name: work.name
+            name: work.name,
+            cover: work.cover,
+            coverIsSvg: work.coverIsSvg
         }))
     })
 
